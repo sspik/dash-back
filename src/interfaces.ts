@@ -22,3 +22,16 @@ export interface IBitrixLoginResponse {
   member_id: string
   server_id: string
 }
+
+export interface IUserJWTPayload {
+  id: string;
+  accessToken: string;
+  refreshToken: string;
+  expires: number;
+}
+
+declare module 'express' {
+  interface Request {
+    user: IUserJWTPayload | undefined;
+  }
+}

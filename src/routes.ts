@@ -1,9 +1,9 @@
 import {Application} from "express";
-import {CLIENT_ID} from "./constants";
 import views from "./views";
+import {authMiddleware} from "./core/middlewares";
 
 export default (app: Application) => {
   app.get('/auth/client', views.getClientCode);
   app.get('/auth/login', views.getTokens);
-  return app
+  return app;
 };

@@ -1,6 +1,15 @@
 import {IUser} from "../models/userScheme";
 import UserController from "./userController";
 import axios from 'axios';
+import jwt from 'jsonwebtoken';
+
+interface IBitrixAuthParams {
+  code: string;
+  member_id: string,
+  client_id: string,
+  client_secret: string,
+  grant_type: string
+}
 
 
 export class User {
@@ -58,16 +67,17 @@ export class User {
       с предоставлением member_id как id портала =\
     */
     try {
+      const params: IBitrixAuthParams = {
+        code,
+        member_id: process.env.MEMBER_ID,
+        client_id: process.env.CLIENT_ID,
+        client_secret: process.env.APP_SECRET,
+        grant_type: 'authorization_code'
+      };
       const response =  await axios.get(
         `https://${server_domain}/oauth/token/`,
         {
-          params: {
-            code,
-            member_id: process.env.MEMBER_ID,
-            client_id: process.env.CLIENT_ID,
-            client_secret: process.env.APP_SECRET,
-            grant_type: 'authorization_code'
-          }
+          params
         }
       );
       return response.data;

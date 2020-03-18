@@ -1,7 +1,9 @@
 import User, { IUser } from "../models/userScheme";
 
 export interface IDefaultUserInput {
-  userId: IUser['userId'];
+  userId?: IUser['userId'];
+  accessToken?: IUser['accessToken'];
+  refreshToken?: IUser['refreshToken'];
 }
 
 export interface ICreateUserInput extends IDefaultUserInput {
