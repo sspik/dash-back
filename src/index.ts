@@ -1,23 +1,20 @@
 require('dotenv').config();
 
 import express from 'express';
+import {DocumentNode} from "graphql";
+import gql from 'graphql-tag';
 import connect from "./connect";
 import { ApolloServer } from "apollo-server-express";
-
 import { importSchema } from "graphql-import";
 import { resolvers } from "./resolvers";
 import {BitrixAPI} from "./dataSources/bitrix24";
-
 import routes from "./routes";
-import {IUserJWTPayload} from "./interfaces";
-import {User} from "./models/userSchema";
 
-const typeDefs = importSchema(`${process.env.SCHEMA_PATH}schema.graphql`);
+const typeDefs: DocumentNode = gql(importSchema(`${process.env.SCHEMA_PATH}schema.graphql`));
 const app = routes(express());
 
 
 const server = new ApolloServer({
-  // @ts-ignore
   typeDefs,
   resolvers,
   dataSources: (): any => ({
