@@ -2,6 +2,7 @@ import { Resolvers } from './GraphQLTypes';
 
 export const resolvers: Resolvers = {
   Query: {
+    // Bitrix
     GetProfile: (_, __,  { dataSources }) =>
       dataSources.bitrixApi.profile(),
     GetUserGroups: (_, __, { dataSources }) =>
@@ -18,6 +19,7 @@ export const resolvers: Resolvers = {
       dataSources.bitrixApi.getTaskComments(taskId)
   },
   Mutation: {
+    // Bitrix
     SendTaskComments: (_, { taskId, message }, { dataSources }) =>
       dataSources.bitrixApi.sendTaskMessage(taskId, message),
     DeleteTaskMessage: (_, {taskId, messageId}, { dataSources }) =>

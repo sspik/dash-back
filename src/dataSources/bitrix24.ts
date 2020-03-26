@@ -19,7 +19,7 @@ export class BitrixAPI extends RESTDataSource {
     return response.result;
   }
   async userGroups(): Promise<Array<GraphQLTypes.WorkGroup>>{
-    return await this.returnArray(this.get('sonet_group.user.groups'));
+    return await BitrixAPI.returnArray(this.get('sonet_group.user.groups'));
   }
   async getGroupById(groupId: string): Promise<GraphQLTypes.WorkGroup>{
     const response = await this.get(
@@ -40,7 +40,7 @@ export class BitrixAPI extends RESTDataSource {
     });
   }
   async getGroupsUsers(groupId: string): Promise<Array<Promise<GraphQLTypes.User>>> {
-    const usersId = await this.returnArray(
+    const usersId = await BitrixAPI.returnArray(
       this.get('sonet_group.user.get',{
         'ID': groupId
       })
@@ -48,7 +48,7 @@ export class BitrixAPI extends RESTDataSource {
     return await this.getUserByIds(usersId.map(u => u["USER_ID"]))
   }
   async getGroupsTasks(groupId: string): Promise<Array<Promise<GraphQLTypes.Task>>> {
-    return this.returnArray(this.get('task.item.list', {
+    return BitrixAPI.returnArray(this.get('task.item.list', {
       '0[DEADLINE]': 'desc',
       '1[GROUP_ID][0]': groupId
     }))
@@ -56,7 +56,7 @@ export class BitrixAPI extends RESTDataSource {
   async getTaskComments(
     taskID: string
   ): Promise<Array<Promise<GraphQLTypes.TaskComment>>> {
-    return this.returnArray(this.get('task.commentitem.getlist.json', {
+    return BitrixAPI.returnArray(this.get('task.commentitem.getlist.json', {
       TASKID: taskID
     }))
   }
@@ -88,7 +88,7 @@ export class BitrixAPI extends RESTDataSource {
       this.context.user.accessToken,
     )
   }
-  private async returnArray(response: Promise<IBitrixResponse>): Promise<Array<any>> {
+  private static async returnArray(response: Promise<IBitrixResponse>): Promise<Array<any>> {
     const { result } = await response;
     return Array.isArray(result)
       ? result
