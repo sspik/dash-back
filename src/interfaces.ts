@@ -1,3 +1,5 @@
+import {IUserModel} from "./models/userSchema";
+
 export interface IBitrixAuthRequest {
   grand_type: String;
   client_id: String;
@@ -24,14 +26,22 @@ export interface IBitrixLoginResponse {
 }
 
 export interface IUserJWTPayload {
-  id: string;
+  userId: number;
   accessToken: string;
   refreshToken: string;
   expires: number;
 }
 
+export interface IBitrixAuthParams {
+  code: string;
+  member_id: string,
+  client_id: string,
+  client_secret: string,
+  grant_type: string
+}
+
 declare module 'express' {
-  interface Request {
-    user: IUserJWTPayload | undefined;
+    interface Request {
+    user: IUserModel | undefined;
   }
 }

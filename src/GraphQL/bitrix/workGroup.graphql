@@ -1,0 +1,28 @@
+#import BooleanEnum, RoleGroup from "enums.graphql"
+
+type WorkGroup {
+  ID: ID
+  SITE_ID: String
+  NAME: String
+  DESCRIPTION: String
+  DATE_CREATE: String
+  DATE_UPDATE: String
+  ACTIVE: BooleanEnum
+  VISIBLE: BooleanEnum
+  OPENED: BooleanEnum
+  CLOSED: BooleanEnum
+  SUBJECT_ID: Int
+  OWNER_ID: Int
+  KEYWORDS: String
+  NUMBER_OF_MEMBERS: Int
+  DATE_ACTIVITY: String
+  SUBJECT_NAME: String
+  PROJECT: BooleanEnum
+  IS_EXTRANET: BooleanEnum
+}
+
+type WorkGroupShort {
+  GROUP_ID: ID
+  GROUP_NAME: String
+  ROLE: RoleGroup
+}

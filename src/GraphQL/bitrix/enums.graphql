@@ -1,0 +1,15 @@
+enum BooleanEnum {
+  Y
+  N
+}
+
+enum RoleGroup {
+  A
+  E
+  K
+}
+
+enum Gender {
+  M
+  F
+}

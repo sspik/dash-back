@@ -1,0 +1,10 @@
+# import Gender from "./enums.graphql"
+
+type Profile {
+  ID: ID
+  ADMIN: Boolean
+  LAST_NAME: String
+  NAME: String
+  PERSONAL_GENDER: Gender
+  PERSONAL_PHOTO: String
+}

@@ -1,0 +1,11 @@
+type SendTaskMessageResponse {
+  error: String
+  error_message: String
+  result: ID
+}
+
+type DeleteTaskMessageResponse {
+  error: String
+  error_message: String
+  result: Boolean
+}

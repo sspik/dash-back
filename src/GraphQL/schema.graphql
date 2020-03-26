@@ -1,0 +1,23 @@
+# import Profile from "bitrix/profile.graphql"
+# import WorkGroup from "bitrix/workGroup.graphql"
+# import WorkGroupShort from "bitrix/workGroup.graphql"
+# import User from "bitrix/user.graphql"
+# import Task from "bitrix/task.graphql"
+# import TaskComment from "bitrix/task.graphql"
+# import SendTaskMessageResponse from "bitrix/taskMessage.graphql"
+# import DeleteTaskMessageResponse from "bitrix/taskMessage.graphql"
+
+type Query {
+  GetProfile: Profile!
+  GetUserGroups: [WorkGroupShort]!
+  GetGroupById(groupId: ID): WorkGroup
+  GetGroupsUsers(groupId: ID): [User]!
+  GetGroupsTasks(groupId: ID): [Task]!
+  GetUserByID(userId: ID): User
+  GetTaskComments(taskId: ID): [TaskComment]!
+}
+
+type Mutation {
+  SendTaskComments(taskId: ID! message: String!): SendTaskMessageResponse!
+  DeleteTaskMessage(taskId: ID! messageId: ID!): DeleteTaskMessageResponse!
+}
