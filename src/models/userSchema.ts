@@ -33,14 +33,14 @@ UserSchema.statics.findById = async (userId: IUserBase['userId']) => {
   return user
 };
 
-UserSchema.methods.updateUser = async function (userData: IUser): Promise<void> {
+UserSchema.methods.updateUser = async function findById (userData: IUser): Promise<void> {
   Object.assign(this, {
     ...userData
   });
   await this.save();
 };
 
-UserSchema.methods.generateAuthToken = function (): string {
+UserSchema.methods.generateAuthToken = function generateAuthToken (): string {
   return encodeToken({...this})
 };
 export const User = mongoose.model<IUser>('User', UserSchema);
