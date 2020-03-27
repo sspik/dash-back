@@ -33,7 +33,7 @@ export async function refreshToken(user: IUserModel) {
       userId: data.user_id,
       accessToken: data.access_token,
       refreshToken: data.refresh_token,
-      expires: Date.now() + 60 * 60 * 1000
+      expires: Date.now() + 60 * 60 * 1000,
     })
   } catch (e) {
     throw new Error(

@@ -7,7 +7,7 @@ import connect from "./connect";
 import { ApolloServer } from "apollo-server-express";
 import { importSchema } from "graphql-import";
 import { resolvers } from "./resolvers";
-import {BitrixAPI} from "./dataSources/bitrix24";
+import {BitrixAPI, YandexMetrikaApi} from "./dataSources";
 import routes from "./routes";
 
 const typeDefs: DocumentNode = gql(importSchema(`${process.env.SCHEMA_PATH}schema.graphql`));
@@ -18,7 +18,8 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   dataSources: (): any => ({
-    bitrixApi: new BitrixAPI()
+    bitrixApi: new BitrixAPI(),
+    yandexMetrikaApi: new YandexMetrikaApi()
   }),
   context: ({ req }) => {
     return { user: req.user }

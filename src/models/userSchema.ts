@@ -6,6 +6,7 @@ interface IUserBase {
   accessToken: string;
   refreshToken: string;
   expires: number;
+  yandexMetrikaId?: number;
 }
 
 export interface IUserModel extends IUserBase{
@@ -20,6 +21,7 @@ const UserSchema: Schema = new Schema({
   userId: { type: Number, required: true, unique: true },
   accessToken: { type: String, required: true, unique: true },
   refreshToken: { type: String, required: true, unique: true },
+  yandexMetrikaId: { type: Number, required: false, unique: true },
   expires: { type: Number, required: true }
 });
 
@@ -31,21 +33,15 @@ UserSchema.statics.findById = async (userId: IUserBase['userId']) => {
   return user
 };
 
-UserSchema.methods.updateUser = async (userData: IUserBase): Promise<void> => {
-  const user = await User.findById(userData.userId);
-  user.accessToken = userData.accessToken;
-  user.refreshToken = userData.refreshToken;
-  user.expires = userData.expires;
-  await user.save();
+UserSchema.methods.updateUser = async function (userData: IUser): Promise<void> {
+  Object.assign(this, {
+    ...userData
+  });
+  await this.save();
 };
 
 UserSchema.methods.generateAuthToken = function (): string {
-  return encodeToken({
-    userId: this.userId,
-    accessToken: this.accessToken,
-    refreshToken: this.refreshToken,
-    expires: this.expires
-  })
+  return encodeToken({...this})
 };
 export const User = mongoose.model<IUser>('User', UserSchema);
 
