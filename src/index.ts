@@ -13,7 +13,6 @@ import routes from "./routes";
 const typeDefs: DocumentNode = gql(importSchema(`${process.env.SCHEMA_PATH}schema.graphql`));
 const app = routes(express());
 
-
 const server = new ApolloServer({
   typeDefs,
   resolvers,

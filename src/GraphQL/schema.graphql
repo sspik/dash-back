@@ -6,6 +6,8 @@
 # import TaskComment from "bitrix/task.graphql"
 # import SendTaskMessageResponse from "bitrix/taskMessage.graphql"
 # import DeleteTaskMessageResponse from "bitrix/taskMessage.graphql"
+# import YandexMetrikaApiResponse from "yandexMetrika/data.graphql"
+# import Counter from "yandexMetrika/counter.graphql"
 
 type Query {
   GetProfile: Profile!
@@ -15,6 +17,8 @@ type Query {
   GetGroupsTasks(groupId: ID): [Task]!
   GetUserByID(userId: ID): User
   GetTaskComments(taskId: ID): [TaskComment]!
+  GetYandexMetrics(metrics: String! dimensions: String date1: String date2: String): YandexMetrikaApiResponse!
+  GetCounterStatus(counter: Int!): Counter!
 }
 
 type Mutation {

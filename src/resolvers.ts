@@ -16,7 +16,18 @@ export const resolvers: Resolvers = {
     GetUserByID: (_, { userId }, { dataSources }) =>
       dataSources.bitrixApi.getUserById(userId),
     GetTaskComments: (_, { taskId }, { dataSources }) =>
-      dataSources.bitrixApi.getTaskComments(taskId)
+      dataSources.bitrixApi.getTaskComments(taskId),
+
+    // Yandex Metrika
+    GetYandexMetrics: (_, { metrics, dimensions, date1, date2 }, { dataSources }) =>
+      dataSources.yandexMetrikaApi.getYandexMetrics({
+        metrics,
+        dimensions,
+        date1,
+        date2,
+      }),
+    GetCounterStatus: (_, { counter }, { dataSources }) =>
+      dataSources.yandexMetrikaApi.checkCounter(counter)
   },
   Mutation: {
     // Bitrix

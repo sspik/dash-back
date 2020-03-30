@@ -1,0 +1,38 @@
+# import ErrorType from "./error.graphql"
+
+type Dimension {
+  name: String!
+  icon_id: ID!
+  icon_type: String!
+  id: ID!
+}
+
+type QueryType {
+  ids: [Int]!
+  dimensions: [String]!
+  metrics: [String]!
+  sort: [String]!
+  date1: String!
+  date2: String!
+  limit: Int
+  offcet: Int
+  group: String
+  auto_group_size: String
+  quantile: String
+  offline_window: String
+  attribution: String
+  currency: String
+  adfox_event_id: String
+}
+
+type DataType {
+  dimensions: [Dimension]!
+  metrics: [Int]!
+}
+
+
+type YandexMetrikaApiResponse {
+  query: QueryType!
+  data: [DataType]!
+  errors: ErrorType
+}

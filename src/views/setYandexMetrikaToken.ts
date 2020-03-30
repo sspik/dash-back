@@ -1,5 +1,4 @@
 import {Request, Response} from "express";
-import {User} from "../models/userSchema";
 
 interface PostData {
   ids: number
@@ -21,7 +20,6 @@ export default async (req: Request, res: Response,): Promise<void> => {
       status: 'ok'
     }))
   } catch (e)  {
-    console.log(e)
     res.status(400);
     res.send(JSON.stringify({
       status: 'error'

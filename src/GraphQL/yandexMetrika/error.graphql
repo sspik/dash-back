@@ -1,0 +1,8 @@
+type Errors {
+  error_type: String!
+  message: String!
+}
+
+type ErrorType {
+  errors: [Errors]!
+}

@@ -1,0 +1,56 @@
+# import ErrorType from "./error.graphql"
+
+enum Status {
+  Active
+  Deleted
+}
+enum CounterType {
+  partner
+  simple
+}
+
+enum CodeStatus {
+  CS_ERR_INFECTED
+  CS_ERR_OTHER_HTML_CODE
+  CS_NOT_FOUND
+  CS_ERR_CONNECT
+  CS_ERR_TIMEOUT
+  CS_OK
+}
+
+enum Permission {
+  view
+  edit
+  own
+}
+
+type Monitoring {
+  enable_monitoring: Int!
+  emails: [String]!
+  sms_allowed: Int!
+  enable_sms: Int
+  sms_time: String!
+  phones: [String]!
+  phone_ids: [ID]!
+  possible_phones: [String]!
+  possible_phone_ids: [ID]!
+}
+
+type Counter {
+  id: ID
+  status: Status
+  owner_login: String
+  code_status: CodeStatus
+  name: String
+  type: CounterType
+  favorite: Int
+  permission: Permission
+  create_time: String
+  time_zone_name: String
+  code: String
+  monitoring: Monitoring
+  filter_robots: Int
+  site: String
+  mirrors: [String]
+  errors: ErrorType
+}

@@ -41,7 +41,13 @@ UserSchema.methods.updateUser = async function findById (userData: IUser): Promi
 };
 
 UserSchema.methods.generateAuthToken = function generateAuthToken (): string {
-  return encodeToken({...this})
+  return encodeToken({
+    userId: this.userId,
+    expires: this.expires,
+    accessToken: this.accessToken,
+    refreshToken: this.refreshToken,
+    yandexMetrikaId: this.yandexMetrikaId
+  })
 };
 export const User = mongoose.model<IUser>('User', UserSchema);
 
