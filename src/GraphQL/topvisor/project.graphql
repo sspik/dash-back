@@ -1,0 +1,8 @@
+# import Searcher from "./searcher.graphql"
+
+type Project {
+  id: ID!
+  name: String!
+  site: String!
+  searchers: [Searcher!]!
+}

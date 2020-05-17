@@ -1,4 +1,8 @@
 #import BooleanEnum, RoleGroup from "enums.graphql"
+#import User from "user.graphql"
+#import Task from "task.graphql"
+#import Counter from "../yandexMetrika/counter.graphql"
+#import Project from "../topvisor/project.graphql"
 
 type WorkGroup {
   ID: ID
@@ -21,8 +25,26 @@ type WorkGroup {
   IS_EXTRANET: BooleanEnum
 }
 
+type WorkGroupDetail {
+  ID: ID
+  NAME: String
+  DESCRIPTION: String
+  DATE_CREATE: String
+  MEMBERS: [User]!
+  OWNER: User!
+  TASKS: [Task]!
+  COUNTER: Counter
+  TOPVISOR_PROJECT: Project
+}
+
 type WorkGroupShort {
   GROUP_ID: ID
   GROUP_NAME: String
   ROLE: RoleGroup
+}
+
+type WorkGroupResponse {
+  result: [WorkGroup]
+  next: Int
+  total: Int!
 }

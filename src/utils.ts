@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import {IUserJWTPayload} from "./interfaces";
-import {IUserModel} from "./models/userSchema";
+import {IUserModel} from "./models/user";
 import axios from "axios";
 
 export function decodeToken(token: string) {

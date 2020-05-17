@@ -10,6 +10,22 @@ export type Scalars = {
   Float: number;
 };
 
+export type Attachment = {
+   __typename?: 'Attachment';
+  CREATED_BY: Scalars['ID'];
+  CREATE_TIME: Scalars['String'];
+  DOWNLOAD_URL: Scalars['String'];
+  ID: Scalars['ID'];
+  NAME: Scalars['String'];
+  OBJECT_ID: Scalars['ID'];
+  SIZE: Scalars['Int'];
+};
+
+export type AttachmentResponse = {
+   __typename?: 'AttachmentResponse';
+  result?: Maybe<Attachment>;
+};
+
 export enum BooleanEnum {
   Y = 'Y',
   N = 'N'
@@ -84,9 +100,24 @@ export type Errors = {
 
 export type ErrorType = {
    __typename?: 'ErrorType';
-  code: Scalars['Int'];
   errors: Array<Maybe<Errors>>;
-  message: Scalars['String'];
+};
+
+export type Feed = {
+   __typename?: 'Feed';
+  ID: Scalars['ID'];
+  AUTHOR: User;
+  AUTHOR_ID: Scalars['String'];
+  DETAIL_TEXT: Scalars['String'];
+  DATE_PUBLISH: Scalars['String'];
+  FILES?: Maybe<Array<Maybe<Attachment>>>;
+};
+
+export type FeedResponse = {
+   __typename?: 'FeedResponse';
+  next?: Maybe<Scalars['Int']>;
+  result: Array<Maybe<Feed>>;
+  total: Scalars['Int'];
 };
 
 export enum Gender {
@@ -109,8 +140,20 @@ export type Monitoring = {
 
 export type Mutation = {
    __typename?: 'Mutation';
+  AddTopvisorProject?: Maybe<Project>;
+  AddYandexMetrikaCounter: Counter;
   DeleteTaskMessage: DeleteTaskMessageResponse;
-  SendTaskComments: SendTaskMessageResponse;
+  SendTaskMessage: SendTaskMessageResponse;
+};
+
+
+export type MutationAddTopvisorProjectArgs = {
+  projectId: Scalars['Int'];
+};
+
+
+export type MutationAddYandexMetrikaCounterArgs = {
+  counterId: Scalars['Int'];
 };
 
 
@@ -120,7 +163,7 @@ export type MutationDeleteTaskMessageArgs = {
 };
 
 
-export type MutationSendTaskCommentsArgs = {
+export type MutationSendTaskMessageArgs = {
   taskId: Scalars['ID'];
   message: Scalars['String'];
 };
@@ -141,17 +184,35 @@ export type Profile = {
   PERSONAL_PHOTO?: Maybe<Scalars['String']>;
 };
 
+export type Project = {
+   __typename?: 'Project';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  searchers: Array<Searcher>;
+  site: Scalars['String'];
+};
+
 export type Query = {
    __typename?: 'Query';
+  GetAttachment: AttachmentResponse;
   GetCounterStatus: Counter;
+  GetFeed: FeedResponse;
   GetGroupById?: Maybe<WorkGroup>;
   GetGroupsTasks: Array<Maybe<Task>>;
   GetGroupsUsers: Array<Maybe<User>>;
   GetProfile: Profile;
   GetTaskComments: Array<Maybe<TaskComment>>;
+  GetTopvisorProjectById?: Maybe<Project>;
+  GetTopvisorProjectByUrl?: Maybe<Project>;
   GetUserByID?: Maybe<User>;
-  GetUserGroups: Array<Maybe<WorkGroupShort>>;
+  GetUserGroups?: Maybe<WorkGroupResponse>;
   GetYandexMetrics: YandexMetrikaApiResponse;
+  SearchGroupByName: Array<Maybe<WorkGroup>>;
+};
+
+
+export type QueryGetAttachmentArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -160,28 +221,48 @@ export type QueryGetCounterStatusArgs = {
 };
 
 
+export type QueryGetFeedArgs = {
+  start?: Maybe<Scalars['Int']>;
+};
+
+
 export type QueryGetGroupByIdArgs = {
-  groupId?: Maybe<Scalars['ID']>;
+  groupId: Scalars['ID'];
 };
 
 
 export type QueryGetGroupsTasksArgs = {
-  groupId?: Maybe<Scalars['ID']>;
+  groupId: Scalars['ID'];
 };
 
 
 export type QueryGetGroupsUsersArgs = {
-  groupId?: Maybe<Scalars['ID']>;
+  groupId: Scalars['ID'];
 };
 
 
 export type QueryGetTaskCommentsArgs = {
-  taskId?: Maybe<Scalars['ID']>;
+  taskId: Scalars['ID'];
+};
+
+
+export type QueryGetTopvisorProjectByIdArgs = {
+  projectId: Scalars['Int'];
+};
+
+
+export type QueryGetTopvisorProjectByUrlArgs = {
+  projectUrl: Scalars['String'];
 };
 
 
 export type QueryGetUserByIdArgs = {
-  userId?: Maybe<Scalars['ID']>;
+  userId: Scalars['ID'];
+};
+
+
+export type QueryGetUserGroupsArgs = {
+  start?: Maybe<Scalars['Int']>;
 };
 
 
@@ -190,6 +271,11 @@ export type QueryGetYandexMetricsArgs = {
   dimensions?: Maybe<Scalars['String']>;
   date1?: Maybe<Scalars['String']>;
   date2?: Maybe<Scalars['String']>;
+};
+
+
+export type QuerySearchGroupByNameArgs = {
+  name: Scalars['String'];
 };
 
 export type QueryType = {
@@ -211,11 +297,40 @@ export type QueryType = {
   adfox_event_id?: Maybe<Scalars['String']>;
 };
 
+export type Region = {
+   __typename?: 'Region';
+  searcher_key: Scalars['Int'];
+  id: Scalars['ID'];
+  key: Scalars['Int'];
+  lang: Scalars['String'];
+  devise: Scalars['Int'];
+  depth: Scalars['Int'];
+  index: Scalars['Int'];
+  enabled: Scalars['Int'];
+  type: Scalars['String'];
+  countryCode: Scalars['String'];
+  name: Scalars['String'];
+  areaName: Scalars['String'];
+  domain: Scalars['String'];
+};
+
 export enum RoleGroup {
   A = 'A',
   E = 'E',
   K = 'K'
 }
+
+export type Searcher = {
+   __typename?: 'Searcher';
+  enabled: Scalars['Int'];
+  id: Scalars['ID'];
+  key: Scalars['Int'];
+  name: Scalars['String'];
+  ord: Scalars['Int'];
+  project_id: Scalars['ID'];
+  regions: Array<Region>;
+  searcher: Scalars['Int'];
+};
 
 export type SendTaskMessageResponse = {
    __typename?: 'SendTaskMessageResponse';
@@ -316,6 +431,13 @@ export type WorkGroup = {
   VISIBLE?: Maybe<BooleanEnum>;
 };
 
+export type WorkGroupResponse = {
+   __typename?: 'WorkGroupResponse';
+  next?: Maybe<Scalars['Int']>;
+  result?: Maybe<Array<Maybe<WorkGroup>>>;
+  total: Scalars['Int'];
+};
+
 export type WorkGroupShort = {
    __typename?: 'WorkGroupShort';
   GROUP_ID?: Maybe<Scalars['ID']>;
@@ -326,7 +448,7 @@ export type WorkGroupShort = {
 export type YandexMetrikaApiResponse = {
    __typename?: 'YandexMetrikaApiResponse';
   data: Array<Maybe<DataType>>;
-  error?: Maybe<ErrorType>;
+  errors?: Maybe<ErrorType>;
   query: QueryType;
 };
 
@@ -404,28 +526,34 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>,
+  ID: ResolverTypeWrapper<Scalars['ID']>,
+  AttachmentResponse: ResolverTypeWrapper<AttachmentResponse>,
+  Attachment: ResolverTypeWrapper<Attachment>,
+  String: ResolverTypeWrapper<Scalars['String']>,
   Int: ResolverTypeWrapper<Scalars['Int']>,
   Counter: ResolverTypeWrapper<Counter>,
-  String: ResolverTypeWrapper<Scalars['String']>,
   CodeStatus: CodeStatus,
   ErrorType: ResolverTypeWrapper<ErrorType>,
   Errors: ResolverTypeWrapper<Errors>,
-  ID: ResolverTypeWrapper<Scalars['ID']>,
   Monitoring: ResolverTypeWrapper<Monitoring>,
   Permission: Permission,
   Status: Status,
   CounterType: CounterType,
+  FeedResponse: ResolverTypeWrapper<FeedResponse>,
+  Feed: ResolverTypeWrapper<Feed>,
+  User: ResolverTypeWrapper<User>,
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
+  Gender: Gender,
   WorkGroup: ResolverTypeWrapper<WorkGroup>,
   BooleanEnum: BooleanEnum,
   Task: ResolverTypeWrapper<Task>,
   Duration: Duration,
-  User: ResolverTypeWrapper<User>,
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
-  Gender: Gender,
   Profile: ResolverTypeWrapper<Profile>,
   TaskComment: ResolverTypeWrapper<TaskComment>,
-  WorkGroupShort: ResolverTypeWrapper<WorkGroupShort>,
-  RoleGroup: RoleGroup,
+  Project: ResolverTypeWrapper<Project>,
+  Searcher: ResolverTypeWrapper<Searcher>,
+  Region: ResolverTypeWrapper<Region>,
+  WorkGroupResponse: ResolverTypeWrapper<WorkGroupResponse>,
   YandexMetrikaApiResponse: ResolverTypeWrapper<YandexMetrikaApiResponse>,
   DataType: ResolverTypeWrapper<DataType>,
   Dimension: ResolverTypeWrapper<Dimension>,
@@ -433,33 +561,41 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>,
   DeleteTaskMessageResponse: ResolverTypeWrapper<DeleteTaskMessageResponse>,
   SendTaskMessageResponse: ResolverTypeWrapper<SendTaskMessageResponse>,
+  WorkGroupShort: ResolverTypeWrapper<WorkGroupShort>,
+  RoleGroup: RoleGroup,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Query: {},
+  ID: Scalars['ID'],
+  AttachmentResponse: AttachmentResponse,
+  Attachment: Attachment,
+  String: Scalars['String'],
   Int: Scalars['Int'],
   Counter: Counter,
-  String: Scalars['String'],
   CodeStatus: CodeStatus,
   ErrorType: ErrorType,
   Errors: Errors,
-  ID: Scalars['ID'],
   Monitoring: Monitoring,
   Permission: Permission,
   Status: Status,
   CounterType: CounterType,
+  FeedResponse: FeedResponse,
+  Feed: Feed,
+  User: User,
+  Boolean: Scalars['Boolean'],
+  Gender: Gender,
   WorkGroup: WorkGroup,
   BooleanEnum: BooleanEnum,
   Task: Task,
   Duration: Duration,
-  User: User,
-  Boolean: Scalars['Boolean'],
-  Gender: Gender,
   Profile: Profile,
   TaskComment: TaskComment,
-  WorkGroupShort: WorkGroupShort,
-  RoleGroup: RoleGroup,
+  Project: Project,
+  Searcher: Searcher,
+  Region: Region,
+  WorkGroupResponse: WorkGroupResponse,
   YandexMetrikaApiResponse: YandexMetrikaApiResponse,
   DataType: DataType,
   Dimension: Dimension,
@@ -467,6 +603,24 @@ export type ResolversParentTypes = {
   Mutation: {},
   DeleteTaskMessageResponse: DeleteTaskMessageResponse,
   SendTaskMessageResponse: SendTaskMessageResponse,
+  WorkGroupShort: WorkGroupShort,
+  RoleGroup: RoleGroup,
+};
+
+export type AttachmentResolvers<ContextType = any, ParentType extends ResolversParentTypes['Attachment'] = ResolversParentTypes['Attachment']> = {
+  CREATED_BY?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  CREATE_TIME?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  DOWNLOAD_URL?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  ID?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  NAME?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  OBJECT_ID?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  SIZE?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type AttachmentResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['AttachmentResponse'] = ResolversParentTypes['AttachmentResponse']> = {
+  result?: Resolver<Maybe<ResolversTypes['Attachment']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type CounterResolvers<ContextType = any, ParentType extends ResolversParentTypes['Counter'] = ResolversParentTypes['Counter']> = {
@@ -517,9 +671,24 @@ export type ErrorsResolvers<ContextType = any, ParentType extends ResolversParen
 };
 
 export type ErrorTypeResolvers<ContextType = any, ParentType extends ResolversParentTypes['ErrorType'] = ResolversParentTypes['ErrorType']> = {
-  code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   errors?: Resolver<Array<Maybe<ResolversTypes['Errors']>>, ParentType, ContextType>,
-  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type FeedResolvers<ContextType = any, ParentType extends ResolversParentTypes['Feed'] = ResolversParentTypes['Feed']> = {
+  ID?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  AUTHOR?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
+  AUTHOR_ID?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  DETAIL_TEXT?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  DATE_PUBLISH?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  FILES?: Resolver<Maybe<Array<Maybe<ResolversTypes['Attachment']>>>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type FeedResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['FeedResponse'] = ResolversParentTypes['FeedResponse']> = {
+  next?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  result?: Resolver<Array<Maybe<ResolversTypes['Feed']>>, ParentType, ContextType>,
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -537,8 +706,10 @@ export type MonitoringResolvers<ContextType = any, ParentType extends ResolversP
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  AddTopvisorProject?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<MutationAddTopvisorProjectArgs, 'projectId'>>,
+  AddYandexMetrikaCounter?: Resolver<ResolversTypes['Counter'], ParentType, ContextType, RequireFields<MutationAddYandexMetrikaCounterArgs, 'counterId'>>,
   DeleteTaskMessage?: Resolver<ResolversTypes['DeleteTaskMessageResponse'], ParentType, ContextType, RequireFields<MutationDeleteTaskMessageArgs, 'taskId' | 'messageId'>>,
-  SendTaskComments?: Resolver<ResolversTypes['SendTaskMessageResponse'], ParentType, ContextType, RequireFields<MutationSendTaskCommentsArgs, 'taskId' | 'message'>>,
+  SendTaskMessage?: Resolver<ResolversTypes['SendTaskMessageResponse'], ParentType, ContextType, RequireFields<MutationSendTaskMessageArgs, 'taskId' | 'message'>>,
 };
 
 export type ProfileResolvers<ContextType = any, ParentType extends ResolversParentTypes['Profile'] = ResolversParentTypes['Profile']> = {
@@ -551,16 +722,29 @@ export type ProfileResolvers<ContextType = any, ParentType extends ResolversPare
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export type ProjectResolvers<ContextType = any, ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  searchers?: Resolver<Array<ResolversTypes['Searcher']>, ParentType, ContextType>,
+  site?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  GetAttachment?: Resolver<ResolversTypes['AttachmentResponse'], ParentType, ContextType, RequireFields<QueryGetAttachmentArgs, 'id'>>,
   GetCounterStatus?: Resolver<ResolversTypes['Counter'], ParentType, ContextType, RequireFields<QueryGetCounterStatusArgs, 'counter'>>,
-  GetGroupById?: Resolver<Maybe<ResolversTypes['WorkGroup']>, ParentType, ContextType, RequireFields<QueryGetGroupByIdArgs, never>>,
-  GetGroupsTasks?: Resolver<Array<Maybe<ResolversTypes['Task']>>, ParentType, ContextType, RequireFields<QueryGetGroupsTasksArgs, never>>,
-  GetGroupsUsers?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType, RequireFields<QueryGetGroupsUsersArgs, never>>,
+  GetFeed?: Resolver<ResolversTypes['FeedResponse'], ParentType, ContextType, RequireFields<QueryGetFeedArgs, 'start'>>,
+  GetGroupById?: Resolver<Maybe<ResolversTypes['WorkGroup']>, ParentType, ContextType, RequireFields<QueryGetGroupByIdArgs, 'groupId'>>,
+  GetGroupsTasks?: Resolver<Array<Maybe<ResolversTypes['Task']>>, ParentType, ContextType, RequireFields<QueryGetGroupsTasksArgs, 'groupId'>>,
+  GetGroupsUsers?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType, RequireFields<QueryGetGroupsUsersArgs, 'groupId'>>,
   GetProfile?: Resolver<ResolversTypes['Profile'], ParentType, ContextType>,
-  GetTaskComments?: Resolver<Array<Maybe<ResolversTypes['TaskComment']>>, ParentType, ContextType, RequireFields<QueryGetTaskCommentsArgs, never>>,
-  GetUserByID?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByIdArgs, never>>,
-  GetUserGroups?: Resolver<Array<Maybe<ResolversTypes['WorkGroupShort']>>, ParentType, ContextType>,
+  GetTaskComments?: Resolver<Array<Maybe<ResolversTypes['TaskComment']>>, ParentType, ContextType, RequireFields<QueryGetTaskCommentsArgs, 'taskId'>>,
+  GetTopvisorProjectById?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryGetTopvisorProjectByIdArgs, 'projectId'>>,
+  GetTopvisorProjectByUrl?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryGetTopvisorProjectByUrlArgs, 'projectUrl'>>,
+  GetUserByID?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByIdArgs, 'userId'>>,
+  GetUserGroups?: Resolver<Maybe<ResolversTypes['WorkGroupResponse']>, ParentType, ContextType, RequireFields<QueryGetUserGroupsArgs, 'start'>>,
   GetYandexMetrics?: Resolver<ResolversTypes['YandexMetrikaApiResponse'], ParentType, ContextType, RequireFields<QueryGetYandexMetricsArgs, 'metrics'>>,
+  SearchGroupByName?: Resolver<Array<Maybe<ResolversTypes['WorkGroup']>>, ParentType, ContextType, RequireFields<QuerySearchGroupByNameArgs, 'name'>>,
 };
 
 export type QueryTypeResolvers<ContextType = any, ParentType extends ResolversParentTypes['QueryType'] = ResolversParentTypes['QueryType']> = {
@@ -579,6 +763,35 @@ export type QueryTypeResolvers<ContextType = any, ParentType extends ResolversPa
   attribution?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   currency?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   adfox_event_id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type RegionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Region'] = ResolversParentTypes['Region']> = {
+  searcher_key?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  key?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  lang?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  devise?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  depth?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  index?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  enabled?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  countryCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  areaName?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  domain?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type SearcherResolvers<ContextType = any, ParentType extends ResolversParentTypes['Searcher'] = ResolversParentTypes['Searcher']> = {
+  enabled?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  key?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  ord?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  project_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  regions?: Resolver<Array<ResolversTypes['Region']>, ParentType, ContextType>,
+  searcher?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -676,6 +889,13 @@ export type WorkGroupResolvers<ContextType = any, ParentType extends ResolversPa
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export type WorkGroupResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['WorkGroupResponse'] = ResolversParentTypes['WorkGroupResponse']> = {
+  next?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  result?: Resolver<Maybe<Array<Maybe<ResolversTypes['WorkGroup']>>>, ParentType, ContextType>,
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export type WorkGroupShortResolvers<ContextType = any, ParentType extends ResolversParentTypes['WorkGroupShort'] = ResolversParentTypes['WorkGroupShort']> = {
   GROUP_ID?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
   GROUP_NAME?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
@@ -685,28 +905,36 @@ export type WorkGroupShortResolvers<ContextType = any, ParentType extends Resolv
 
 export type YandexMetrikaApiResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['YandexMetrikaApiResponse'] = ResolversParentTypes['YandexMetrikaApiResponse']> = {
   data?: Resolver<Array<Maybe<ResolversTypes['DataType']>>, ParentType, ContextType>,
-  error?: Resolver<Maybe<ResolversTypes['ErrorType']>, ParentType, ContextType>,
+  errors?: Resolver<Maybe<ResolversTypes['ErrorType']>, ParentType, ContextType>,
   query?: Resolver<ResolversTypes['QueryType'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type Resolvers<ContextType = any> = {
+  Attachment?: AttachmentResolvers<ContextType>,
+  AttachmentResponse?: AttachmentResponseResolvers<ContextType>,
   Counter?: CounterResolvers<ContextType>,
   DataType?: DataTypeResolvers<ContextType>,
   DeleteTaskMessageResponse?: DeleteTaskMessageResponseResolvers<ContextType>,
   Dimension?: DimensionResolvers<ContextType>,
   Errors?: ErrorsResolvers<ContextType>,
   ErrorType?: ErrorTypeResolvers<ContextType>,
+  Feed?: FeedResolvers<ContextType>,
+  FeedResponse?: FeedResponseResolvers<ContextType>,
   Monitoring?: MonitoringResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
   Profile?: ProfileResolvers<ContextType>,
+  Project?: ProjectResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
   QueryType?: QueryTypeResolvers<ContextType>,
+  Region?: RegionResolvers<ContextType>,
+  Searcher?: SearcherResolvers<ContextType>,
   SendTaskMessageResponse?: SendTaskMessageResponseResolvers<ContextType>,
   Task?: TaskResolvers<ContextType>,
   TaskComment?: TaskCommentResolvers<ContextType>,
   User?: UserResolvers<ContextType>,
   WorkGroup?: WorkGroupResolvers<ContextType>,
+  WorkGroupResponse?: WorkGroupResponseResolvers<ContextType>,
   WorkGroupShort?: WorkGroupShortResolvers<ContextType>,
   YandexMetrikaApiResponse?: YandexMetrikaApiResponseResolvers<ContextType>,
 };

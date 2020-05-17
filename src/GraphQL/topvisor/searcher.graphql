@@ -1,0 +1,26 @@
+type Region {
+  searcher_key: Int!
+  id: ID!
+  key: Int!
+  lang: String!
+  devise: Int!
+  depth: Int!
+  index: Int!
+  enabled: Int!
+  type: String!
+  countryCode: String!
+  name: String!
+  areaName: String!
+  domain: String!
+}
+
+type Searcher {
+  id: ID!
+  project_id: ID!
+  searcher: Int!
+  enabled: Int!
+  ord: Int!
+  key: Int!
+  name: String!
+  regions: [Region!]!
+}

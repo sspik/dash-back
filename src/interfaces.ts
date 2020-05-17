@@ -1,4 +1,4 @@
-import {IUserModel} from "./models/userSchema";
+import {IUserModel} from "./models/user";
 
 export interface IBitrixAuthRequest {
   grand_type: String;
@@ -30,7 +30,6 @@ export interface IUserJWTPayload {
   accessToken: string;
   refreshToken: string;
   expires: number;
-  yandexMetrikaId: number;
 }
 
 export interface IBitrixAuthParams {

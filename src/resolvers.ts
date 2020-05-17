@@ -5,8 +5,8 @@ export const resolvers: Resolvers = {
     // Bitrix
     GetProfile: (_, __,  { dataSources }) =>
       dataSources.bitrixApi.profile(),
-    GetUserGroups: (_, __, { dataSources }) =>
-      dataSources.bitrixApi.userGroups(),
+    GetUserGroups: (_, { start }, { dataSources }) =>
+      dataSources.bitrixApi.userGroups(start),
     GetGroupsTasks: (_, { groupId }, { dataSources }) =>
       dataSources.bitrixApi.getGroupsTasks(groupId),
     GetGroupById: (_, { groupId } , { dataSources }) =>
@@ -17,6 +17,11 @@ export const resolvers: Resolvers = {
       dataSources.bitrixApi.getUserById(userId),
     GetTaskComments: (_, { taskId }, { dataSources }) =>
       dataSources.bitrixApi.getTaskComments(taskId),
+    SearchGroupByName: (_, { name }, { dataSources }) =>
+      dataSources.bitrixApi.searchGroupByName(name),
+    GetFeed: (_, { start }, { dataSources }) =>
+      dataSources.bitrixApi.getFeed(start),
+
 
     // Yandex Metrika
     GetYandexMetrics: (_, { metrics, dimensions, date1, date2 }, { dataSources }) =>
@@ -27,13 +32,27 @@ export const resolvers: Resolvers = {
         date2,
       }),
     GetCounterStatus: (_, { counter }, { dataSources }) =>
-      dataSources.yandexMetrikaApi.checkCounter(counter)
+      dataSources.yandexMetrikaApi.checkCounter(counter),
+
+    // TopVisor
+    GetTopvisorProjectById: (_, {projectId}, { dataSources }) =>
+      dataSources.topvisorApi.getProjectById(projectId),
+    GetTopvisorProjectByUrl: (_, {projectUrl}, { dataSources }) =>
+      dataSources.topvisorApi.getProjectByUrl(projectUrl),
   },
   Mutation: {
     // Bitrix
-    SendTaskComments: (_, { taskId, message }, { dataSources }) =>
+    SendTaskMessage: (_, { taskId, message }, { dataSources }) =>
       dataSources.bitrixApi.sendTaskMessage(taskId, message),
-    DeleteTaskMessage: (_, {taskId, messageId}, { dataSources }) =>
-      dataSources.bitrixApi.deleteTaskMessageResponse(taskId, messageId)
+    DeleteTaskMessage: (_, { taskId, messageId}, { dataSources }) =>
+      dataSources.bitrixApi.deleteTaskMessage(taskId, messageId),
+
+    // Yandex Metrika
+    AddYandexMetrikaCounter: (_, { counterId }, { dataSources }) =>
+      dataSources.yandexMetrikaApi.addCounter(counterId),
+
+    // Topvisor
+    AddTopvisorProject: (_, { projectId }, { dataSources }) =>
+      dataSources.topvisor.addTopvisorProject(projectId)
   }
 };

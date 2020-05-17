@@ -1,27 +1,41 @@
 # import Profile from "bitrix/profile.graphql"
 # import WorkGroup from "bitrix/workGroup.graphql"
 # import WorkGroupShort from "bitrix/workGroup.graphql"
+# import WorkGroupResponse from "bitrix/workGroup.graphql"
 # import User from "bitrix/user.graphql"
 # import Task from "bitrix/task.graphql"
 # import TaskComment from "bitrix/task.graphql"
 # import SendTaskMessageResponse from "bitrix/taskMessage.graphql"
 # import DeleteTaskMessageResponse from "bitrix/taskMessage.graphql"
+# import FeedResponse from "bitrix/feed.graphql"
+# import AttachmentResponse from "bitrix/attachment.graphql"
 # import YandexMetrikaApiResponse from "yandexMetrika/data.graphql"
 # import Counter from "yandexMetrika/counter.graphql"
+# import Project from "topvisor/project.graphql"
+
+
+
 
 type Query {
   GetProfile: Profile!
-  GetUserGroups: [WorkGroupShort]!
-  GetGroupById(groupId: ID): WorkGroup
-  GetGroupsUsers(groupId: ID): [User]!
-  GetGroupsTasks(groupId: ID): [Task]!
-  GetUserByID(userId: ID): User
-  GetTaskComments(taskId: ID): [TaskComment]!
+  GetUserGroups(start: Int = 0): WorkGroupResponse
+  GetGroupById(groupId: ID!): WorkGroup
+  SearchGroupByName(name: String!): [WorkGroup]!
+  GetGroupsUsers(groupId: ID!): [User]!
+  GetGroupsTasks(groupId: ID!): [Task]!
+  GetUserByID(userId: ID!): User
+  GetTaskComments(taskId: ID!): [TaskComment]!
+  GetFeed(start: Int = 0): FeedResponse!
+  GetAttachment(id: ID!): AttachmentResponse!
   GetYandexMetrics(metrics: String! dimensions: String date1: String date2: String): YandexMetrikaApiResponse!
   GetCounterStatus(counter: Int!): Counter!
+  GetTopvisorProjectById(projectId: Int!): Project
+  GetTopvisorProjectByUrl(projectUrl: String!): Project
 }
 
 type Mutation {
-  SendTaskComments(taskId: ID! message: String!): SendTaskMessageResponse!
+  SendTaskMessage(taskId: ID! message: String!): SendTaskMessageResponse!
   DeleteTaskMessage(taskId: ID! messageId: ID!): DeleteTaskMessageResponse!
+  AddYandexMetrikaCounter(counterId: Int!): Counter!
+  AddTopvisorProject(projectId: Int!): Project
 }

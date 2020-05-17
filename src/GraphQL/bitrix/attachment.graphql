@@ -1,0 +1,13 @@
+type Attachment {
+  ID: ID!
+  OBJECT_ID: ID!
+  CREATE_TIME: String!
+  CREATED_BY: ID!
+  DOWNLOAD_URL: String!
+  NAME: String!
+  SIZE: Int!
+}
+
+type AttachmentResponse {
+  result: Attachment
+}

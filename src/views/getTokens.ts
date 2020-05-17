@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
 import {IBitrixAuthParams} from "../interfaces";
 import Axios from "axios";
-import {User} from "../models/userSchema";
+import {User} from "../models/user";
 
 export default async (req: Request, res: Response): Promise<void> => {
   const { code, server_domain } = req.query;
@@ -12,10 +12,17 @@ export default async (req: Request, res: Response): Promise<void> => {
     client_secret: process.env.APP_SECRET,
     grant_type: 'authorization_code'
   };
-  const bitrixResponse = await Axios.get(
-    `https://${server_domain}/oauth/token`,
-    { params }
-  );
+  let bitrixResponse;
+  try {
+    bitrixResponse = await Axios.get(
+      `https://${server_domain}/oauth/token`,
+      { params }
+    );
+  } catch (e) {
+    res.statusCode = bitrixResponse ? bitrixResponse.status : 403;
+    throw new Error(e)
+  }
+
   const { data } = bitrixResponse;
   if (await User.exists({userId: data.user_id})){
     await User.findOneAndUpdate({userId: data.user_id}, {

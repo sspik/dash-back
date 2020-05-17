@@ -1,0 +1,17 @@
+# import User from "./user.graphql"
+# import Attachment from "./attachment.graphql"
+
+type Feed {
+  ID: ID!
+  AUTHOR: User
+  AUTHOR_ID: String!
+  DETAIL_TEXT: String!
+  DATE_PUBLISH: String!
+  FILES: [Attachment]
+}
+
+type FeedResponse {
+  next: Int
+  total: Int!
+  result: [Feed]!
+}
