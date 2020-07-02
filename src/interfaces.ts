@@ -1,4 +1,4 @@
-import {IUserModel} from "./models/user";
+import { IUserModel } from "./models/user";
 
 export interface IBitrixAuthRequest {
   grand_type: String;
@@ -40,8 +40,10 @@ export interface IBitrixAuthParams {
   grant_type: string
 }
 
-declare module 'express' {
+declare global {
+  namespace Express {
     interface Request {
-    user?: IUserModel;
+      user?: IUserModel;
+    }
   }
 }
