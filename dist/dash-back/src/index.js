@@ -18,9 +18,9 @@ exports.server = new apollo_server_express_1.ApolloServer({
     typeDefs,
     resolvers: resolvers_1.resolvers,
     dataSources: () => ({
-        bitrixApi: new dataSources_1.BitrixAPI(),
-        yandexMetrikaApi: new dataSources_1.YandexMetrikaApi(),
-        topvisorApi: new dataSources_1.TopvisorApi(),
+        bitrixApi: dataSources_1.Bitrix,
+        yandexMetrikaApi: dataSources_1.YandexMetrika,
+        topvisorApi: dataSources_1.Topvisor,
     }),
     context: ({ req }) => {
         return { user: req.user };

@@ -7,19 +7,22 @@ exports.resolvers = {
         GetUserGroups: (_, { start }, { dataSources }) => dataSources.bitrixApi.userGroups(start),
         GetGroupsTasks: (_, { groupId }, { dataSources }) => dataSources.bitrixApi.getGroupsTasks(groupId),
         GetGroupById: (_, { groupId }, { dataSources }) => dataSources.bitrixApi.getGroupById(groupId),
+        GetTaskByID: (_, { taskId }, { dataSources }) => dataSources.bitrixApi.getTaskById(taskId),
         GetGroupsUsers: (_, { groupId }, { dataSources }) => dataSources.bitrixApi.getGroupsUsers(groupId),
         GetUserByID: (_, { userId }, { dataSources }) => dataSources.bitrixApi.getUserById(userId),
         GetTaskComments: (_, { taskId }, { dataSources }) => dataSources.bitrixApi.getTaskComments(taskId),
         SearchGroupByName: (_, { name }, { dataSources }) => dataSources.bitrixApi.searchGroupByName(name),
         GetFeed: (_, { start }, { dataSources }) => dataSources.bitrixApi.getFeed(start),
         // Yandex Metrika
-        GetYandexMetrics: (_, { metrics, dimensions, date1, date2 }, { dataSources }) => dataSources.yandexMetrikaApi.getYandexMetrics({
+        GetYandexMetrics: (_, { metrics, dimensions, date1, date2, bitrixGroupId, preset }, { dataSources }) => dataSources.yandexMetrikaApi.getYandexMetrics({
             metrics,
             dimensions,
             date1,
             date2,
+            bitrixGroupId,
+            preset
         }),
-        GetCounterStatus: (_, { counter }, { dataSources }) => dataSources.yandexMetrikaApi.checkCounter(counter),
+        GetCounter: (_, { bitrixGroupId }, { dataSources }) => dataSources.yandexMetrikaApi.getCounter(bitrixGroupId),
         // TopVisor
         GetTopvisorProjectById: (_, { projectId }, { dataSources }) => dataSources.topvisorApi.getProjectById(projectId),
         GetTopvisorProjectByUrl: (_, { projectUrl }, { dataSources }) => dataSources.topvisorApi.getProjectByUrl(projectUrl),

@@ -1,4 +1,6 @@
 #import BooleanEnum from "enums.graphql"
+#import User from "user.graphql"
+#improt Attachment from attachment.graphql
 
 enum Duration {
   days
@@ -7,47 +9,55 @@ enum Duration {
 }
 
 type Task {
-  ID: ID
-  TITLE: String
-  STAGE_ID: Int
-  DESCRIPTION: String
-  DEADLINE: String
-  START_DATE_PLAN: String
-  END_DATE_PLAN: String
-  PRIORITY: String
-  PARENT_ID: ID
-  GROUP_ID: ID
-  RESPONSIBLE_ID: ID
-  TIME_ESTIMATE: Int
-  CREATED_BY: ID
-  DECLINE_REASON: String
-  REAL_STATUS: Int
+  ID: ID!
+  TITLE: String!
+  STAGE_ID: Int!
+  DESCRIPTION: String!
+  DEADLINE: String!
   STATUS: Int
-  RESPONSIBLE_NAME: String
-  RESPONSIBLE_LAST_NAME: String
-  RESPONSIBLE_SECOND_NAME: String
-  DATE_START: String
   DURATION_FACT: Int
-  DURATION_PLAN: Int
-  DURATION_TYPE: Duration
-  CREATED_BY_NAME: String
-  CREATED_BY_LAST_NAME: String
-  CREATED_BY_SECOND_NAME: String
-  CREATED_DATE: String
-  CHANGED_BY: ID
-  CHANGED_DATE: String
-  STATUS_CHANGED_BY: String
-  STATUS_CHANGED_DATE: String
-  CLOSED_BY: ID
-  CLOSED_DATE: String
+  CREATED_BY_NAME: String!
+  CREATED_BY_LAST_NAME: String!
+  CREATED_DATE: String!
+  CLOSED_DATE: String!
 }
 
+type shortTaskUser {
+  id: ID!
+  name: String!
+  link: String!
+  icon: String!
+}
+
+type TaskDetail {
+  id: ID!
+  title: String!
+  description: String
+  deadline: String
+  startDatePlan: String
+  endDatePlan: String
+  priority: Int
+  responsible: shortTaskUser
+  timeEstimate: String
+  creator: shortTaskUser
+  status: Int
+  dateStart: String
+  durationFact: Int
+  durationPlan: Int
+  durationType: Duration
+  createdDate: String
+  closedDate: String
+  ufTaskWebdavFiles: [ID]
+  files: [Attachment]
+}
+
+
 type TaskComment {
-  POST_MESSAGE_HTML: String
   ID: ID
-  AUTHOR_ID: ID
-  AUTHOR_NAME: String
-  AUTHOR_EMAIL: String
+  AUTHOR: User
+  AUTHOR_ID: ID!
   POST_DATE: String
   POST_MESSAGE: String
+  ATTACHED_OBJECTS: [ID]
+  FILES: [Attachment]
 }

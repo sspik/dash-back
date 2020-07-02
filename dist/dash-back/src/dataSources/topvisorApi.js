@@ -14,13 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const apollo_datasource_rest_1 = require("apollo-datasource-rest");
 const punycode_1 = __importDefault(require("punycode"));
-class TopvisorError extends Error {
-}
-exports.TopvisorError = TopvisorError;
 class TopvisorApi extends apollo_datasource_rest_1.RESTDataSource {
     constructor() {
         super();
-        this.error = new TopvisorError('Проект не найден');
         this.baseURL = 'https://api.topvisor.com/v2/json';
     }
     getProjectById(projectId) {
@@ -35,7 +31,7 @@ class TopvisorApi extends apollo_datasource_rest_1.RESTDataSource {
                 show_searchers_and_regions: 1
             });
             if (!response.result || !response.result.length) {
-                throw this.error;
+                throw new Error('Проект не найден');
             }
             return response.result[0];
         });
@@ -50,7 +46,7 @@ class TopvisorApi extends apollo_datasource_rest_1.RESTDataSource {
                     }]
             });
             if (!response.result || !response.result.length) {
-                throw this.error;
+                throw new Error('Проект не найден');
             }
             return response.result[0];
         });
@@ -61,5 +57,5 @@ class TopvisorApi extends apollo_datasource_rest_1.RESTDataSource {
         request.headers.set('User-Id', process.env.TOPVISOR_USER);
     }
 }
-exports.TopvisorApi = TopvisorApi;
+exports.Topvisor = new TopvisorApi();
 //# sourceMappingURL=topvisorApi.js.map

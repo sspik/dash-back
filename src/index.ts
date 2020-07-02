@@ -1,29 +1,32 @@
 require('dotenv').config();
 
 import express from 'express';
-import {DocumentNode} from "graphql";
 import gql from 'graphql-tag';
 import connect from "./connect";
+import { DocumentNode } from "graphql";
 import { ApolloServer } from "apollo-server-express";
 import { importSchema } from "graphql-import";
 import { resolvers } from "./resolvers";
 import routes from "./routes";
 import {
-  BitrixAPI,
-  YandexMetrikaApi,
-  TopvisorApi
+  Bitrix,
+  YandexMetrika,
+  Topvisor
 } from "./dataSources";
 
-const typeDefs: DocumentNode = gql(importSchema(`${process.env.SCHEMA_PATH}schema.graphql`));
+const typeDefs: DocumentNode = gql(importSchema(
+  `${process.env.SCHEMA_PATH}schema.graphql`)
+);
 const app = routes(express());
 
 export const server = new ApolloServer({
   typeDefs,
   resolvers,
-  dataSources: (): any => ({
-    bitrixApi: new BitrixAPI(),
-    yandexMetrikaApi: new YandexMetrikaApi(),
-    topvisorApi: new TopvisorApi(),
+  subscriptions: false,
+  dataSources: () => ({
+    bitrixApi: Bitrix,
+    yandexMetrikaApi: YandexMetrika,
+    topvisorApi: Topvisor,
   }),
   context: ({ req }) => {
     return { user: req.user }

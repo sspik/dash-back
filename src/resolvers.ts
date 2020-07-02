@@ -11,6 +11,8 @@ export const resolvers: Resolvers = {
       dataSources.bitrixApi.getGroupsTasks(groupId),
     GetGroupById: (_, { groupId } , { dataSources }) =>
       dataSources.bitrixApi.getGroupById(groupId),
+    GetTaskByID: (_, { taskId }, { dataSources }) =>
+      dataSources.bitrixApi.getTaskById(taskId),
     GetGroupsUsers: (_, { groupId } , { dataSources }) =>
       dataSources.bitrixApi.getGroupsUsers(groupId),
     GetUserByID: (_, { userId }, { dataSources }) =>
@@ -22,17 +24,25 @@ export const resolvers: Resolvers = {
     GetFeed: (_, { start }, { dataSources }) =>
       dataSources.bitrixApi.getFeed(start),
 
-
     // Yandex Metrika
-    GetYandexMetrics: (_, { metrics, dimensions, date1, date2 }, { dataSources }) =>
+    GetYandexMetrics: (_, {
+      metrics,
+      dimensions,
+      date1,
+      date2,
+      bitrixGroupId,
+      preset
+    }, { dataSources }) =>
       dataSources.yandexMetrikaApi.getYandexMetrics({
         metrics,
         dimensions,
         date1,
         date2,
+        bitrixGroupId,
+        preset
       }),
-    GetCounterStatus: (_, { counter }, { dataSources }) =>
-      dataSources.yandexMetrikaApi.checkCounter(counter),
+    GetCounter: (_, { bitrixGroupId }, { dataSources }) =>
+      dataSources.yandexMetrikaApi.getCounter(bitrixGroupId),
 
     // TopVisor
     GetTopvisorProjectById: (_, {projectId}, { dataSources }) =>

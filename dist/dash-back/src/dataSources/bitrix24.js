@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const axios_1 = __importDefault(require("axios"));
 const apollo_datasource_rest_1 = require("apollo-datasource-rest");
 const lodash_1 = __importDefault(require("lodash"));
 class BitrixAPI extends apollo_datasource_rest_1.RESTDataSource {
@@ -127,8 +128,24 @@ class BitrixAPI extends apollo_datasource_rest_1.RESTDataSource {
     }
     getTaskComments(taskID) {
         return __awaiter(this, void 0, void 0, function* () {
-            return BitrixAPI.returnArray(this.get('task.commentitem.getlist', {
-                TASKID: taskID
+            const commentsResponse = yield BitrixAPI.returnArray(this.get('task.commentitem.getlist', { TASKID: taskID }));
+            if (commentsResponse.length === 0)
+                return [];
+            const authorIds = commentsResponse.map(c => {
+                return c.AUTHOR_ID;
+            });
+            const authors = yield this.getUserByIds(authorIds);
+            return commentsResponse.map((c) => __awaiter(this, void 0, void 0, function* () {
+                let comment = c;
+                if (c.ATTACHED_OBJECTS) {
+                    let fileIds = Object.keys(c.ATTACHED_OBJECTS);
+                    comment['FILES'] = yield this.getAttachments(fileIds);
+                }
+                else {
+                    comment['FILES'] = [];
+                }
+                comment['AUTHOR'] = lodash_1.default.first(authors.filter(a => a.ID === comment['AUTHOR_ID']));
+                return comment;
             }));
         });
     }
@@ -146,7 +163,7 @@ class BitrixAPI extends apollo_datasource_rest_1.RESTDataSource {
             // Получаем объекты файлов
             let fileIds = [];
             feeds.result.forEach((f) => {
-                f.FILES ? fileIds.push(...f.FILES) : null;
+                f.FILES && fileIds.push(...f.FILES);
             });
             const files = yield this.getAttachments(fileIds);
             // Собираем новый result с файлами и пользователями
@@ -189,6 +206,24 @@ class BitrixAPI extends apollo_datasource_rest_1.RESTDataSource {
             return files;
         });
     }
+    getTaskById(taskId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let task;
+            try {
+                const taskResponse = yield this.get('tasks.task.get', {
+                    taskId
+                });
+                task = taskResponse.result.task;
+            }
+            catch (_a) {
+                throw new Error('Ошибка получения задачи');
+            }
+            if (!Array.isArray(task.ufTaskWebdavFiles))
+                return task;
+            const files = yield this.getAttachments(task.ufTaskWebdavFiles);
+            return Object.assign(Object.assign({}, task), { files });
+        });
+    }
     // Mutations
     sendTaskMessage(taskId, message) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -209,17 +244,42 @@ class BitrixAPI extends apollo_datasource_rest_1.RESTDataSource {
     // Other
     willSendRequest(request) {
         return __awaiter(this, void 0, void 0, function* () {
-            request.params.set('auth', this.context.user.accessToken);
+            // Если запрос пришел из graphql, то подкитываем access токен
+            // из пользоватлея
+            if (this.context.user) {
+                request.params.set('auth', this.context.user.accessToken);
+            }
         });
     }
     static returnArray(response) {
         return __awaiter(this, void 0, void 0, function* () {
             const { result } = yield response;
-            return Array.isArray(result)
-                ? result
-                : [];
+            return Array.isArray(result) ? result : [];
+        });
+    }
+    // Методы для вызова из других api
+    getUserAccess(groupId, userToken) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield axios_1.default.post(`${process.env.BITRIX24_API_ENDPOINT}/sonet_group.feature.access`, {
+                GROUP_ID: groupId,
+                auth: userToken,
+                FEATURE: "blog",
+                OPERATION: "write_post"
+            });
+            return response.data.result;
+        });
+    }
+    getGroupByToken(groupId, userToken) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!(yield this.getUserAccess(groupId, userToken)))
+                return;
+            const response = yield axios_1.default.post(`${process.env.BITRIX24_API_ENDPOINT}/sonet_group.get`, {
+                FILTER: { ID: groupId },
+                auth: userToken
+            });
+            return Array.isArray(response.data.result) && response.data.result[0];
         });
     }
 }
-exports.BitrixAPI = BitrixAPI;
+exports.Bitrix = new BitrixAPI();
 //# sourceMappingURL=bitrix24.js.map

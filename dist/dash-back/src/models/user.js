@@ -33,7 +33,7 @@ UserSchema.statics.findById = function findById(userId) {
         return user;
     });
 };
-UserSchema.methods.updateUser = function findById(userData) {
+UserSchema.methods.updateUser = function updateUser(userData) {
     return __awaiter(this, void 0, void 0, function* () {
         Object.assign(this, Object.assign({}, userData));
         yield this.save();

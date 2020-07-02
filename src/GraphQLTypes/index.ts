@@ -68,7 +68,7 @@ export enum CounterType {
 export type DataType = {
    __typename?: 'DataType';
   dimensions: Array<Maybe<Dimension>>;
-  metrics: Array<Maybe<Scalars['Int']>>;
+  metrics: Array<Maybe<Array<Maybe<Scalars['Int']>>>>;
 };
 
 export type DeleteTaskMessageResponse = {
@@ -80,10 +80,10 @@ export type DeleteTaskMessageResponse = {
 
 export type Dimension = {
    __typename?: 'Dimension';
-  name: Scalars['String'];
-  icon_id: Scalars['ID'];
-  icon_type: Scalars['String'];
-  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  icon_id?: Maybe<Scalars['ID']>;
+  icon_type?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['ID']>;
 };
 
 export enum Duration {
@@ -106,7 +106,7 @@ export type ErrorType = {
 export type Feed = {
    __typename?: 'Feed';
   ID: Scalars['ID'];
-  AUTHOR: User;
+  AUTHOR?: Maybe<User>;
   AUTHOR_ID: Scalars['String'];
   DETAIL_TEXT: Scalars['String'];
   DATE_PUBLISH: Scalars['String'];
@@ -195,12 +195,13 @@ export type Project = {
 export type Query = {
    __typename?: 'Query';
   GetAttachment: AttachmentResponse;
-  GetCounterStatus: Counter;
+  GetCounter: Counter;
   GetFeed: FeedResponse;
   GetGroupById?: Maybe<WorkGroup>;
   GetGroupsTasks: Array<Maybe<Task>>;
   GetGroupsUsers: Array<Maybe<User>>;
   GetProfile: Profile;
+  GetTaskByID?: Maybe<TaskDetail>;
   GetTaskComments: Array<Maybe<TaskComment>>;
   GetTopvisorProjectById?: Maybe<Project>;
   GetTopvisorProjectByUrl?: Maybe<Project>;
@@ -216,8 +217,8 @@ export type QueryGetAttachmentArgs = {
 };
 
 
-export type QueryGetCounterStatusArgs = {
-  counter: Scalars['Int'];
+export type QueryGetCounterArgs = {
+  bitrixGroupId: Scalars['ID'];
 };
 
 
@@ -241,13 +242,18 @@ export type QueryGetGroupsUsersArgs = {
 };
 
 
+export type QueryGetTaskByIdArgs = {
+  taskId: Scalars['ID'];
+};
+
+
 export type QueryGetTaskCommentsArgs = {
   taskId: Scalars['ID'];
 };
 
 
 export type QueryGetTopvisorProjectByIdArgs = {
-  projectId: Scalars['Int'];
+  projectId: Scalars['ID'];
 };
 
 
@@ -267,10 +273,12 @@ export type QueryGetUserGroupsArgs = {
 
 
 export type QueryGetYandexMetricsArgs = {
-  metrics: Scalars['String'];
+  metrics?: Maybe<Scalars['String']>;
   dimensions?: Maybe<Scalars['String']>;
   date1?: Maybe<Scalars['String']>;
   date2?: Maybe<Scalars['String']>;
+  bitrixGroupId: Scalars['ID'];
+  preset?: Maybe<Scalars['String']>;
 };
 
 
@@ -339,6 +347,14 @@ export type SendTaskMessageResponse = {
   result?: Maybe<Scalars['ID']>;
 };
 
+export type ShortTaskUser = {
+   __typename?: 'shortTaskUser';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  link: Scalars['String'];
+  icon: Scalars['String'];
+};
+
 export enum Status {
   Active = 'Active',
   Deleted = 'Deleted'
@@ -346,50 +362,51 @@ export enum Status {
 
 export type Task = {
    __typename?: 'Task';
-  CHANGED_BY?: Maybe<Scalars['ID']>;
-  CHANGED_DATE?: Maybe<Scalars['String']>;
-  CLOSED_BY?: Maybe<Scalars['ID']>;
-  CLOSED_DATE?: Maybe<Scalars['String']>;
-  CREATED_BY?: Maybe<Scalars['ID']>;
-  CREATED_BY_LAST_NAME?: Maybe<Scalars['String']>;
-  CREATED_BY_NAME?: Maybe<Scalars['String']>;
-  CREATED_BY_SECOND_NAME?: Maybe<Scalars['String']>;
-  CREATED_DATE?: Maybe<Scalars['String']>;
-  DATE_START?: Maybe<Scalars['String']>;
-  DEADLINE?: Maybe<Scalars['String']>;
-  DECLINE_REASON?: Maybe<Scalars['String']>;
-  DESCRIPTION?: Maybe<Scalars['String']>;
+  CLOSED_DATE: Scalars['String'];
+  CREATED_BY_LAST_NAME: Scalars['String'];
+  CREATED_BY_NAME: Scalars['String'];
+  CREATED_DATE: Scalars['String'];
+  DEADLINE: Scalars['String'];
+  DESCRIPTION: Scalars['String'];
   DURATION_FACT?: Maybe<Scalars['Int']>;
-  DURATION_PLAN?: Maybe<Scalars['Int']>;
-  DURATION_TYPE?: Maybe<Duration>;
-  END_DATE_PLAN?: Maybe<Scalars['String']>;
-  GROUP_ID?: Maybe<Scalars['ID']>;
-  ID?: Maybe<Scalars['ID']>;
-  PARENT_ID?: Maybe<Scalars['ID']>;
-  PRIORITY?: Maybe<Scalars['String']>;
-  REAL_STATUS?: Maybe<Scalars['Int']>;
-  RESPONSIBLE_ID?: Maybe<Scalars['ID']>;
-  RESPONSIBLE_LAST_NAME?: Maybe<Scalars['String']>;
-  RESPONSIBLE_NAME?: Maybe<Scalars['String']>;
-  RESPONSIBLE_SECOND_NAME?: Maybe<Scalars['String']>;
-  STAGE_ID?: Maybe<Scalars['Int']>;
-  START_DATE_PLAN?: Maybe<Scalars['String']>;
+  ID: Scalars['ID'];
+  STAGE_ID: Scalars['Int'];
   STATUS?: Maybe<Scalars['Int']>;
-  STATUS_CHANGED_BY?: Maybe<Scalars['String']>;
-  STATUS_CHANGED_DATE?: Maybe<Scalars['String']>;
-  TIME_ESTIMATE?: Maybe<Scalars['Int']>;
-  TITLE?: Maybe<Scalars['String']>;
+  TITLE: Scalars['String'];
 };
 
 export type TaskComment = {
    __typename?: 'TaskComment';
-  AUTHOR_EMAIL?: Maybe<Scalars['String']>;
-  AUTHOR_ID?: Maybe<Scalars['ID']>;
-  AUTHOR_NAME?: Maybe<Scalars['String']>;
+  ATTACHED_OBJECTS?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  AUTHOR?: Maybe<User>;
+  AUTHOR_ID: Scalars['ID'];
+  FILES?: Maybe<Array<Maybe<Attachment>>>;
   ID?: Maybe<Scalars['ID']>;
   POST_DATE?: Maybe<Scalars['String']>;
   POST_MESSAGE?: Maybe<Scalars['String']>;
-  POST_MESSAGE_HTML?: Maybe<Scalars['String']>;
+};
+
+export type TaskDetail = {
+   __typename?: 'TaskDetail';
+  closedDate?: Maybe<Scalars['String']>;
+  createdDate?: Maybe<Scalars['String']>;
+  creator?: Maybe<ShortTaskUser>;
+  dateStart?: Maybe<Scalars['String']>;
+  deadline?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  durationFact?: Maybe<Scalars['Int']>;
+  durationPlan?: Maybe<Scalars['Int']>;
+  durationType?: Maybe<Duration>;
+  endDatePlan?: Maybe<Scalars['String']>;
+  files?: Maybe<Array<Maybe<Attachment>>>;
+  id: Scalars['ID'];
+  priority?: Maybe<Scalars['Int']>;
+  responsible?: Maybe<ShortTaskUser>;
+  startDatePlan?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['Int']>;
+  timeEstimate?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
+  ufTaskWebdavFiles?: Maybe<Array<Maybe<Scalars['ID']>>>;
 };
 
 export type User = {
@@ -450,6 +467,8 @@ export type YandexMetrikaApiResponse = {
   data: Array<Maybe<DataType>>;
   errors?: Maybe<ErrorType>;
   query: QueryType;
+  time_intervals?: Maybe<Array<Maybe<Array<Maybe<Scalars['String']>>>>>;
+  totals?: Maybe<Array<Maybe<Array<Maybe<Scalars['Int']>>>>>;
 };
 
 
@@ -547,8 +566,10 @@ export type ResolversTypes = {
   WorkGroup: ResolverTypeWrapper<WorkGroup>,
   BooleanEnum: BooleanEnum,
   Task: ResolverTypeWrapper<Task>,
-  Duration: Duration,
   Profile: ResolverTypeWrapper<Profile>,
+  TaskDetail: ResolverTypeWrapper<TaskDetail>,
+  shortTaskUser: ResolverTypeWrapper<ShortTaskUser>,
+  Duration: Duration,
   TaskComment: ResolverTypeWrapper<TaskComment>,
   Project: ResolverTypeWrapper<Project>,
   Searcher: ResolverTypeWrapper<Searcher>,
@@ -589,8 +610,10 @@ export type ResolversParentTypes = {
   WorkGroup: WorkGroup,
   BooleanEnum: BooleanEnum,
   Task: Task,
-  Duration: Duration,
   Profile: Profile,
+  TaskDetail: TaskDetail,
+  shortTaskUser: ShortTaskUser,
+  Duration: Duration,
   TaskComment: TaskComment,
   Project: Project,
   Searcher: Searcher,
@@ -645,7 +668,7 @@ export type CounterResolvers<ContextType = any, ParentType extends ResolversPare
 
 export type DataTypeResolvers<ContextType = any, ParentType extends ResolversParentTypes['DataType'] = ResolversParentTypes['DataType']> = {
   dimensions?: Resolver<Array<Maybe<ResolversTypes['Dimension']>>, ParentType, ContextType>,
-  metrics?: Resolver<Array<Maybe<ResolversTypes['Int']>>, ParentType, ContextType>,
+  metrics?: Resolver<Array<Maybe<Array<Maybe<ResolversTypes['Int']>>>>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -657,10 +680,10 @@ export type DeleteTaskMessageResponseResolvers<ContextType = any, ParentType ext
 };
 
 export type DimensionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Dimension'] = ResolversParentTypes['Dimension']> = {
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  icon_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
-  icon_type?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  icon_id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
+  icon_type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -677,7 +700,7 @@ export type ErrorTypeResolvers<ContextType = any, ParentType extends ResolversPa
 
 export type FeedResolvers<ContextType = any, ParentType extends ResolversParentTypes['Feed'] = ResolversParentTypes['Feed']> = {
   ID?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
-  AUTHOR?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
+  AUTHOR?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
   AUTHOR_ID?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   DETAIL_TEXT?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   DATE_PUBLISH?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
@@ -732,18 +755,19 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   GetAttachment?: Resolver<ResolversTypes['AttachmentResponse'], ParentType, ContextType, RequireFields<QueryGetAttachmentArgs, 'id'>>,
-  GetCounterStatus?: Resolver<ResolversTypes['Counter'], ParentType, ContextType, RequireFields<QueryGetCounterStatusArgs, 'counter'>>,
+  GetCounter?: Resolver<ResolversTypes['Counter'], ParentType, ContextType, RequireFields<QueryGetCounterArgs, 'bitrixGroupId'>>,
   GetFeed?: Resolver<ResolversTypes['FeedResponse'], ParentType, ContextType, RequireFields<QueryGetFeedArgs, 'start'>>,
   GetGroupById?: Resolver<Maybe<ResolversTypes['WorkGroup']>, ParentType, ContextType, RequireFields<QueryGetGroupByIdArgs, 'groupId'>>,
   GetGroupsTasks?: Resolver<Array<Maybe<ResolversTypes['Task']>>, ParentType, ContextType, RequireFields<QueryGetGroupsTasksArgs, 'groupId'>>,
   GetGroupsUsers?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType, RequireFields<QueryGetGroupsUsersArgs, 'groupId'>>,
   GetProfile?: Resolver<ResolversTypes['Profile'], ParentType, ContextType>,
+  GetTaskByID?: Resolver<Maybe<ResolversTypes['TaskDetail']>, ParentType, ContextType, RequireFields<QueryGetTaskByIdArgs, 'taskId'>>,
   GetTaskComments?: Resolver<Array<Maybe<ResolversTypes['TaskComment']>>, ParentType, ContextType, RequireFields<QueryGetTaskCommentsArgs, 'taskId'>>,
   GetTopvisorProjectById?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryGetTopvisorProjectByIdArgs, 'projectId'>>,
   GetTopvisorProjectByUrl?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryGetTopvisorProjectByUrlArgs, 'projectUrl'>>,
   GetUserByID?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByIdArgs, 'userId'>>,
   GetUserGroups?: Resolver<Maybe<ResolversTypes['WorkGroupResponse']>, ParentType, ContextType, RequireFields<QueryGetUserGroupsArgs, 'start'>>,
-  GetYandexMetrics?: Resolver<ResolversTypes['YandexMetrikaApiResponse'], ParentType, ContextType, RequireFields<QueryGetYandexMetricsArgs, 'metrics'>>,
+  GetYandexMetrics?: Resolver<ResolversTypes['YandexMetrikaApiResponse'], ParentType, ContextType, RequireFields<QueryGetYandexMetricsArgs, 'bitrixGroupId'>>,
   SearchGroupByName?: Resolver<Array<Maybe<ResolversTypes['WorkGroup']>>, ParentType, ContextType, RequireFields<QuerySearchGroupByNameArgs, 'name'>>,
 };
 
@@ -802,51 +826,60 @@ export type SendTaskMessageResponseResolvers<ContextType = any, ParentType exten
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export type ShortTaskUserResolvers<ContextType = any, ParentType extends ResolversParentTypes['shortTaskUser'] = ResolversParentTypes['shortTaskUser']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  link?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  icon?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export type TaskResolvers<ContextType = any, ParentType extends ResolversParentTypes['Task'] = ResolversParentTypes['Task']> = {
-  CHANGED_BY?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
-  CHANGED_DATE?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  CLOSED_BY?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
-  CLOSED_DATE?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  CREATED_BY?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
-  CREATED_BY_LAST_NAME?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  CREATED_BY_NAME?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  CREATED_BY_SECOND_NAME?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  CREATED_DATE?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  DATE_START?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  DEADLINE?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  DECLINE_REASON?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  DESCRIPTION?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  CLOSED_DATE?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  CREATED_BY_LAST_NAME?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  CREATED_BY_NAME?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  CREATED_DATE?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  DEADLINE?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  DESCRIPTION?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   DURATION_FACT?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  DURATION_PLAN?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  DURATION_TYPE?: Resolver<Maybe<ResolversTypes['Duration']>, ParentType, ContextType>,
-  END_DATE_PLAN?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  GROUP_ID?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
-  ID?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
-  PARENT_ID?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
-  PRIORITY?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  REAL_STATUS?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  RESPONSIBLE_ID?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
-  RESPONSIBLE_LAST_NAME?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  RESPONSIBLE_NAME?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  RESPONSIBLE_SECOND_NAME?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  STAGE_ID?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  START_DATE_PLAN?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  ID?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  STAGE_ID?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   STATUS?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  STATUS_CHANGED_BY?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  STATUS_CHANGED_DATE?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  TIME_ESTIMATE?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  TITLE?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  TITLE?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type TaskCommentResolvers<ContextType = any, ParentType extends ResolversParentTypes['TaskComment'] = ResolversParentTypes['TaskComment']> = {
-  AUTHOR_EMAIL?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  AUTHOR_ID?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
-  AUTHOR_NAME?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  ATTACHED_OBJECTS?: Resolver<Maybe<Array<Maybe<ResolversTypes['ID']>>>, ParentType, ContextType>,
+  AUTHOR?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
+  AUTHOR_ID?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  FILES?: Resolver<Maybe<Array<Maybe<ResolversTypes['Attachment']>>>, ParentType, ContextType>,
   ID?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
   POST_DATE?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   POST_MESSAGE?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  POST_MESSAGE_HTML?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type TaskDetailResolvers<ContextType = any, ParentType extends ResolversParentTypes['TaskDetail'] = ResolversParentTypes['TaskDetail']> = {
+  closedDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  createdDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  creator?: Resolver<Maybe<ResolversTypes['shortTaskUser']>, ParentType, ContextType>,
+  dateStart?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  deadline?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  durationFact?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  durationPlan?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  durationType?: Resolver<Maybe<ResolversTypes['Duration']>, ParentType, ContextType>,
+  endDatePlan?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  files?: Resolver<Maybe<Array<Maybe<ResolversTypes['Attachment']>>>, ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  priority?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  responsible?: Resolver<Maybe<ResolversTypes['shortTaskUser']>, ParentType, ContextType>,
+  startDatePlan?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  status?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  timeEstimate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  ufTaskWebdavFiles?: Resolver<Maybe<Array<Maybe<ResolversTypes['ID']>>>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -907,6 +940,8 @@ export type YandexMetrikaApiResponseResolvers<ContextType = any, ParentType exte
   data?: Resolver<Array<Maybe<ResolversTypes['DataType']>>, ParentType, ContextType>,
   errors?: Resolver<Maybe<ResolversTypes['ErrorType']>, ParentType, ContextType>,
   query?: Resolver<ResolversTypes['QueryType'], ParentType, ContextType>,
+  time_intervals?: Resolver<Maybe<Array<Maybe<Array<Maybe<ResolversTypes['String']>>>>>, ParentType, ContextType>,
+  totals?: Resolver<Maybe<Array<Maybe<Array<Maybe<ResolversTypes['Int']>>>>>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -930,8 +965,10 @@ export type Resolvers<ContextType = any> = {
   Region?: RegionResolvers<ContextType>,
   Searcher?: SearcherResolvers<ContextType>,
   SendTaskMessageResponse?: SendTaskMessageResponseResolvers<ContextType>,
+  shortTaskUser?: ShortTaskUserResolvers<ContextType>,
   Task?: TaskResolvers<ContextType>,
   TaskComment?: TaskCommentResolvers<ContextType>,
+  TaskDetail?: TaskDetailResolvers<ContextType>,
   User?: UserResolvers<ContextType>,
   WorkGroup?: WorkGroupResolvers<ContextType>,
   WorkGroupResponse?: WorkGroupResponseResolvers<ContextType>,

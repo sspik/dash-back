@@ -1,16 +1,17 @@
+import Axois from 'axios';
 import { RequestOptions, RESTDataSource } from "apollo-datasource-rest";
 import * as GraphQLTypes from '../GraphQLTypes';
-import { IBatchRequest } from "../../../dash-front/src/interfaces";
 import _ from 'lodash';
 
+interface IBatchRequest { [key: string]: string }
 
-interface IBitrixResponse {
-  result?: Array<any>
+interface IBitrixResponse<T> {
+  result?: Array<T>
   error?: string
   error_description?: string
 }
 
-export class BitrixAPI extends RESTDataSource {
+class BitrixAPI extends RESTDataSource {
   constructor() {
     super();
     this.baseURL = process.env.BITRIX24_API_ENDPOINT;
@@ -23,7 +24,7 @@ export class BitrixAPI extends RESTDataSource {
   }
 
   async userShortGroups(): Promise<Array<GraphQLTypes.WorkGroupShort>> {
-    return await BitrixAPI.returnArray(this.post('sonet_group.user.groups', {
+    return await BitrixAPI.returnArray<GraphQLTypes.WorkGroupShort>(this.post('sonet_group.user.groups', {
       order: { "ID": "ASC" },
       select: [ "ID" ],
     }))
@@ -90,12 +91,12 @@ export class BitrixAPI extends RESTDataSource {
   }
 
   async getGroupsUsers(groupId: string): Promise<Array<GraphQLTypes.User>> {
-    const usersId = await BitrixAPI.returnArray(
+    const usersId = await BitrixAPI.returnArray<GraphQLTypes.User>(
       this.get('sonet_group.user.get',{
         'ID': groupId
       })
     );
-    return await this.getUserByIds(usersId.map(u => u["USER_ID"]))
+    return await this.getUserByIds(usersId.map(u => u["USER_ID" as "ID"]))
   }
 
   async getGroupsTasks(groupId: string): Promise<Array<GraphQLTypes.Task>> {
@@ -125,10 +126,28 @@ export class BitrixAPI extends RESTDataSource {
 
   async getTaskComments(
     taskID: string
-  ): Promise<Array<GraphQLTypes.TaskComment>> {
-    return BitrixAPI.returnArray(this.get('task.commentitem.getlist', {
-      TASKID: taskID
-    }))
+  ): Promise<Array<Promise<GraphQLTypes.TaskComment>>> {
+    const commentsResponse = await BitrixAPI.returnArray<GraphQLTypes.TaskComment>(
+      this.get('task.commentitem.getlist',
+        { TASKID: taskID  }
+        )
+    );
+    if (commentsResponse.length === 0) return [];
+    const authorIds = commentsResponse.map(c => {
+      return c.AUTHOR_ID
+    });
+    const authors = await this.getUserByIds(authorIds);
+    return commentsResponse.map(async (c) => {
+      let comment: GraphQLTypes.TaskComment = c;
+      if (c.ATTACHED_OBJECTS) {
+        let fileIds = Object.keys(c.ATTACHED_OBJECTS);
+        comment['FILES'] = await this.getAttachments(fileIds);
+      } else {
+        comment['FILES'] = []
+      }
+      comment['AUTHOR'] = _.first(authors.filter(a => a.ID === comment['AUTHOR_ID']))
+      return comment;
+    })
   }
 
   async getFeed(start: number = 0): Promise<GraphQLTypes.FeedResponse> {
@@ -144,7 +163,7 @@ export class BitrixAPI extends RESTDataSource {
     // Получаем объекты файлов
     let fileIds: Array<any> = [];
     feeds.result.forEach((f: any) => {
-      f.FILES ? fileIds.push(...f.FILES) : null
+      f.FILES && fileIds.push(...f.FILES)
     });
 
     const files = await this.getAttachments(fileIds)
@@ -162,7 +181,7 @@ export class BitrixAPI extends RESTDataSource {
     return feeds;
   }
 
-  async getAttachments(ids: number[]): Promise<GraphQLTypes.Attachment[]> {
+  async getAttachments(ids: string[]): Promise<GraphQLTypes.Attachment[]> {
     let batchArray: IBatchRequest[] = [];
     ids.forEach(( id ) => {
       const keyName = `query${id}`
@@ -194,6 +213,24 @@ export class BitrixAPI extends RESTDataSource {
     return files
   }
 
+  async getTaskById(taskId: string): Promise<GraphQLTypes.TaskDetail> {
+    let task: GraphQLTypes.TaskDetail
+    try {
+      const taskResponse = await this.get('tasks.task.get', {
+        taskId
+      });
+      task = taskResponse.result.task;
+    } catch {
+      throw new Error('Ошибка получения задачи')
+    }
+    if (!Array.isArray(task.ufTaskWebdavFiles)) return task
+    const files = await this.getAttachments(task.ufTaskWebdavFiles);
+    return {
+      ...task,
+      files,
+    }
+  }
+
   // Mutations
   async sendTaskMessage(
     taskId: string,
@@ -216,15 +253,45 @@ export class BitrixAPI extends RESTDataSource {
 
   // Other
   async willSendRequest(request: RequestOptions): Promise<void> {
-    request.params.set(
-      'auth',
-      this.context.user.accessToken,
-    )
+    // Если запрос пришел из graphql, то подкитываем access токен
+    // из пользоватлея
+    if (this.context.user) {
+      request.params.set(
+        'auth',
+        this.context.user.accessToken,
+      )
+    }
   }
-  private static async returnArray(response: Promise<IBitrixResponse>): Promise<Array<any>> {
+  private static async returnArray<T>(response: Promise<IBitrixResponse<T>>): Promise<Array<T>> {
     const { result } = await response;
-    return Array.isArray(result)
-      ? result
-      : [];
+    return Array.isArray(result) ? result : [];
+  }
+
+  // Методы для вызова из других api
+  async getUserAccess(groupId: string, userToken: string): Promise<boolean> {
+    type TResponse = {"result": boolean};
+    const response = await Axois.post<TResponse>(
+      `${process.env.BITRIX24_API_ENDPOINT}/sonet_group.feature.access`,
+      {
+        GROUP_ID: groupId,
+        auth: userToken,
+        FEATURE: "blog",
+        OPERATION: "write_post"
+      });
+    return response.data.result;
+  }
+  async getGroupByToken(groupId: string, userToken: string): Promise<GraphQLTypes.WorkGroup> {
+    if (!await this.getUserAccess(groupId, userToken)) return;
+    type TResponse = { result: GraphQLTypes.WorkGroup[] };
+    const response = await Axois.post<TResponse>(
+      `${process.env.BITRIX24_API_ENDPOINT}/sonet_group.get`,
+      {
+        FILTER: { ID: groupId },
+        auth: userToken
+      }
+    )
+    return Array.isArray(response.data.result) && response.data.result[0];
   }
 }
+
+export const Bitrix = new BitrixAPI()

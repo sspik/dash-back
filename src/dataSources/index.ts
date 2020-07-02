@@ -1,9 +1,9 @@
-import {BitrixAPI} from "./bitrix24";
-import {YandexMetrikaApi} from "./yandexMetrika";
-import { TopvisorApi } from "./topvisorApi";
+import { Bitrix } from "./bitrix24";
+import { YandexMetrika } from "./yandexMetrika";
+import { Topvisor } from "./topvisorApi";
 
 export {
-  BitrixAPI,
-  YandexMetrikaApi,
-  TopvisorApi
+  Bitrix,
+  YandexMetrika,
+  Topvisor
 }

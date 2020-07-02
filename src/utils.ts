@@ -42,3 +42,8 @@ export async function refreshToken(user: IUserModel) {
     )
   }
 }
+
+export function extractDomain(input: string): string | null {
+  const match = input.match(/(?:[a-z0-9а-яА-Я](?:[a-z0-9а-яА-Я-]{0,61}[a-zа-яА-Я0-9])?\.)+[a-zа-яА-Я0-9][a-zа-яА-Я0-9-]{0,61}[a-zа-яА-Я0-9]/);
+  return match ? match[0].toLowerCase() : null;
+}

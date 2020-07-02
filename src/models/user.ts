@@ -1,4 +1,4 @@
-import mongoose, {Schema, Document} from 'mongoose';
+import mongoose, { Schema, Document } from 'mongoose';
 import { encodeToken } from "../utils";
 
 interface IUserBase {
@@ -33,7 +33,7 @@ UserSchema.statics.findById = async function findById(
   return user
 };
 
-UserSchema.methods.updateUser = async function findById(
+UserSchema.methods.updateUser = async function updateUser(
   userData: IUser
 ): Promise<void> {
   Object.assign(this, {

@@ -2,12 +2,7 @@ import {RequestOptions, RESTDataSource} from "apollo-datasource-rest";
 import * as GraphQLTypes from '../GraphQLTypes';
 import punycode from "punycode";
 
-
-export class TopvisorError extends Error {}
-
-export class TopvisorApi extends RESTDataSource {
-
-  private error = new TopvisorError('Проект не найден');
+class TopvisorApi extends RESTDataSource {
 
   constructor() {
     super();
@@ -15,7 +10,7 @@ export class TopvisorApi extends RESTDataSource {
   }
 
   async getProjectById(
-    projectId: number
+    projectId: string
   ): Promise<GraphQLTypes.Project> {
     console.log(this.context.user.topvisor.length)
     const response = await this.post('get/projects_2/projects', {
@@ -27,7 +22,7 @@ export class TopvisorApi extends RESTDataSource {
       show_searchers_and_regions: 1
     });
     if (!response.result || !response.result.length) {
-      throw this.error;
+      throw new Error('Проект не найден');
     }
     return response.result[0]
   }
@@ -43,7 +38,7 @@ export class TopvisorApi extends RESTDataSource {
       }]
     });
     if (!response.result || !response.result.length) {
-      throw this.error;
+      throw new Error('Проект не найден');
     }
     return response.result[0]
   }
@@ -63,3 +58,5 @@ export class TopvisorApi extends RESTDataSource {
     )
   }
 }
+
+export const Topvisor = new TopvisorApi();

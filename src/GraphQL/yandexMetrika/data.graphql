@@ -1,10 +1,10 @@
 # import ErrorType from "./error.graphql"
 
 type Dimension {
-  name: String!
-  icon_id: ID!
-  icon_type: String!
-  id: ID!
+  name: String
+  icon_id: ID
+  icon_type: String
+  id: ID
 }
 
 type QueryType {
@@ -27,7 +27,7 @@ type QueryType {
 
 type DataType {
   dimensions: [Dimension]!
-  metrics: [Int]!
+  metrics: [[Int]]!
 }
 
 
@@ -35,4 +35,6 @@ type YandexMetrikaApiResponse {
   query: QueryType!
   data: [DataType]!
   errors: ErrorType
+  time_intervals: [[String]]
+  totals: [[Int]]
 }

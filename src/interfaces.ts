@@ -42,6 +42,6 @@ export interface IBitrixAuthParams {
 
 declare module 'express' {
     interface Request {
-    user: IUserModel | undefined;
+    user?: IUserModel;
   }
 }
