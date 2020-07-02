@@ -83,11 +83,11 @@ class YandexMetrikaApi extends RESTDataSource {
   private async getCounterId(bitrixGroupId: string): Promise<string> {
     let counterId: string;
     try {
-      const yandexMetrka = await YandexMetrkaModel.findOne({
+      const yandexMetrika = await YandexMetrkaModel.findOne({
         bitrixGroupId
       });
-      counterId = yandexMetrka.counter.toString();
-    } catch {
+      counterId = yandexMetrika.counter.toString();
+    } catch (e) {
       const bitrixGroup = await Bitrix.getGroupByToken(
         bitrixGroupId,
         this.context.user.accessToken
