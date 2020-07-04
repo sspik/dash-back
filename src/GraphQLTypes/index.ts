@@ -203,8 +203,7 @@ export type Query = {
   GetProfile: Profile;
   GetTaskByID?: Maybe<TaskDetail>;
   GetTaskComments: Array<Maybe<TaskComment>>;
-  GetTopvisorProjectById?: Maybe<Project>;
-  GetTopvisorProjectByUrl?: Maybe<Project>;
+  GetTopvisorProject?: Maybe<Project>;
   GetUserByID?: Maybe<User>;
   GetUserGroups?: Maybe<WorkGroupResponse>;
   GetYandexMetrics: YandexMetrikaApiResponse;
@@ -252,13 +251,8 @@ export type QueryGetTaskCommentsArgs = {
 };
 
 
-export type QueryGetTopvisorProjectByIdArgs = {
-  projectId: Scalars['ID'];
-};
-
-
-export type QueryGetTopvisorProjectByUrlArgs = {
-  projectUrl: Scalars['String'];
+export type QueryGetTopvisorProjectArgs = {
+  bitrixGroupId: Scalars['ID'];
 };
 
 
@@ -763,8 +757,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   GetProfile?: Resolver<ResolversTypes['Profile'], ParentType, ContextType>,
   GetTaskByID?: Resolver<Maybe<ResolversTypes['TaskDetail']>, ParentType, ContextType, RequireFields<QueryGetTaskByIdArgs, 'taskId'>>,
   GetTaskComments?: Resolver<Array<Maybe<ResolversTypes['TaskComment']>>, ParentType, ContextType, RequireFields<QueryGetTaskCommentsArgs, 'taskId'>>,
-  GetTopvisorProjectById?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryGetTopvisorProjectByIdArgs, 'projectId'>>,
-  GetTopvisorProjectByUrl?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryGetTopvisorProjectByUrlArgs, 'projectUrl'>>,
+  GetTopvisorProject?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryGetTopvisorProjectArgs, 'bitrixGroupId'>>,
   GetUserByID?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByIdArgs, 'userId'>>,
   GetUserGroups?: Resolver<Maybe<ResolversTypes['WorkGroupResponse']>, ParentType, ContextType, RequireFields<QueryGetUserGroupsArgs, 'start'>>,
   GetYandexMetrics?: Resolver<ResolversTypes['YandexMetrikaApiResponse'], ParentType, ContextType, RequireFields<QueryGetYandexMetricsArgs, 'bitrixGroupId'>>,

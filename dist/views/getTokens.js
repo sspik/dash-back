@@ -23,7 +23,14 @@ exports.default = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         client_secret: process.env.APP_SECRET,
         grant_type: 'authorization_code'
     };
-    const bitrixResponse = yield axios_1.default.get(`https://${server_domain}/oauth/token`, { params });
+    let bitrixResponse;
+    try {
+        bitrixResponse = yield axios_1.default.get(`https://${server_domain}/oauth/token`, { params });
+    }
+    catch (e) {
+        res.statusCode = bitrixResponse ? bitrixResponse.status : 403;
+        throw new Error(e);
+    }
     const { data } = bitrixResponse;
     if (yield user_1.User.exists({ userId: data.user_id })) {
         yield user_1.User.findOneAndUpdate({ userId: data.user_id }, {

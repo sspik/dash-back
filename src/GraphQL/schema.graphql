@@ -35,8 +35,7 @@ type Query {
     preset: String
   ): YandexMetrikaApiResponse!
   GetCounter(bitrixGroupId: ID!): Counter!
-  GetTopvisorProjectById(projectId: ID!): Project
-  GetTopvisorProjectByUrl(projectUrl: String!): Project
+  GetTopvisorProject(bitrixGroupId: ID!): Project
 }
 
 type Mutation {

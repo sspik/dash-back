@@ -45,10 +45,8 @@ export const resolvers: Resolvers = {
       dataSources.yandexMetrikaApi.getCounter(bitrixGroupId),
 
     // TopVisor
-    GetTopvisorProjectById: (_, {projectId}, { dataSources }) =>
-      dataSources.topvisorApi.getProjectById(projectId),
-    GetTopvisorProjectByUrl: (_, {projectUrl}, { dataSources }) =>
-      dataSources.topvisorApi.getProjectByUrl(projectUrl),
+    GetTopvisorProject: (_, {bitrixGroupId}, { dataSources }) =>
+      dataSources.topvisorApi.getProject(bitrixGroupId),
   },
   Mutation: {
     // Bitrix

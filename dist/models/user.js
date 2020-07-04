@@ -23,12 +23,6 @@ const UserSchema = new mongoose_1.Schema({
     accessToken: { type: String, required: true, unique: true },
     refreshToken: { type: String, required: true, unique: true },
     expires: { type: Number, required: true },
-    yandexMetrika: [
-        { type: mongoose_1.Schema.Types.ObjectId, ref: 'YandexMetrka' }
-    ],
-    topvisor: [
-        { type: mongoose_1.Schema.Types.ObjectId, ref: 'Topvisor' }
-    ]
 });
 UserSchema.statics.findById = function findById(userId) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -39,7 +33,7 @@ UserSchema.statics.findById = function findById(userId) {
         return user;
     });
 };
-UserSchema.methods.updateUser = function findById(userData) {
+UserSchema.methods.updateUser = function updateUser(userData) {
     return __awaiter(this, void 0, void 0, function* () {
         Object.assign(this, Object.assign({}, userData));
         yield this.save();

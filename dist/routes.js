@@ -15,12 +15,10 @@ exports.default = (app) => {
         extended: true
     }));
     app.use(auth_1.authMiddleware);
-    app.set('view engine', 'pug');
-    app.set('views', process.env.TEMPLATE_PATH);
     app.get('/auth/client', views_1.default.getClientCode);
     app.get('/auth/login', views_1.default.getTokens);
     app.get('/', auth_1.authMiddleware, views_1.default.homePage);
-    app.post('/setYandexMetrikaId', auth_1.authMiddleware, views_1.default.setYandexMetrikaToken);
+    app.get('/attachment/:attachment', auth_1.authMiddleware, views_1.default.getAttachment);
     return app;
 };
 //# sourceMappingURL=routes.js.map
