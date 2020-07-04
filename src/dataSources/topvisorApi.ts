@@ -51,7 +51,7 @@ class TopvisorApi extends RESTDataSource {
     return projectId;
   }
 
-  async getProjectByDomain(
+  private async getProjectByDomain(
     domainString: string
   ): Promise<GraphQLTypes.Project> {
     const domain = extractDomain(domainString);
