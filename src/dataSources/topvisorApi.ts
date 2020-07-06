@@ -51,7 +51,12 @@ class TopvisorApi extends RESTDataSource {
         projectId,
         bitrixGroupId,
       });
-      await topvisor.save()
+      try {
+        await topvisor.save()
+      } catch (e) {
+        // 11000 - duplicate key error. fk async
+        if (e.code !== 11000) throw new Error(e)
+      }
     }
     return projectId;
   }
