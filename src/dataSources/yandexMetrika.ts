@@ -94,8 +94,7 @@ class YandexMetrikaApi extends RESTDataSource {
       );
       if (!bitrixGroup) throw new Error('Группа не найдена или доступ запрещён');
       const counter = await this.getCounterByDomain(bitrixGroup.NAME);
-      const yandexMetrika = await new YandexMetrkaModel({
-        userId: this.context.user.userId,
+      const yandexMetrika = new YandexMetrkaModel({
         counter: counter.id,
         bitrixGroupId,
       })

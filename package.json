@@ -27,6 +27,7 @@
     "apollo-link-batch-http": "^1.2.14",
     "apollo-link-context": "^1.0.19",
     "apollo-server": ">=2.14.2",
+    "apollo-server-env": "^2.4.5",
     "apollo-server-express": ">=2.14.2",
     "apollo-server-testing": ">=2.14.2",
     "aws-sdk": "^2.585.0",

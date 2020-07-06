@@ -47,6 +47,11 @@ class TopvisorApi extends RESTDataSource {
       if (!bitrixGroup) throw new Error('Группа не найдена или доступ запрещён');
       const project = await this.getProjectByDomain(bitrixGroup.NAME);
       projectId = project.id
+      const topvisor = await new TopvisorModel({
+        projectId,
+        bitrixGroupId,
+      });
+      await topvisor.save()
     }
     return projectId;
   }
