@@ -10,7 +10,6 @@ interface ITopvisorPositionsParams {
   bitrixGroupId: string;
   projectId: string;
   regionIndexes: number[];
-  dates?: string[];
   date1?: string;
   date2?: string;
 }
