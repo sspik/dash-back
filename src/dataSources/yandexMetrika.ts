@@ -98,7 +98,12 @@ class YandexMetrikaApi extends RESTDataSource {
         counter: counter.id,
         bitrixGroupId,
       })
-      await yandexMetrika.save();
+      try {
+        await yandexMetrika.save();
+      } catch (e) {
+        // 11000 - duplicate key error. fk async
+        if (e.code !== 11000) throw new Error(e)
+      }
       counterId = counter.id;
     }
     return counterId
