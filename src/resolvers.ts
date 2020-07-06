@@ -54,13 +54,5 @@ export const resolvers: Resolvers = {
       dataSources.bitrixApi.sendTaskMessage(taskId, message),
     DeleteTaskMessage: (_, { taskId, messageId}, { dataSources }) =>
       dataSources.bitrixApi.deleteTaskMessage(taskId, messageId),
-
-    // Yandex Metrika
-    AddYandexMetrikaCounter: (_, { counterId }, { dataSources }) =>
-      dataSources.yandexMetrikaApi.addCounter(counterId),
-
-    // Topvisor
-    AddTopvisorProject: (_, { projectId }, { dataSources }) =>
-      dataSources.topvisor.addTopvisorProject(projectId)
   }
 };

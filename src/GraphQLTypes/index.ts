@@ -140,20 +140,8 @@ export type Monitoring = {
 
 export type Mutation = {
    __typename?: 'Mutation';
-  AddTopvisorProject?: Maybe<Project>;
-  AddYandexMetrikaCounter: Counter;
   DeleteTaskMessage: DeleteTaskMessageResponse;
   SendTaskMessage: SendTaskMessageResponse;
-};
-
-
-export type MutationAddTopvisorProjectArgs = {
-  projectId: Scalars['Int'];
-};
-
-
-export type MutationAddYandexMetrikaCounterArgs = {
-  counterId: Scalars['Int'];
 };
 
 
@@ -723,8 +711,6 @@ export type MonitoringResolvers<ContextType = any, ParentType extends ResolversP
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  AddTopvisorProject?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<MutationAddTopvisorProjectArgs, 'projectId'>>,
-  AddYandexMetrikaCounter?: Resolver<ResolversTypes['Counter'], ParentType, ContextType, RequireFields<MutationAddYandexMetrikaCounterArgs, 'counterId'>>,
   DeleteTaskMessage?: Resolver<ResolversTypes['DeleteTaskMessageResponse'], ParentType, ContextType, RequireFields<MutationDeleteTaskMessageArgs, 'taskId' | 'messageId'>>,
   SendTaskMessage?: Resolver<ResolversTypes['SendTaskMessageResponse'], ParentType, ContextType, RequireFields<MutationSendTaskMessageArgs, 'taskId' | 'message'>>,
 };

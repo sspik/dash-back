@@ -41,6 +41,4 @@ type Query {
 type Mutation {
   SendTaskMessage(taskId: ID! message: String!): SendTaskMessageResponse!
   DeleteTaskMessage(taskId: ID! messageId: ID!): DeleteTaskMessageResponse!
-  AddYandexMetrikaCounter(counterId: Int!): Counter!
-  AddTopvisorProject(projectId: Int!): Project
 }
