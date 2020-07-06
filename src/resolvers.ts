@@ -47,6 +47,20 @@ export const resolvers: Resolvers = {
     // TopVisor
     GetTopvisorProject: (_, {bitrixGroupId}, { dataSources }) =>
       dataSources.topvisorApi.getProject(bitrixGroupId),
+    GetTopvisorPositions: (_, {
+      bitrixGroupId,
+      projectId,
+      regionIndexes,
+      date1,
+      date2,
+    }, { dataSources }) =>
+      dataSources.topvisorApi.getPositions({
+        bitrixGroupId,
+        projectId,
+        regionIndexes,
+        date1,
+        date2,
+      }),
   },
   Mutation: {
     // Bitrix

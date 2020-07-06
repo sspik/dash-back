@@ -5,6 +5,24 @@ import { extractDomain } from "../utils";
 import { Bitrix } from "./bitrix24";
 import punycode from "punycode";
 
+
+interface ITopvisorPositionsParams {
+  bitrixGroupId: string;
+  projectId: string;
+  regionIndexes: number[];
+  dates?: string[];
+  date1?: string;
+  date2?: string;
+}
+
+type TKeywordResponse = {
+  name: string,
+  positionsData: {
+    [key: string]: { "position": string }
+  }
+}
+
+
 class TopvisorApi extends RESTDataSource {
 
   constructor() {
@@ -15,6 +33,7 @@ class TopvisorApi extends RESTDataSource {
   async getProject(
     bitrixGroupId: GraphQLTypes.WorkGroup["ID"]
   ): Promise<GraphQLTypes.Project> {
+    await this.checkGroupPermissions(bitrixGroupId);
     const projectId = await this.getProjectId(bitrixGroupId)
     const response = await this.post('get/projects_2/projects', {
       filters: [{
@@ -29,6 +48,51 @@ class TopvisorApi extends RESTDataSource {
     }
     return response.result[0]
   };
+
+  async getPositions(
+    params: ITopvisorPositionsParams
+  ): Promise<GraphQLTypes.PositionResponse> {
+    const {
+      bitrixGroupId,
+      projectId,
+      regionIndexes,
+      date1,
+      date2
+    } = params;
+    await this.checkGroupPermissions(bitrixGroupId);
+    if (!await this.accessToProject(
+      projectId,
+      bitrixGroupId
+    )) throw new Error('Доступ запрещён');
+    let response;
+    try {
+      response = await this.post('get/positions_2/history', {
+        project_id: projectId,
+        regions_indexes: regionIndexes,
+        date1,
+        date2,
+      });
+    } catch (e) {
+      throw new Error(`Ошибка при запросе позиций: ${e.message}`)
+    }
+    return {
+      result: {
+        keywords: response.result.keywords.map((keyword: TKeywordResponse) => {
+          return {
+            name: keyword.name,
+            positionsData: Object.keys(keyword.positionsData).map(p => {
+              const [data, _, searcher] = p.split(':');
+              return {
+                data,
+                searcher,
+                position: keyword.positionsData[p].position
+              }
+            })
+          }
+        })
+      }
+    }
+  }
 
   private async getProjectId(
     bitrixGroupId: GraphQLTypes.WorkGroup["ID"]
@@ -77,6 +141,22 @@ class TopvisorApi extends RESTDataSource {
       throw new Error('Проект не найден');
     }
     return response.result[0]
+  }
+
+  private async accessToProject(
+    projectId: string,
+    bitrixGroupId: string,
+  ): Promise<boolean> {
+    return projectId === await this.getProjectId(bitrixGroupId);
+  }
+
+  private async checkGroupPermissions(
+    bitrixGroupId: GraphQLTypes.WorkGroup['ID']
+  ): Promise<void> {
+    if (!await Bitrix.getUserAccess(
+      bitrixGroupId,
+      this.context.user.accessToken
+    )) throw new Error('Доступ запрещён');
   }
 
   willSendRequest(request: RequestOptions): void {

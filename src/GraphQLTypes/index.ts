@@ -125,6 +125,12 @@ export enum Gender {
   F = 'F'
 }
 
+export type Keyword = {
+   __typename?: 'Keyword';
+  name: Scalars['String'];
+  positionsData?: Maybe<Array<Maybe<PositionData>>>;
+};
+
 export type Monitoring = {
    __typename?: 'Monitoring';
   enable_monitoring: Scalars['Int'];
@@ -162,6 +168,18 @@ export enum Permission {
   Own = 'own'
 }
 
+export type PositionData = {
+   __typename?: 'PositionData';
+  data?: Maybe<Scalars['String']>;
+  searcher?: Maybe<Scalars['Int']>;
+  position?: Maybe<Scalars['String']>;
+};
+
+export type PositionResponse = {
+   __typename?: 'PositionResponse';
+  result?: Maybe<Result>;
+};
+
 export type Profile = {
    __typename?: 'Profile';
   ADMIN?: Maybe<Scalars['Boolean']>;
@@ -191,6 +209,7 @@ export type Query = {
   GetProfile: Profile;
   GetTaskByID?: Maybe<TaskDetail>;
   GetTaskComments: Array<Maybe<TaskComment>>;
+  GetTopvisorPositions: PositionResponse;
   GetTopvisorProject?: Maybe<Project>;
   GetUserByID?: Maybe<User>;
   GetUserGroups?: Maybe<WorkGroupResponse>;
@@ -236,6 +255,15 @@ export type QueryGetTaskByIdArgs = {
 
 export type QueryGetTaskCommentsArgs = {
   taskId: Scalars['ID'];
+};
+
+
+export type QueryGetTopvisorPositionsArgs = {
+  bitrixGroupId: Scalars['ID'];
+  projectId: Scalars['ID'];
+  regionIndexes: Array<Maybe<Scalars['Int']>>;
+  date1?: Maybe<Scalars['String']>;
+  date2?: Maybe<Scalars['String']>;
 };
 
 
@@ -302,6 +330,11 @@ export type Region = {
   name: Scalars['String'];
   areaName: Scalars['String'];
   domain: Scalars['String'];
+};
+
+export type Result = {
+   __typename?: 'Result';
+  keywords: Array<Maybe<Keyword>>;
 };
 
 export enum RoleGroup {
@@ -553,6 +586,10 @@ export type ResolversTypes = {
   shortTaskUser: ResolverTypeWrapper<ShortTaskUser>,
   Duration: Duration,
   TaskComment: ResolverTypeWrapper<TaskComment>,
+  PositionResponse: ResolverTypeWrapper<PositionResponse>,
+  Result: ResolverTypeWrapper<Result>,
+  Keyword: ResolverTypeWrapper<Keyword>,
+  PositionData: ResolverTypeWrapper<PositionData>,
   Project: ResolverTypeWrapper<Project>,
   Searcher: ResolverTypeWrapper<Searcher>,
   Region: ResolverTypeWrapper<Region>,
@@ -597,6 +634,10 @@ export type ResolversParentTypes = {
   shortTaskUser: ShortTaskUser,
   Duration: Duration,
   TaskComment: TaskComment,
+  PositionResponse: PositionResponse,
+  Result: Result,
+  Keyword: Keyword,
+  PositionData: PositionData,
   Project: Project,
   Searcher: Searcher,
   Region: Region,
@@ -697,6 +738,12 @@ export type FeedResponseResolvers<ContextType = any, ParentType extends Resolver
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export type KeywordResolvers<ContextType = any, ParentType extends ResolversParentTypes['Keyword'] = ResolversParentTypes['Keyword']> = {
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  positionsData?: Resolver<Maybe<Array<Maybe<ResolversTypes['PositionData']>>>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export type MonitoringResolvers<ContextType = any, ParentType extends ResolversParentTypes['Monitoring'] = ResolversParentTypes['Monitoring']> = {
   enable_monitoring?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   emails?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>,
@@ -713,6 +760,18 @@ export type MonitoringResolvers<ContextType = any, ParentType extends ResolversP
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   DeleteTaskMessage?: Resolver<ResolversTypes['DeleteTaskMessageResponse'], ParentType, ContextType, RequireFields<MutationDeleteTaskMessageArgs, 'taskId' | 'messageId'>>,
   SendTaskMessage?: Resolver<ResolversTypes['SendTaskMessageResponse'], ParentType, ContextType, RequireFields<MutationSendTaskMessageArgs, 'taskId' | 'message'>>,
+};
+
+export type PositionDataResolvers<ContextType = any, ParentType extends ResolversParentTypes['PositionData'] = ResolversParentTypes['PositionData']> = {
+  data?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  searcher?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  position?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type PositionResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PositionResponse'] = ResolversParentTypes['PositionResponse']> = {
+  result?: Resolver<Maybe<ResolversTypes['Result']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type ProfileResolvers<ContextType = any, ParentType extends ResolversParentTypes['Profile'] = ResolversParentTypes['Profile']> = {
@@ -743,6 +802,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   GetProfile?: Resolver<ResolversTypes['Profile'], ParentType, ContextType>,
   GetTaskByID?: Resolver<Maybe<ResolversTypes['TaskDetail']>, ParentType, ContextType, RequireFields<QueryGetTaskByIdArgs, 'taskId'>>,
   GetTaskComments?: Resolver<Array<Maybe<ResolversTypes['TaskComment']>>, ParentType, ContextType, RequireFields<QueryGetTaskCommentsArgs, 'taskId'>>,
+  GetTopvisorPositions?: Resolver<ResolversTypes['PositionResponse'], ParentType, ContextType, RequireFields<QueryGetTopvisorPositionsArgs, 'bitrixGroupId' | 'projectId' | 'regionIndexes'>>,
   GetTopvisorProject?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryGetTopvisorProjectArgs, 'bitrixGroupId'>>,
   GetUserByID?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByIdArgs, 'userId'>>,
   GetUserGroups?: Resolver<Maybe<ResolversTypes['WorkGroupResponse']>, ParentType, ContextType, RequireFields<QueryGetUserGroupsArgs, 'start'>>,
@@ -783,6 +843,11 @@ export type RegionResolvers<ContextType = any, ParentType extends ResolversParen
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   areaName?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   domain?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type ResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['Result'] = ResolversParentTypes['Result']> = {
+  keywords?: Resolver<Array<Maybe<ResolversTypes['Keyword']>>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -935,13 +1000,17 @@ export type Resolvers<ContextType = any> = {
   ErrorType?: ErrorTypeResolvers<ContextType>,
   Feed?: FeedResolvers<ContextType>,
   FeedResponse?: FeedResponseResolvers<ContextType>,
+  Keyword?: KeywordResolvers<ContextType>,
   Monitoring?: MonitoringResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
+  PositionData?: PositionDataResolvers<ContextType>,
+  PositionResponse?: PositionResponseResolvers<ContextType>,
   Profile?: ProfileResolvers<ContextType>,
   Project?: ProjectResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
   QueryType?: QueryTypeResolvers<ContextType>,
   Region?: RegionResolvers<ContextType>,
+  Result?: ResultResolvers<ContextType>,
   Searcher?: SearcherResolvers<ContextType>,
   SendTaskMessageResponse?: SendTaskMessageResponseResolvers<ContextType>,
   shortTaskUser?: ShortTaskUserResolvers<ContextType>,

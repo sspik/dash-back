@@ -1,0 +1,18 @@
+type PositionData {
+  data: String
+  searcher: Int
+  position: String
+}
+
+type Keyword {
+  name: String!
+  positionsData: [PositionData]
+}
+
+type Result {
+  keywords: [Keyword]!
+}
+
+type PositionResponse {
+  result: Result
+}

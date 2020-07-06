@@ -13,6 +13,7 @@
 # import YandexMetrikaApiResponse from "yandexMetrika/data.graphql"
 # import Counter from "yandexMetrika/counter.graphql"
 # import Project from "topvisor/project.graphql"
+# import PositionResponse from "topvisor/positions.graphql"
 
 type Query {
   GetProfile: Profile!
@@ -36,6 +37,13 @@ type Query {
   ): YandexMetrikaApiResponse!
   GetCounter(bitrixGroupId: ID!): Counter!
   GetTopvisorProject(bitrixGroupId: ID!): Project
+  GetTopvisorPositions(
+    bitrixGroupId: ID!
+    projectId: ID!
+    regionIndexes: [Int]!
+    date1: String
+    date2: String
+  ): PositionResponse!
 }
 
 type Mutation {
