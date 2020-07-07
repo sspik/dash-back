@@ -1,6 +1,6 @@
 type PositionData {
   data: String
-  searcher: Int
+  regionIndex: Int
   position: String
 }
 

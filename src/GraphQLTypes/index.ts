@@ -171,7 +171,7 @@ export enum Permission {
 export type PositionData = {
    __typename?: 'PositionData';
   data?: Maybe<Scalars['String']>;
-  searcher?: Maybe<Scalars['Int']>;
+  regionIndex?: Maybe<Scalars['Int']>;
   position?: Maybe<Scalars['String']>;
 };
 
@@ -764,7 +764,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type PositionDataResolvers<ContextType = any, ParentType extends ResolversParentTypes['PositionData'] = ResolversParentTypes['PositionData']> = {
   data?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  searcher?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  regionIndex?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
   position?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };

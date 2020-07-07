@@ -84,10 +84,10 @@ class TopvisorApi extends RESTDataSource {
             name: keyword.name,
             positionsData: keyword.positionsData
               && Object.keys(keyword.positionsData).map(p => {
-                const [data, _, searcher] = p.split(':');
+                const [data, _, regionIndex] = p.split(':');
                 return {
                   data,
-                  searcher,
+                  regionIndex,
                   position: keyword.positionsData[p].position
                 }
             })
