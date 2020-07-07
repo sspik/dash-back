@@ -82,13 +82,14 @@ class TopvisorApi extends RESTDataSource {
         keywords: response.result.keywords.map((keyword: TKeywordResponse) => {
           return {
             name: keyword.name,
-            positionsData: Object.keys(keyword.positionsData).map(p => {
-              const [data, _, searcher] = p.split(':');
-              return {
-                data,
-                searcher,
-                position: keyword.positionsData[p].position
-              }
+            positionsData: keyword.positionsData
+              && Object.keys(keyword.positionsData).map(p => {
+                const [data, _, searcher] = p.split(':');
+                return {
+                  data,
+                  searcher,
+                  position: keyword.positionsData[p].position
+                }
             })
           }
         })
