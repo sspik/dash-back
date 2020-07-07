@@ -21,6 +21,9 @@ type TKeywordResponse = {
   }
 }
 
+type TProjectResponse = {
+  result: GraphQLTypes.Project[]
+}
 
 class TopvisorApi extends RESTDataSource {
 
@@ -34,7 +37,7 @@ class TopvisorApi extends RESTDataSource {
   ): Promise<GraphQLTypes.Project> {
     await this.checkGroupPermissions(bitrixGroupId);
     const projectId = await this.getProjectId(bitrixGroupId)
-    const response = await this.post('get/projects_2/projects', {
+    const response = await this.post<TProjectResponse>('get/projects_2/projects', {
       filters: [{
         name: 'id',
         operator: 'EQUALS',
