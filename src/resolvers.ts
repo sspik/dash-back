@@ -61,6 +61,20 @@ export const resolvers: Resolvers = {
         date1,
         date2,
       }),
+    GetTopvisorSummaryChart: (_, {
+      bitrixGroupId,
+      projectId,
+      regionIndex,
+      date1,
+      date2,
+    }, { dataSources } ) =>
+      dataSources.topvisorApi.getSummaryChart({
+        bitrixGroupId,
+        projectId,
+        regionIndex,
+        date1,
+        date2,
+      })
   },
   Mutation: {
     // Bitrix

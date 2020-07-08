@@ -5,13 +5,19 @@ import { extractDomain } from "../utils";
 import { Bitrix } from "./bitrix24";
 import punycode from "punycode";
 
-
-interface ITopvisorPositionsParams {
+interface ITopvisorBaseParams {
   bitrixGroupId: string;
   projectId: string;
-  regionIndexes: number[];
-  date1?: string;
-  date2?: string;
+  date1: string;
+  date2: string;
+}
+
+interface ITopvisorPositionsParams extends ITopvisorBaseParams {
+  regionIndexes: string[];
+}
+
+interface ITopvisorSummaryChartParams extends ITopvisorBaseParams {
+  regionIndex: string
 }
 
 type TKeywordResponse = {
@@ -93,6 +99,52 @@ class TopvisorApi extends RESTDataSource {
             })
           }
         })
+      }
+    }
+  }
+
+  async getSummaryChart(
+    params: ITopvisorSummaryChartParams
+  ): Promise<GraphQLTypes.SummaryChartResponse> {
+    const {
+      bitrixGroupId,
+      projectId,
+      regionIndex,
+      date1,
+      date2
+    } = params;
+    await this.checkGroupPermissions(bitrixGroupId);
+    if (!await this.accessToProject(
+      projectId,
+      bitrixGroupId
+    )) throw new Error('Доступ запрещён');
+    let response;
+    try {
+      response = await this.post('get/positions_2/summary_chart', {
+        project_id: projectId,
+        region_index: regionIndex,
+        date1,
+        date2,
+        show_tops: true,
+        show_avg: true,
+      })
+    } catch (e) {
+      throw new Error(`Ошибка при запросе суммарной информации: ${e.message}`)
+    }
+    const responseData = response.result.seriesByProjectsId[projectId];
+    return {
+      result: {
+        tops: {
+          all: responseData.tops.all,
+          top3: responseData.tops["1_3"],
+          top10: responseData.tops["1_10"],
+          top11_30: responseData.tops["11_30"],
+          top31_50: responseData.tops["31_50"],
+          top51_100: responseData.tops["51_100"],
+          top101_10000: responseData.tops["101_10000"],
+        },
+        avg: responseData.avg,
+        dates: response.result.dates,
       }
     }
   }

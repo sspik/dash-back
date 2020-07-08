@@ -1,0 +1,19 @@
+type Tops {
+  all: [Int],
+  top3: [Int],
+  top10: [Int],
+  top11_30: [Int],
+  top31_50: [Int],
+  top51_100: [Int],
+  top101_10000: [Int]
+}
+
+type SummaryChart {
+  tops: Tops
+  avg: [Float]
+  dates: [String]
+}
+
+type SummaryChartResponse {
+  result: SummaryChart
+}

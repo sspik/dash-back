@@ -211,6 +211,7 @@ export type Query = {
   GetTaskComments: Array<Maybe<TaskComment>>;
   GetTopvisorPositions: PositionResponse;
   GetTopvisorProject?: Maybe<Project>;
+  GetTopvisorSummaryChart?: Maybe<SummaryChartResponse>;
   GetUserByID?: Maybe<User>;
   GetUserGroups?: Maybe<WorkGroupResponse>;
   GetYandexMetrics: YandexMetrikaApiResponse;
@@ -261,14 +262,23 @@ export type QueryGetTaskCommentsArgs = {
 export type QueryGetTopvisorPositionsArgs = {
   bitrixGroupId: Scalars['ID'];
   projectId: Scalars['ID'];
-  regionIndexes: Array<Maybe<Scalars['Int']>>;
-  date1?: Maybe<Scalars['String']>;
-  date2?: Maybe<Scalars['String']>;
+  regionIndexes: Array<Scalars['ID']>;
+  date1: Scalars['String'];
+  date2: Scalars['String'];
 };
 
 
 export type QueryGetTopvisorProjectArgs = {
   bitrixGroupId: Scalars['ID'];
+};
+
+
+export type QueryGetTopvisorSummaryChartArgs = {
+  bitrixGroupId: Scalars['ID'];
+  projectId: Scalars['ID'];
+  regionIndex: Scalars['ID'];
+  date1: Scalars['String'];
+  date2: Scalars['String'];
 };
 
 
@@ -375,6 +385,18 @@ export enum Status {
   Deleted = 'Deleted'
 }
 
+export type SummaryChart = {
+   __typename?: 'SummaryChart';
+  tops?: Maybe<Tops>;
+  avg?: Maybe<Array<Maybe<Scalars['Float']>>>;
+  dates?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type SummaryChartResponse = {
+   __typename?: 'SummaryChartResponse';
+  result?: Maybe<SummaryChart>;
+};
+
 export type Task = {
    __typename?: 'Task';
   CLOSED_DATE: Scalars['String'];
@@ -382,7 +404,7 @@ export type Task = {
   CREATED_BY_NAME: Scalars['String'];
   CREATED_DATE: Scalars['String'];
   DEADLINE: Scalars['String'];
-  DESCRIPTION: Scalars['String'];
+  DESCRIPTION?: Maybe<Scalars['String']>;
   DURATION_FACT?: Maybe<Scalars['Int']>;
   ID: Scalars['ID'];
   STAGE_ID: Scalars['Int'];
@@ -422,6 +444,17 @@ export type TaskDetail = {
   timeEstimate?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   ufTaskWebdavFiles?: Maybe<Array<Maybe<Scalars['ID']>>>;
+};
+
+export type Tops = {
+   __typename?: 'Tops';
+  all?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  top3?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  top10?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  top11_30?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  top31_50?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  top51_100?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  top101_10000?: Maybe<Array<Maybe<Scalars['Int']>>>;
 };
 
 export type User = {
@@ -593,6 +626,10 @@ export type ResolversTypes = {
   Project: ResolverTypeWrapper<Project>,
   Searcher: ResolverTypeWrapper<Searcher>,
   Region: ResolverTypeWrapper<Region>,
+  SummaryChartResponse: ResolverTypeWrapper<SummaryChartResponse>,
+  SummaryChart: ResolverTypeWrapper<SummaryChart>,
+  Tops: ResolverTypeWrapper<Tops>,
+  Float: ResolverTypeWrapper<Scalars['Float']>,
   WorkGroupResponse: ResolverTypeWrapper<WorkGroupResponse>,
   YandexMetrikaApiResponse: ResolverTypeWrapper<YandexMetrikaApiResponse>,
   DataType: ResolverTypeWrapper<DataType>,
@@ -641,6 +678,10 @@ export type ResolversParentTypes = {
   Project: Project,
   Searcher: Searcher,
   Region: Region,
+  SummaryChartResponse: SummaryChartResponse,
+  SummaryChart: SummaryChart,
+  Tops: Tops,
+  Float: Scalars['Float'],
   WorkGroupResponse: WorkGroupResponse,
   YandexMetrikaApiResponse: YandexMetrikaApiResponse,
   DataType: DataType,
@@ -802,8 +843,9 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   GetProfile?: Resolver<ResolversTypes['Profile'], ParentType, ContextType>,
   GetTaskByID?: Resolver<Maybe<ResolversTypes['TaskDetail']>, ParentType, ContextType, RequireFields<QueryGetTaskByIdArgs, 'taskId'>>,
   GetTaskComments?: Resolver<Array<Maybe<ResolversTypes['TaskComment']>>, ParentType, ContextType, RequireFields<QueryGetTaskCommentsArgs, 'taskId'>>,
-  GetTopvisorPositions?: Resolver<ResolversTypes['PositionResponse'], ParentType, ContextType, RequireFields<QueryGetTopvisorPositionsArgs, 'bitrixGroupId' | 'projectId' | 'regionIndexes'>>,
+  GetTopvisorPositions?: Resolver<ResolversTypes['PositionResponse'], ParentType, ContextType, RequireFields<QueryGetTopvisorPositionsArgs, 'bitrixGroupId' | 'projectId' | 'regionIndexes' | 'date1' | 'date2'>>,
   GetTopvisorProject?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryGetTopvisorProjectArgs, 'bitrixGroupId'>>,
+  GetTopvisorSummaryChart?: Resolver<Maybe<ResolversTypes['SummaryChartResponse']>, ParentType, ContextType, RequireFields<QueryGetTopvisorSummaryChartArgs, 'bitrixGroupId' | 'projectId' | 'regionIndex' | 'date1' | 'date2'>>,
   GetUserByID?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByIdArgs, 'userId'>>,
   GetUserGroups?: Resolver<Maybe<ResolversTypes['WorkGroupResponse']>, ParentType, ContextType, RequireFields<QueryGetUserGroupsArgs, 'start'>>,
   GetYandexMetrics?: Resolver<ResolversTypes['YandexMetrikaApiResponse'], ParentType, ContextType, RequireFields<QueryGetYandexMetricsArgs, 'bitrixGroupId'>>,
@@ -878,13 +920,25 @@ export type ShortTaskUserResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export type SummaryChartResolvers<ContextType = any, ParentType extends ResolversParentTypes['SummaryChart'] = ResolversParentTypes['SummaryChart']> = {
+  tops?: Resolver<Maybe<ResolversTypes['Tops']>, ParentType, ContextType>,
+  avg?: Resolver<Maybe<Array<Maybe<ResolversTypes['Float']>>>, ParentType, ContextType>,
+  dates?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type SummaryChartResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['SummaryChartResponse'] = ResolversParentTypes['SummaryChartResponse']> = {
+  result?: Resolver<Maybe<ResolversTypes['SummaryChart']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export type TaskResolvers<ContextType = any, ParentType extends ResolversParentTypes['Task'] = ResolversParentTypes['Task']> = {
   CLOSED_DATE?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   CREATED_BY_LAST_NAME?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   CREATED_BY_NAME?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   CREATED_DATE?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   DEADLINE?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  DESCRIPTION?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  DESCRIPTION?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   DURATION_FACT?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
   ID?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   STAGE_ID?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
@@ -924,6 +978,17 @@ export type TaskDetailResolvers<ContextType = any, ParentType extends ResolversP
   timeEstimate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   ufTaskWebdavFiles?: Resolver<Maybe<Array<Maybe<ResolversTypes['ID']>>>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type TopsResolvers<ContextType = any, ParentType extends ResolversParentTypes['Tops'] = ResolversParentTypes['Tops']> = {
+  all?: Resolver<Maybe<Array<Maybe<ResolversTypes['Int']>>>, ParentType, ContextType>,
+  top3?: Resolver<Maybe<Array<Maybe<ResolversTypes['Int']>>>, ParentType, ContextType>,
+  top10?: Resolver<Maybe<Array<Maybe<ResolversTypes['Int']>>>, ParentType, ContextType>,
+  top11_30?: Resolver<Maybe<Array<Maybe<ResolversTypes['Int']>>>, ParentType, ContextType>,
+  top31_50?: Resolver<Maybe<Array<Maybe<ResolversTypes['Int']>>>, ParentType, ContextType>,
+  top51_100?: Resolver<Maybe<Array<Maybe<ResolversTypes['Int']>>>, ParentType, ContextType>,
+  top101_10000?: Resolver<Maybe<Array<Maybe<ResolversTypes['Int']>>>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -1014,9 +1079,12 @@ export type Resolvers<ContextType = any> = {
   Searcher?: SearcherResolvers<ContextType>,
   SendTaskMessageResponse?: SendTaskMessageResponseResolvers<ContextType>,
   shortTaskUser?: ShortTaskUserResolvers<ContextType>,
+  SummaryChart?: SummaryChartResolvers<ContextType>,
+  SummaryChartResponse?: SummaryChartResponseResolvers<ContextType>,
   Task?: TaskResolvers<ContextType>,
   TaskComment?: TaskCommentResolvers<ContextType>,
   TaskDetail?: TaskDetailResolvers<ContextType>,
+  Tops?: TopsResolvers<ContextType>,
   User?: UserResolvers<ContextType>,
   WorkGroup?: WorkGroupResolvers<ContextType>,
   WorkGroupResponse?: WorkGroupResponseResolvers<ContextType>,

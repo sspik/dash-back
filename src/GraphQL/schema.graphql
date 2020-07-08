@@ -14,6 +14,7 @@
 # import Counter from "yandexMetrika/counter.graphql"
 # import Project from "topvisor/project.graphql"
 # import PositionResponse from "topvisor/positions.graphql"
+# import SummaryChartResponse from "topvisor/summaryChart.graphql"
 
 type Query {
   GetProfile: Profile!
@@ -40,10 +41,17 @@ type Query {
   GetTopvisorPositions(
     bitrixGroupId: ID!
     projectId: ID!
-    regionIndexes: [Int]!
-    date1: String
-    date2: String
+    regionIndexes: [ID!]!
+    date1: String!
+    date2: String!
   ): PositionResponse!
+  GetTopvisorSummaryChart(
+    bitrixGroupId: ID!
+    projectId: ID!
+    regionIndex: ID!
+    date1: String!
+    date2: String!
+  ): SummaryChartResponse
 }
 
 type Mutation {
