@@ -12,7 +12,7 @@ type Task {
   ID: ID!
   TITLE: String!
   STAGE_ID: Int!
-  DESCRIPTION: String!
+  DESCRIPTION: String
   DEADLINE: String!
   STATUS: Int
   DURATION_FACT: Int
