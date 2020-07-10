@@ -1,5 +1,8 @@
 overwrite: true
-schema: "src/GraphQL/schema.graphql"
+schema:
+  - "src/GraphQL/schema.graphql"
+  - |
+    scalar Upload
 documents: null
 generates:
   src/GraphQLTypes/index.ts:

@@ -1,10 +1,9 @@
 require('dotenv').config();
 
 import express from 'express';
-import gql from 'graphql-tag';
 import connect from "./connect";
 import { DocumentNode } from "graphql";
-import { ApolloServer } from "apollo-server-express";
+import { ApolloServer, gql } from "apollo-server-express";
 import { importSchema } from "graphql-import";
 import { resolvers } from "./resolvers";
 import routes from "./routes";

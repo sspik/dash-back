@@ -1,0 +1,5 @@
+type File {
+  ID: ID!
+  NAME: String!
+  DOWNLOAD_URL: String!
+}

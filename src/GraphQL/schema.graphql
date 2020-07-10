@@ -10,11 +10,14 @@
 # import DeleteTaskMessageResponse from "bitrix/taskMessage.graphql"
 # import FeedResponse from "bitrix/feed.graphql"
 # import AttachmentResponse from "bitrix/attachment.graphql"
+# import File from "bitrix/uploadAttachment.graphql";
 # import YandexMetrikaApiResponse from "yandexMetrika/data.graphql"
 # import Counter from "yandexMetrika/counter.graphql"
 # import Project from "topvisor/project.graphql"
 # import PositionResponse from "topvisor/positions.graphql"
 # import SummaryChartResponse from "topvisor/summaryChart.graphql"
+
+scalar UploadFix
 
 type Query {
   GetProfile: Profile!
@@ -57,4 +60,5 @@ type Query {
 type Mutation {
   SendTaskMessage(taskId: ID! message: String!): SendTaskMessageResponse!
   DeleteTaskMessage(taskId: ID! messageId: ID!): DeleteTaskMessageResponse!
+  AttachmentUpload(folderId: ID! files: [UploadFix!]!): [File]!
 }

@@ -251,6 +251,16 @@ class BitrixAPI extends RESTDataSource {
     })
   }
 
+  async uploadAttachment(
+    folderId: string,
+    files: Array<GraphQLTypes.Scalars["Upload"]>,
+  ): Promise<GraphQLTypes.File[]> {
+    await files.map(file => {
+      console.log(file)
+    })
+    return
+  }
+
   // Other
   async willSendRequest(request: RequestOptions): Promise<void> {
     // Если запрос пришел из graphql, то подкитываем access токен

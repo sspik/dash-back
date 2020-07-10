@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo } from 'graphql';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 export type Maybe<T> = T | null;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
@@ -8,6 +8,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  UploadFix: any;
+  Upload: any;
 };
 
 export type Attachment = {
@@ -120,6 +122,13 @@ export type FeedResponse = {
   total: Scalars['Int'];
 };
 
+export type File = {
+   __typename?: 'File';
+  DOWNLOAD_URL: Scalars['String'];
+  ID: Scalars['ID'];
+  NAME: Scalars['String'];
+};
+
 export enum Gender {
   M = 'M',
   F = 'F'
@@ -146,8 +155,15 @@ export type Monitoring = {
 
 export type Mutation = {
    __typename?: 'Mutation';
+  AttachmentUpload: Array<Maybe<File>>;
   DeleteTaskMessage: DeleteTaskMessageResponse;
   SendTaskMessage: SendTaskMessageResponse;
+};
+
+
+export type MutationAttachmentUploadArgs = {
+  folderId: Scalars['ID'];
+  files: Array<Scalars['UploadFix']>;
 };
 
 
@@ -457,6 +473,8 @@ export type Tops = {
   top101_10000?: Maybe<Array<Maybe<Scalars['Int']>>>;
 };
 
+
+
 export type User = {
    __typename?: 'User';
   ACTIVE?: Maybe<Scalars['Boolean']>;
@@ -636,8 +654,11 @@ export type ResolversTypes = {
   Dimension: ResolverTypeWrapper<Dimension>,
   QueryType: ResolverTypeWrapper<QueryType>,
   Mutation: ResolverTypeWrapper<{}>,
+  UploadFix: ResolverTypeWrapper<Scalars['UploadFix']>,
+  File: ResolverTypeWrapper<File>,
   DeleteTaskMessageResponse: ResolverTypeWrapper<DeleteTaskMessageResponse>,
   SendTaskMessageResponse: ResolverTypeWrapper<SendTaskMessageResponse>,
+  Upload: ResolverTypeWrapper<Scalars['Upload']>,
   WorkGroupShort: ResolverTypeWrapper<WorkGroupShort>,
   RoleGroup: RoleGroup,
 };
@@ -688,8 +709,11 @@ export type ResolversParentTypes = {
   Dimension: Dimension,
   QueryType: QueryType,
   Mutation: {},
+  UploadFix: Scalars['UploadFix'],
+  File: File,
   DeleteTaskMessageResponse: DeleteTaskMessageResponse,
   SendTaskMessageResponse: SendTaskMessageResponse,
+  Upload: Scalars['Upload'],
   WorkGroupShort: WorkGroupShort,
   RoleGroup: RoleGroup,
 };
@@ -779,6 +803,13 @@ export type FeedResponseResolvers<ContextType = any, ParentType extends Resolver
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export type FileResolvers<ContextType = any, ParentType extends ResolversParentTypes['File'] = ResolversParentTypes['File']> = {
+  DOWNLOAD_URL?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  ID?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  NAME?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export type KeywordResolvers<ContextType = any, ParentType extends ResolversParentTypes['Keyword'] = ResolversParentTypes['Keyword']> = {
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   positionsData?: Resolver<Maybe<Array<Maybe<ResolversTypes['PositionData']>>>, ParentType, ContextType>,
@@ -799,6 +830,7 @@ export type MonitoringResolvers<ContextType = any, ParentType extends ResolversP
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  AttachmentUpload?: Resolver<Array<Maybe<ResolversTypes['File']>>, ParentType, ContextType, RequireFields<MutationAttachmentUploadArgs, 'folderId' | 'files'>>,
   DeleteTaskMessage?: Resolver<ResolversTypes['DeleteTaskMessageResponse'], ParentType, ContextType, RequireFields<MutationDeleteTaskMessageArgs, 'taskId' | 'messageId'>>,
   SendTaskMessage?: Resolver<ResolversTypes['SendTaskMessageResponse'], ParentType, ContextType, RequireFields<MutationSendTaskMessageArgs, 'taskId' | 'message'>>,
 };
@@ -992,6 +1024,14 @@ export type TopsResolvers<ContextType = any, ParentType extends ResolversParentT
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
+  name: 'Upload'
+}
+
+export interface UploadFixScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['UploadFix'], any> {
+  name: 'UploadFix'
+}
+
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   ACTIVE?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   ID?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
@@ -1065,6 +1105,7 @@ export type Resolvers<ContextType = any> = {
   ErrorType?: ErrorTypeResolvers<ContextType>,
   Feed?: FeedResolvers<ContextType>,
   FeedResponse?: FeedResponseResolvers<ContextType>,
+  File?: FileResolvers<ContextType>,
   Keyword?: KeywordResolvers<ContextType>,
   Monitoring?: MonitoringResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
@@ -1085,6 +1126,8 @@ export type Resolvers<ContextType = any> = {
   TaskComment?: TaskCommentResolvers<ContextType>,
   TaskDetail?: TaskDetailResolvers<ContextType>,
   Tops?: TopsResolvers<ContextType>,
+  Upload?: GraphQLScalarType,
+  UploadFix?: GraphQLScalarType,
   User?: UserResolvers<ContextType>,
   WorkGroup?: WorkGroupResolvers<ContextType>,
   WorkGroupResponse?: WorkGroupResponseResolvers<ContextType>,
