@@ -1,4 +1,5 @@
 import { IUserModel } from "./models/user";
+import { ReadStream } from "fs";
 
 export interface IBitrixAuthRequest {
   grand_type: String;
@@ -38,6 +39,13 @@ export interface IBitrixAuthParams {
   client_id: string,
   client_secret: string,
   grant_type: string
+}
+
+export interface IFileSteam {
+  filename: string;
+  mimetype: string;
+  encoding: string;
+  createReadStream: () => ReadStream;
 }
 
 declare global {

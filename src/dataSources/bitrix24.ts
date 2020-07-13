@@ -2,6 +2,7 @@ import Axois from 'axios';
 import { RequestOptions, RESTDataSource } from "apollo-datasource-rest";
 import * as GraphQLTypes from '../GraphQLTypes';
 import _ from 'lodash';
+import {IFileSteam} from "../interfaces";
 
 interface IBatchRequest { [key: string]: string }
 
@@ -253,10 +254,17 @@ class BitrixAPI extends RESTDataSource {
 
   async uploadAttachment(
     folderId: string,
-    files: Array<GraphQLTypes.Scalars["Upload"]>,
+    files: Array<Promise<IFileSteam>>,
   ): Promise<GraphQLTypes.File[]> {
-    await files.map(file => {
-      console.log(file)
+    files.map(async (filePromise) => {
+      const file = await filePromise;
+      const readStream = file.createReadStream();
+      let fileBody: string = '';
+      readStream.on('data', (chunk) => {
+        const stringChunk = chunk.toString();
+        fileBody += stringChunk;
+      });
+      console.log(fileBody)
     })
     return
   }

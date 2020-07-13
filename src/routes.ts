@@ -1,4 +1,4 @@
-import express, {Application} from "express";
+import express, { Application } from "express";
 import views from "./views";
 import { authMiddleware } from "./middleswares/auth";
 import cookieParser from 'cookie-parser'
