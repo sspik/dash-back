@@ -124,7 +124,6 @@ export type FeedResponse = {
 
 export type File = {
    __typename?: 'File';
-  DOWNLOAD_URL: Scalars['String'];
   ID: Scalars['ID'];
   NAME: Scalars['String'];
 };
@@ -804,7 +803,6 @@ export type FeedResponseResolvers<ContextType = any, ParentType extends Resolver
 };
 
 export type FileResolvers<ContextType = any, ParentType extends ResolversParentTypes['File'] = ResolversParentTypes['File']> = {
-  DOWNLOAD_URL?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   ID?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   NAME?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,

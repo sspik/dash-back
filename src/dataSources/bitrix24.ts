@@ -2,7 +2,8 @@ import Axois from 'axios';
 import { RequestOptions, RESTDataSource } from "apollo-datasource-rest";
 import * as GraphQLTypes from '../GraphQLTypes';
 import _ from 'lodash';
-import {IFileSteam} from "../interfaces";
+import { IFileStream } from "../interfaces";
+import { saveStream } from "../utils";
 
 interface IBatchRequest { [key: string]: string }
 
@@ -10,6 +11,9 @@ interface IBitrixResponse<T> {
   result?: Array<T>
   error?: string
   error_description?: string
+}
+interface IUploadFileResponse {
+  result: GraphQLTypes.File
 }
 
 class BitrixAPI extends RESTDataSource {
@@ -252,21 +256,39 @@ class BitrixAPI extends RESTDataSource {
     })
   }
 
-  async uploadAttachment(
+  async uploadFile(
     folderId: string,
-    files: Array<Promise<IFileSteam>>,
-  ): Promise<GraphQLTypes.File[]> {
-    files.map(async (filePromise) => {
+    files: Array<Promise<IFileStream>>,
+  ): Promise<Promise<GraphQLTypes.File>[]> {
+    const makeFilesToUpload = files.map(async (filePromise) => {
       const file = await filePromise;
       const readStream = file.createReadStream();
-      let fileBody: string = '';
-      readStream.on('data', (chunk) => {
-        const stringChunk = chunk.toString();
-        fileBody += stringChunk;
-      });
-      console.log(fileBody)
+      return {
+        id: process.env.BITRIX24_UPLOAD_FOLDER_ID,
+        fileContent: await saveStream(readStream),
+        data: {
+          NAME: file.filename
+        }
+      }
+    });
+    const filesToUpload = await Promise.all(makeFilesToUpload);
+    return filesToUpload.map( async (file) => {
+      try {
+        const uploadUrl = await this.post<IUploadFileResponse>(
+          'disk.folder.uploadFile',
+          {
+            ...file,
+            generateUniqueName: 1
+          }
+        );
+        return {
+          ID: uploadUrl.result.ID,
+          NAME: uploadUrl.result.NAME,
+        }
+      } catch (e) {
+        throw new Error(`Ошибка загрузки файла ${e.message}`)
+      }
     })
-    return
   }
 
   // Other

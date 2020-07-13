@@ -83,6 +83,6 @@ export const resolvers: Resolvers = {
     DeleteTaskMessage: (_, { taskId, messageId }, { dataSources }) =>
       dataSources.bitrixApi.deleteTaskMessage(taskId, messageId),
     AttachmentUpload: (_, { folderId, files }, { dataSources }) =>
-      dataSources.bitrixApi.uploadAttachment(folderId, files),
+      dataSources.bitrixApi.uploadFile(folderId, files),
   }
 };

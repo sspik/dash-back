@@ -41,7 +41,7 @@ export interface IBitrixAuthParams {
   grant_type: string
 }
 
-export interface IFileSteam {
+export interface IFileStream {
   filename: string;
   mimetype: string;
   encoding: string;
