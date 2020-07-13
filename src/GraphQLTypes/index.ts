@@ -73,6 +73,11 @@ export type DataType = {
   metrics: Array<Maybe<Array<Maybe<Scalars['Int']>>>>;
 };
 
+export type DeleteFileResponse = {
+   __typename?: 'DeleteFileResponse';
+  result?: Maybe<Scalars['Boolean']>;
+};
+
 export type DeleteTaskMessageResponse = {
    __typename?: 'DeleteTaskMessageResponse';
   error?: Maybe<Scalars['String']>;
@@ -115,6 +120,11 @@ export type Feed = {
   FILES?: Maybe<Array<Maybe<Attachment>>>;
 };
 
+export type FeedMessageResponse = {
+   __typename?: 'FeedMessageResponse';
+  result: Scalars['Boolean'];
+};
+
 export type FeedResponse = {
    __typename?: 'FeedResponse';
   next?: Maybe<Scalars['Int']>;
@@ -124,6 +134,7 @@ export type FeedResponse = {
 
 export type File = {
    __typename?: 'File';
+  CREATED_BY: Scalars['ID'];
   ID: Scalars['ID'];
   NAME: Scalars['String'];
 };
@@ -154,15 +165,16 @@ export type Monitoring = {
 
 export type Mutation = {
    __typename?: 'Mutation';
-  AttachmentUpload: Array<Maybe<File>>;
+  DeleteFile: DeleteFileResponse;
   DeleteTaskMessage: DeleteTaskMessageResponse;
+  SendFeedMessage: FeedMessageResponse;
   SendTaskMessage: SendTaskMessageResponse;
+  UploadFile: Array<Maybe<File>>;
 };
 
 
-export type MutationAttachmentUploadArgs = {
-  folderId: Scalars['ID'];
-  files: Array<Scalars['UploadFix']>;
+export type MutationDeleteFileArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -172,9 +184,22 @@ export type MutationDeleteTaskMessageArgs = {
 };
 
 
+export type MutationSendFeedMessageArgs = {
+  title?: Maybe<Scalars['String']>;
+  message: Scalars['String'];
+  files?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+
 export type MutationSendTaskMessageArgs = {
   taskId: Scalars['ID'];
   message: Scalars['String'];
+};
+
+
+export type MutationUploadFileArgs = {
+  folderId: Scalars['ID'];
+  files: Array<Scalars['UploadFix']>;
 };
 
 export enum Permission {
@@ -653,10 +678,12 @@ export type ResolversTypes = {
   Dimension: ResolverTypeWrapper<Dimension>,
   QueryType: ResolverTypeWrapper<QueryType>,
   Mutation: ResolverTypeWrapper<{}>,
+  DeleteFileResponse: ResolverTypeWrapper<DeleteFileResponse>,
+  DeleteTaskMessageResponse: ResolverTypeWrapper<DeleteTaskMessageResponse>,
+  FeedMessageResponse: ResolverTypeWrapper<FeedMessageResponse>,
+  SendTaskMessageResponse: ResolverTypeWrapper<SendTaskMessageResponse>,
   UploadFix: ResolverTypeWrapper<Scalars['UploadFix']>,
   File: ResolverTypeWrapper<File>,
-  DeleteTaskMessageResponse: ResolverTypeWrapper<DeleteTaskMessageResponse>,
-  SendTaskMessageResponse: ResolverTypeWrapper<SendTaskMessageResponse>,
   Upload: ResolverTypeWrapper<Scalars['Upload']>,
   WorkGroupShort: ResolverTypeWrapper<WorkGroupShort>,
   RoleGroup: RoleGroup,
@@ -708,10 +735,12 @@ export type ResolversParentTypes = {
   Dimension: Dimension,
   QueryType: QueryType,
   Mutation: {},
+  DeleteFileResponse: DeleteFileResponse,
+  DeleteTaskMessageResponse: DeleteTaskMessageResponse,
+  FeedMessageResponse: FeedMessageResponse,
+  SendTaskMessageResponse: SendTaskMessageResponse,
   UploadFix: Scalars['UploadFix'],
   File: File,
-  DeleteTaskMessageResponse: DeleteTaskMessageResponse,
-  SendTaskMessageResponse: SendTaskMessageResponse,
   Upload: Scalars['Upload'],
   WorkGroupShort: WorkGroupShort,
   RoleGroup: RoleGroup,
@@ -759,6 +788,11 @@ export type DataTypeResolvers<ContextType = any, ParentType extends ResolversPar
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export type DeleteFileResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['DeleteFileResponse'] = ResolversParentTypes['DeleteFileResponse']> = {
+  result?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export type DeleteTaskMessageResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['DeleteTaskMessageResponse'] = ResolversParentTypes['DeleteTaskMessageResponse']> = {
   error?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   error_message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
@@ -795,6 +829,11 @@ export type FeedResolvers<ContextType = any, ParentType extends ResolversParentT
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export type FeedMessageResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['FeedMessageResponse'] = ResolversParentTypes['FeedMessageResponse']> = {
+  result?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export type FeedResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['FeedResponse'] = ResolversParentTypes['FeedResponse']> = {
   next?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
   result?: Resolver<Array<Maybe<ResolversTypes['Feed']>>, ParentType, ContextType>,
@@ -803,6 +842,7 @@ export type FeedResponseResolvers<ContextType = any, ParentType extends Resolver
 };
 
 export type FileResolvers<ContextType = any, ParentType extends ResolversParentTypes['File'] = ResolversParentTypes['File']> = {
+  CREATED_BY?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   ID?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   NAME?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
@@ -828,9 +868,11 @@ export type MonitoringResolvers<ContextType = any, ParentType extends ResolversP
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  AttachmentUpload?: Resolver<Array<Maybe<ResolversTypes['File']>>, ParentType, ContextType, RequireFields<MutationAttachmentUploadArgs, 'folderId' | 'files'>>,
+  DeleteFile?: Resolver<ResolversTypes['DeleteFileResponse'], ParentType, ContextType, RequireFields<MutationDeleteFileArgs, 'id'>>,
   DeleteTaskMessage?: Resolver<ResolversTypes['DeleteTaskMessageResponse'], ParentType, ContextType, RequireFields<MutationDeleteTaskMessageArgs, 'taskId' | 'messageId'>>,
+  SendFeedMessage?: Resolver<ResolversTypes['FeedMessageResponse'], ParentType, ContextType, RequireFields<MutationSendFeedMessageArgs, 'message'>>,
   SendTaskMessage?: Resolver<ResolversTypes['SendTaskMessageResponse'], ParentType, ContextType, RequireFields<MutationSendTaskMessageArgs, 'taskId' | 'message'>>,
+  UploadFile?: Resolver<Array<Maybe<ResolversTypes['File']>>, ParentType, ContextType, RequireFields<MutationUploadFileArgs, 'folderId' | 'files'>>,
 };
 
 export type PositionDataResolvers<ContextType = any, ParentType extends ResolversParentTypes['PositionData'] = ResolversParentTypes['PositionData']> = {
@@ -1097,11 +1139,13 @@ export type Resolvers<ContextType = any> = {
   AttachmentResponse?: AttachmentResponseResolvers<ContextType>,
   Counter?: CounterResolvers<ContextType>,
   DataType?: DataTypeResolvers<ContextType>,
+  DeleteFileResponse?: DeleteFileResponseResolvers<ContextType>,
   DeleteTaskMessageResponse?: DeleteTaskMessageResponseResolvers<ContextType>,
   Dimension?: DimensionResolvers<ContextType>,
   Errors?: ErrorsResolvers<ContextType>,
   ErrorType?: ErrorTypeResolvers<ContextType>,
   Feed?: FeedResolvers<ContextType>,
+  FeedMessageResponse?: FeedMessageResponseResolvers<ContextType>,
   FeedResponse?: FeedResponseResolvers<ContextType>,
   File?: FileResolvers<ContextType>,
   Keyword?: KeywordResolvers<ContextType>,

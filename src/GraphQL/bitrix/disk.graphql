@@ -1,0 +1,9 @@
+type File {
+  ID: ID!
+  NAME: String!
+  CREATED_BY: ID!
+}
+
+type DeleteFileResponse {
+  result: Boolean
+}

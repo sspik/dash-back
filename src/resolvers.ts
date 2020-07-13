@@ -80,9 +80,13 @@ export const resolvers: Resolvers = {
     // Bitrix
     SendTaskMessage: (_, { taskId, message }, { dataSources }) =>
       dataSources.bitrixApi.sendTaskMessage(taskId, message),
+    SendFeedMessage: (_, { title, message, files }, { dataSources }) =>
+      dataSources.bitrixApi.sendFeedMessage(title, message, files),
     DeleteTaskMessage: (_, { taskId, messageId }, { dataSources }) =>
       dataSources.bitrixApi.deleteTaskMessage(taskId, messageId),
-    AttachmentUpload: (_, { folderId, files }, { dataSources }) =>
+    UploadFile: (_, { folderId, files }, { dataSources }) =>
       dataSources.bitrixApi.uploadFile(folderId, files),
+    DeleteFile: (_, { id }, { dataSources }) =>
+      dataSources.bitrixApi.deleteFile(id)
   }
 };

@@ -246,6 +246,24 @@ class BitrixAPI extends RESTDataSource {
       '1[POST_MESSAGE]': message
     })
   }
+
+  async sendFeedMessage(
+    title: string,
+    message: string,
+    files: string[]
+  ): Promise<GraphQLTypes.FeedMessageResponse> {
+    try {
+      const response = await this.post('log.blogpost.add', {
+        USER_ID: this.context.user.userId,
+        TITLE: title,
+        POST_MESSAGE: message,
+        FILES: files,
+      })
+    } catch (e) {
+      throw new Error(`Ошибка публикации сообщения в живой ленте ${e.message}`)
+    }
+  }
+
   async deleteTaskMessage(
     taskId: string,
     messageId: string,
@@ -281,14 +299,35 @@ class BitrixAPI extends RESTDataSource {
             generateUniqueName: 1
           }
         );
-        return {
-          ID: uploadUrl.result.ID,
-          NAME: uploadUrl.result.NAME,
-        }
+        const { ID, NAME, CREATED_BY } = uploadUrl.result;
+        return { ID, NAME, CREATED_BY }
       } catch (e) {
         throw new Error(`Ошибка загрузки файла ${e.message}`)
       }
     })
+  }
+
+  async deleteFile(id: string): Promise<GraphQLTypes.DeleteFileResponse> {
+    const file = await this.getFile(id);
+    console.log(file.CREATED_BY, this.context.user.userId)
+    if (file.CREATED_BY === this.context.user.userId.toString()) {
+      return this.get('disk.file.delete', { id });
+    } else {
+      throw new Error('Доступ к файлу запрещён');
+    }
+  }
+
+  private async getFile(fileId: string): Promise<GraphQLTypes.File> {
+    try {
+      const response = await this.get(
+        'disk.file.get',
+        {
+          id: fileId
+        });
+      return response.result
+    } catch (e) {
+      throw new Error(`Ошибка получения файла ${e.message}`);
+    }
   }
 
   // Other
