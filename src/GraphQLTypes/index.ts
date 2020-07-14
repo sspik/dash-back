@@ -73,11 +73,6 @@ export type DataType = {
   metrics: Array<Maybe<Array<Maybe<Scalars['Int']>>>>;
 };
 
-export type DeleteFileResponse = {
-   __typename?: 'DeleteFileResponse';
-  result?: Maybe<Scalars['Boolean']>;
-};
-
 export type DeleteTaskMessageResponse = {
    __typename?: 'DeleteTaskMessageResponse';
   error?: Maybe<Scalars['String']>;
@@ -132,13 +127,6 @@ export type FeedResponse = {
   total: Scalars['Int'];
 };
 
-export type File = {
-   __typename?: 'File';
-  CREATED_BY: Scalars['ID'];
-  ID: Scalars['ID'];
-  NAME: Scalars['String'];
-};
-
 export enum Gender {
   M = 'M',
   F = 'F'
@@ -165,16 +153,9 @@ export type Monitoring = {
 
 export type Mutation = {
    __typename?: 'Mutation';
-  DeleteFile: DeleteFileResponse;
   DeleteTaskMessage: DeleteTaskMessageResponse;
   SendFeedMessage: FeedMessageResponse;
   SendTaskMessage: SendTaskMessageResponse;
-  UploadFile: Array<Maybe<File>>;
-};
-
-
-export type MutationDeleteFileArgs = {
-  id: Scalars['ID'];
 };
 
 
@@ -187,19 +168,13 @@ export type MutationDeleteTaskMessageArgs = {
 export type MutationSendFeedMessageArgs = {
   title?: Maybe<Scalars['String']>;
   message: Scalars['String'];
-  files?: Maybe<Array<Maybe<Scalars['String']>>>;
+  files?: Maybe<Array<Maybe<Scalars['UploadFix']>>>;
 };
 
 
 export type MutationSendTaskMessageArgs = {
   taskId: Scalars['ID'];
   message: Scalars['String'];
-};
-
-
-export type MutationUploadFileArgs = {
-  folderId: Scalars['ID'];
-  files: Array<Scalars['UploadFix']>;
 };
 
 export enum Permission {
@@ -678,12 +653,10 @@ export type ResolversTypes = {
   Dimension: ResolverTypeWrapper<Dimension>,
   QueryType: ResolverTypeWrapper<QueryType>,
   Mutation: ResolverTypeWrapper<{}>,
-  DeleteFileResponse: ResolverTypeWrapper<DeleteFileResponse>,
   DeleteTaskMessageResponse: ResolverTypeWrapper<DeleteTaskMessageResponse>,
+  UploadFix: ResolverTypeWrapper<Scalars['UploadFix']>,
   FeedMessageResponse: ResolverTypeWrapper<FeedMessageResponse>,
   SendTaskMessageResponse: ResolverTypeWrapper<SendTaskMessageResponse>,
-  UploadFix: ResolverTypeWrapper<Scalars['UploadFix']>,
-  File: ResolverTypeWrapper<File>,
   Upload: ResolverTypeWrapper<Scalars['Upload']>,
   WorkGroupShort: ResolverTypeWrapper<WorkGroupShort>,
   RoleGroup: RoleGroup,
@@ -735,12 +708,10 @@ export type ResolversParentTypes = {
   Dimension: Dimension,
   QueryType: QueryType,
   Mutation: {},
-  DeleteFileResponse: DeleteFileResponse,
   DeleteTaskMessageResponse: DeleteTaskMessageResponse,
+  UploadFix: Scalars['UploadFix'],
   FeedMessageResponse: FeedMessageResponse,
   SendTaskMessageResponse: SendTaskMessageResponse,
-  UploadFix: Scalars['UploadFix'],
-  File: File,
   Upload: Scalars['Upload'],
   WorkGroupShort: WorkGroupShort,
   RoleGroup: RoleGroup,
@@ -785,11 +756,6 @@ export type CounterResolvers<ContextType = any, ParentType extends ResolversPare
 export type DataTypeResolvers<ContextType = any, ParentType extends ResolversParentTypes['DataType'] = ResolversParentTypes['DataType']> = {
   dimensions?: Resolver<Array<Maybe<ResolversTypes['Dimension']>>, ParentType, ContextType>,
   metrics?: Resolver<Array<Maybe<Array<Maybe<ResolversTypes['Int']>>>>, ParentType, ContextType>,
-  __isTypeOf?: isTypeOfResolverFn<ParentType>,
-};
-
-export type DeleteFileResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['DeleteFileResponse'] = ResolversParentTypes['DeleteFileResponse']> = {
-  result?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -841,13 +807,6 @@ export type FeedResponseResolvers<ContextType = any, ParentType extends Resolver
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
-export type FileResolvers<ContextType = any, ParentType extends ResolversParentTypes['File'] = ResolversParentTypes['File']> = {
-  CREATED_BY?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
-  ID?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
-  NAME?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  __isTypeOf?: isTypeOfResolverFn<ParentType>,
-};
-
 export type KeywordResolvers<ContextType = any, ParentType extends ResolversParentTypes['Keyword'] = ResolversParentTypes['Keyword']> = {
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   positionsData?: Resolver<Maybe<Array<Maybe<ResolversTypes['PositionData']>>>, ParentType, ContextType>,
@@ -868,11 +827,9 @@ export type MonitoringResolvers<ContextType = any, ParentType extends ResolversP
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  DeleteFile?: Resolver<ResolversTypes['DeleteFileResponse'], ParentType, ContextType, RequireFields<MutationDeleteFileArgs, 'id'>>,
   DeleteTaskMessage?: Resolver<ResolversTypes['DeleteTaskMessageResponse'], ParentType, ContextType, RequireFields<MutationDeleteTaskMessageArgs, 'taskId' | 'messageId'>>,
   SendFeedMessage?: Resolver<ResolversTypes['FeedMessageResponse'], ParentType, ContextType, RequireFields<MutationSendFeedMessageArgs, 'message'>>,
   SendTaskMessage?: Resolver<ResolversTypes['SendTaskMessageResponse'], ParentType, ContextType, RequireFields<MutationSendTaskMessageArgs, 'taskId' | 'message'>>,
-  UploadFile?: Resolver<Array<Maybe<ResolversTypes['File']>>, ParentType, ContextType, RequireFields<MutationUploadFileArgs, 'folderId' | 'files'>>,
 };
 
 export type PositionDataResolvers<ContextType = any, ParentType extends ResolversParentTypes['PositionData'] = ResolversParentTypes['PositionData']> = {
@@ -1139,7 +1096,6 @@ export type Resolvers<ContextType = any> = {
   AttachmentResponse?: AttachmentResponseResolvers<ContextType>,
   Counter?: CounterResolvers<ContextType>,
   DataType?: DataTypeResolvers<ContextType>,
-  DeleteFileResponse?: DeleteFileResponseResolvers<ContextType>,
   DeleteTaskMessageResponse?: DeleteTaskMessageResponseResolvers<ContextType>,
   Dimension?: DimensionResolvers<ContextType>,
   Errors?: ErrorsResolvers<ContextType>,
@@ -1147,7 +1103,6 @@ export type Resolvers<ContextType = any> = {
   Feed?: FeedResolvers<ContextType>,
   FeedMessageResponse?: FeedMessageResponseResolvers<ContextType>,
   FeedResponse?: FeedResponseResolvers<ContextType>,
-  File?: FileResolvers<ContextType>,
   Keyword?: KeywordResolvers<ContextType>,
   Monitoring?: MonitoringResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,

@@ -11,8 +11,6 @@
 # import DeleteTaskMessageResponse from "bitrix/taskMessage.graphql"
 # import FeedResponse from "bitrix/feed.graphql"
 # import AttachmentResponse from "bitrix/attachment.graphql"
-# import File from "bitrix/disk.graphql";
-# import DeleteFileResponse from "bitrix/disk.graphql";
 # import YandexMetrikaApiResponse from "yandexMetrika/data.graphql"
 # import Counter from "yandexMetrika/counter.graphql"
 # import Project from "topvisor/project.graphql"
@@ -64,9 +62,7 @@ type Mutation {
   SendFeedMessage(
     title: String
     message: String!
-    files: [String]
+    files: [UploadFix]
   ): FeedMessageResponse!
   DeleteTaskMessage(taskId: ID! messageId: ID!): DeleteTaskMessageResponse!
-  UploadFile(folderId: ID! files: [UploadFix!]!): [File]!
-  DeleteFile(id: ID!): DeleteFileResponse!
 }

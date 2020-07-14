@@ -84,9 +84,5 @@ export const resolvers: Resolvers = {
       dataSources.bitrixApi.sendFeedMessage(title, message, files),
     DeleteTaskMessage: (_, { taskId, messageId }, { dataSources }) =>
       dataSources.bitrixApi.deleteTaskMessage(taskId, messageId),
-    UploadFile: (_, { folderId, files }, { dataSources }) =>
-      dataSources.bitrixApi.uploadFile(folderId, files),
-    DeleteFile: (_, { id }, { dataSources }) =>
-      dataSources.bitrixApi.deleteFile(id)
   }
 };

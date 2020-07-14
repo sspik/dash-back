@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
-import {IUserJWTPayload} from "./interfaces";
-import {IUserModel} from "./models/user";
+import { IUserJWTPayload } from "./interfaces";
+import { IUserModel } from "./models/user";
 import axios from "axios";
-import {ReadStream} from "fs";
+import { ReadStream } from "fs";
 
 export function decodeToken(token: string) {
   const secret = process.env.SECRET_KEY;

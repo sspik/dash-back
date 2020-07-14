@@ -12,9 +12,6 @@ interface IBitrixResponse<T> {
   error?: string
   error_description?: string
 }
-interface IUploadFileResponse {
-  result: GraphQLTypes.File
-}
 
 class BitrixAPI extends RESTDataSource {
   constructor() {
@@ -250,83 +247,24 @@ class BitrixAPI extends RESTDataSource {
   async sendFeedMessage(
     title: string,
     message: string,
-    files: string[]
+    files: Array<Promise<IFileStream>>
   ): Promise<GraphQLTypes.FeedMessageResponse> {
+    const makeFiles = files.map(async (filePromise) => {
+      const file = await filePromise;
+      const readStream = file.createReadStream();
+      return [ file.filename, await saveStream(readStream) ]
+    })
+    const filesToSend = await Promise.all(makeFiles);
     try {
       return await this.post('log.blogpost.add', {
         USER_ID: this.context.user.userId,
         TITLE: title,
         POST_MESSAGE: message,
-        FILES: files,
+        FILES: filesToSend,
+        DEST: ['U6'] // TODO Убрать по завершению
       })
     } catch (e) {
       throw new Error(`Ошибка публикации сообщения в живой ленте ${e.message}`)
-    }
-  }
-
-  async deleteTaskMessage(
-    taskId: string,
-    messageId: string,
-  ): Promise<GraphQLTypes.DeleteTaskMessageResponse> {
-    return await this.get('task.commentitem.delete', {
-      TASKID: taskId,
-      ITEMID: messageId
-    })
-  }
-
-  async uploadFile(
-    folderId: string,
-    files: Array<Promise<IFileStream>>,
-  ): Promise<Promise<GraphQLTypes.File>[]> {
-    const makeFilesToUpload = files.map(async (filePromise) => {
-      const file = await filePromise;
-      const readStream = file.createReadStream();
-      return {
-        id: process.env.BITRIX24_UPLOAD_FOLDER_ID,
-        fileContent: await saveStream(readStream),
-        data: {
-          NAME: file.filename
-        }
-      }
-    });
-    const filesToUpload = await Promise.all(makeFilesToUpload);
-    return filesToUpload.map( async (file) => {
-      try {
-        const uploadUrl = await this.post<IUploadFileResponse>(
-          'disk.folder.uploadFile',
-          {
-            ...file,
-            generateUniqueName: 1
-          }
-        );
-        const { ID, NAME, CREATED_BY } = uploadUrl.result;
-        return { ID, NAME, CREATED_BY }
-      } catch (e) {
-        throw new Error(`Ошибка загрузки файла ${e.message}`)
-      }
-    })
-  }
-
-  async deleteFile(id: string): Promise<GraphQLTypes.DeleteFileResponse> {
-    const file = await this.getFile(id);
-    console.log(file.CREATED_BY, this.context.user.userId)
-    if (file.CREATED_BY === this.context.user.userId.toString()) {
-      return this.get('disk.file.delete', { id });
-    } else {
-      throw new Error('Доступ к файлу запрещён');
-    }
-  }
-
-  private async getFile(fileId: string): Promise<GraphQLTypes.File> {
-    try {
-      const response = await this.get(
-        'disk.file.get',
-        {
-          id: fileId
-        });
-      return response.result
-    } catch (e) {
-      throw new Error(`Ошибка получения файла ${e.message}`);
     }
   }
 
