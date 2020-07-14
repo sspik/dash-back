@@ -169,6 +169,7 @@ export type MutationSendFeedMessageArgs = {
   title?: Maybe<Scalars['String']>;
   message: Scalars['String'];
   files?: Maybe<Array<Maybe<Scalars['UploadFix']>>>;
+  showFor?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 
@@ -246,6 +247,7 @@ export type QueryGetCounterArgs = {
 
 export type QueryGetFeedArgs = {
   start?: Maybe<Scalars['Int']>;
+  filter?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 

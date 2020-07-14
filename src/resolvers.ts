@@ -21,8 +21,8 @@ export const resolvers: Resolvers = {
       dataSources.bitrixApi.getTaskComments(taskId),
     SearchGroupByName: (_, { name }, { dataSources }) =>
       dataSources.bitrixApi.searchGroupByName(name),
-    GetFeed: (_, { start }, { dataSources }) =>
-      dataSources.bitrixApi.getFeed(start),
+    GetFeed: (_, { start, filter }, { dataSources }) =>
+      dataSources.bitrixApi.getFeed(start, filter),
 
     // Yandex Metrika
     GetYandexMetrics: (_, {
@@ -80,8 +80,13 @@ export const resolvers: Resolvers = {
     // Bitrix
     SendTaskMessage: (_, { taskId, message }, { dataSources }) =>
       dataSources.bitrixApi.sendTaskMessage(taskId, message),
-    SendFeedMessage: (_, { title, message, files }, { dataSources }) =>
-      dataSources.bitrixApi.sendFeedMessage(title, message, files),
+    SendFeedMessage: (_, {
+      title,
+      message,
+      files,
+      showFor
+    }, { dataSources }) =>
+      dataSources.bitrixApi.sendFeedMessage(title, message, files, showFor),
     DeleteTaskMessage: (_, { taskId, messageId }, { dataSources }) =>
       dataSources.bitrixApi.deleteTaskMessage(taskId, messageId),
   }

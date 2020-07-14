@@ -29,7 +29,7 @@ type Query {
   GetTaskByID(taskId: ID!): TaskDetail
   GetUserByID(userId: ID!): User
   GetTaskComments(taskId: ID!): [TaskComment]!
-  GetFeed(start: Int = 0): FeedResponse!
+  GetFeed(start: Int = 0, filter: [String]): FeedResponse!
   GetAttachment(id: ID!): AttachmentResponse!
   GetYandexMetrics(
     metrics: String
@@ -63,6 +63,7 @@ type Mutation {
     title: String
     message: String!
     files: [UploadFix]
+    showFor: [String]
   ): FeedMessageResponse!
   DeleteTaskMessage(taskId: ID! messageId: ID!): DeleteTaskMessageResponse!
 }

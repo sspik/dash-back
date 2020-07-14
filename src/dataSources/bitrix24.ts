@@ -152,9 +152,10 @@ class BitrixAPI extends RESTDataSource {
     })
   }
 
-  async getFeed(start: number = 0): Promise<GraphQLTypes.FeedResponse> {
+  async getFeed(start: number = 0, filter?: string[]): Promise<GraphQLTypes.FeedResponse> {
     const feeds = await this.post('log.blogpost.get', {
-      start
+      start,
+      LOG_RIGHTS: filter
     });
     if (!Array.isArray(feeds.result)) {
       throw new Error('Ошибка при получении живой ленты')
@@ -247,24 +248,28 @@ class BitrixAPI extends RESTDataSource {
   async sendFeedMessage(
     title: string,
     message: string,
-    files: Array<Promise<IFileStream>>
+    files?: Array<Promise<IFileStream>>,
+    showFor?: string[]
   ): Promise<GraphQLTypes.FeedMessageResponse> {
-    const makeFiles = files.map(async (filePromise) => {
-      const file = await filePromise;
-      const readStream = file.createReadStream();
-      return [ file.filename, await saveStream(readStream) ]
-    })
-    const filesToSend = await Promise.all(makeFiles);
+    let filesToSend: string[][];
+    if (Array.isArray(files)){
+      const makeFiles = files.map(async (filePromise) => {
+        const file = await filePromise;
+        const readStream = file.createReadStream();
+        return [ file.filename, await saveStream(readStream) ]
+      })
+      filesToSend = await Promise.all(makeFiles);
+    }
     try {
       return await this.post('log.blogpost.add', {
         USER_ID: this.context.user.userId,
         TITLE: title,
         POST_MESSAGE: message,
         FILES: filesToSend,
-        DEST: ['U6'] // TODO Убрать по завершению
+        DEST: showFor,
       })
     } catch (e) {
-      throw new Error(`Ошибка публикации сообщения в живой ленте ${e.message}`)
+      throw new Error(`Ошибка публикации сообщения ${e.message}`)
     }
   }
 
