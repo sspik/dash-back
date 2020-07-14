@@ -253,7 +253,7 @@ class BitrixAPI extends RESTDataSource {
     files: string[]
   ): Promise<GraphQLTypes.FeedMessageResponse> {
     try {
-      const response = await this.post('log.blogpost.add', {
+      return await this.post('log.blogpost.add', {
         USER_ID: this.context.user.userId,
         TITLE: title,
         POST_MESSAGE: message,
