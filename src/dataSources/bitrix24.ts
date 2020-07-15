@@ -237,11 +237,13 @@ class BitrixAPI extends RESTDataSource {
   // Mutations
   async sendTaskMessage(
     taskId: string,
-    message: string
+    message: string,
   ): Promise<GraphQLTypes.SendTaskMessageResponse> {
-    return await this.get('task.commentitem.add', {
-      '0': taskId,
-      '1[POST_MESSAGE]': message
+    return await this.post('task.commentitem.add', {
+      TASKID: taskId,
+      FIELDS: {
+        POST_MESSAGE: message,
+      }
     })
   }
 

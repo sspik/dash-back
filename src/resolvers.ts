@@ -78,7 +78,10 @@ export const resolvers: Resolvers = {
   },
   Mutation: {
     // Bitrix
-    SendTaskMessage: (_, { taskId, message }, { dataSources }) =>
+    SendTaskMessage: (_, {
+      taskId,
+      message,
+    }, { dataSources }) =>
       dataSources.bitrixApi.sendTaskMessage(taskId, message),
     SendFeedMessage: (_, {
       title,

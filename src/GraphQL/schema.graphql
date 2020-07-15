@@ -58,7 +58,10 @@ type Query {
 }
 
 type Mutation {
-  SendTaskMessage(taskId: ID! message: String!): SendTaskMessageResponse!
+  SendTaskMessage(
+    taskId: ID!
+    message: String!
+  ): SendTaskMessageResponse!
   SendFeedMessage(
     title: String
     message: String!
