@@ -28,6 +28,23 @@ export type AttachmentResponse = {
   result?: Maybe<Attachment>;
 };
 
+export type BitrixUser = {
+   __typename?: 'BitrixUser';
+  ACTIVE?: Maybe<Scalars['Boolean']>;
+  ID?: Maybe<Scalars['ID']>;
+  LAST_NAME?: Maybe<Scalars['String']>;
+  NAME?: Maybe<Scalars['String']>;
+  PERSONAL_BIRTHDAY?: Maybe<Scalars['String']>;
+  PERSONAL_GENDER?: Maybe<Gender>;
+  PERSONAL_ICQ?: Maybe<Scalars['String']>;
+  PERSONAL_MOBILE?: Maybe<Scalars['String']>;
+  PERSONAL_PHONE?: Maybe<Scalars['String']>;
+  PERSONAL_PHOTO?: Maybe<Scalars['String']>;
+  PERSONAL_PROFESSION?: Maybe<Scalars['String']>;
+  PERSONAL_WWW?: Maybe<Scalars['String']>;
+  SECOND_NAME?: Maybe<Scalars['String']>;
+};
+
 export enum BooleanEnum {
   Y = 'Y',
   N = 'N'
@@ -108,7 +125,7 @@ export type ErrorType = {
 export type Feed = {
    __typename?: 'Feed';
   ID: Scalars['ID'];
-  AUTHOR?: Maybe<User>;
+  AUTHOR?: Maybe<BitrixUser>;
   AUTHOR_ID: Scalars['String'];
   DETAIL_TEXT: Scalars['String'];
   DATE_PUBLISH: Scalars['String'];
@@ -221,14 +238,14 @@ export type Query = {
   GetFeed: FeedResponse;
   GetGroupById?: Maybe<WorkGroup>;
   GetGroupsTasks: Array<Maybe<Task>>;
-  GetGroupsUsers: Array<Maybe<User>>;
+  GetGroupsUsers: Array<Maybe<BitrixUser>>;
   GetProfile: Profile;
   GetTaskByID?: Maybe<TaskDetail>;
   GetTaskComments: Array<Maybe<TaskComment>>;
   GetTopvisorPositions: PositionResponse;
   GetTopvisorProject?: Maybe<Project>;
   GetTopvisorSummaryChart?: Maybe<SummaryChartResponse>;
-  GetUserByID?: Maybe<User>;
+  GetUserByID?: Maybe<BitrixUser>;
   GetUserGroups?: Maybe<WorkGroupResponse>;
   GetYandexMetrics: YandexMetrikaApiResponse;
   SearchGroupByName: Array<Maybe<WorkGroup>>;
@@ -432,7 +449,7 @@ export type Task = {
 export type TaskComment = {
    __typename?: 'TaskComment';
   ATTACHED_OBJECTS?: Maybe<Array<Maybe<Scalars['ID']>>>;
-  AUTHOR?: Maybe<User>;
+  AUTHOR?: Maybe<BitrixUser>;
   AUTHOR_ID: Scalars['ID'];
   FILES?: Maybe<Array<Maybe<Attachment>>>;
   ID?: Maybe<Scalars['ID']>;
@@ -475,23 +492,6 @@ export type Tops = {
 };
 
 
-
-export type User = {
-   __typename?: 'User';
-  ACTIVE?: Maybe<Scalars['Boolean']>;
-  ID?: Maybe<Scalars['ID']>;
-  LAST_NAME?: Maybe<Scalars['String']>;
-  NAME?: Maybe<Scalars['String']>;
-  PERSONAL_BIRTHDAY?: Maybe<Scalars['String']>;
-  PERSONAL_GENDER?: Maybe<Gender>;
-  PERSONAL_ICQ?: Maybe<Scalars['String']>;
-  PERSONAL_MOBILE?: Maybe<Scalars['String']>;
-  PERSONAL_PHONE?: Maybe<Scalars['String']>;
-  PERSONAL_PHOTO?: Maybe<Scalars['String']>;
-  PERSONAL_PROFESSION?: Maybe<Scalars['String']>;
-  PERSONAL_WWW?: Maybe<Scalars['String']>;
-  SECOND_NAME?: Maybe<Scalars['String']>;
-};
 
 export type WorkGroup = {
    __typename?: 'WorkGroup';
@@ -627,7 +627,7 @@ export type ResolversTypes = {
   CounterType: CounterType,
   FeedResponse: ResolverTypeWrapper<FeedResponse>,
   Feed: ResolverTypeWrapper<Feed>,
-  User: ResolverTypeWrapper<User>,
+  BitrixUser: ResolverTypeWrapper<BitrixUser>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   Gender: Gender,
   WorkGroup: ResolverTypeWrapper<WorkGroup>,
@@ -682,7 +682,7 @@ export type ResolversParentTypes = {
   CounterType: CounterType,
   FeedResponse: FeedResponse,
   Feed: Feed,
-  User: User,
+  BitrixUser: BitrixUser,
   Boolean: Scalars['Boolean'],
   Gender: Gender,
   WorkGroup: WorkGroup,
@@ -732,6 +732,23 @@ export type AttachmentResolvers<ContextType = any, ParentType extends ResolversP
 
 export type AttachmentResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['AttachmentResponse'] = ResolversParentTypes['AttachmentResponse']> = {
   result?: Resolver<Maybe<ResolversTypes['Attachment']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type BitrixUserResolvers<ContextType = any, ParentType extends ResolversParentTypes['BitrixUser'] = ResolversParentTypes['BitrixUser']> = {
+  ACTIVE?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  ID?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
+  LAST_NAME?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  NAME?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  PERSONAL_BIRTHDAY?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  PERSONAL_GENDER?: Resolver<Maybe<ResolversTypes['Gender']>, ParentType, ContextType>,
+  PERSONAL_ICQ?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  PERSONAL_MOBILE?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  PERSONAL_PHONE?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  PERSONAL_PHOTO?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  PERSONAL_PROFESSION?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  PERSONAL_WWW?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  SECOND_NAME?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -789,7 +806,7 @@ export type ErrorTypeResolvers<ContextType = any, ParentType extends ResolversPa
 
 export type FeedResolvers<ContextType = any, ParentType extends ResolversParentTypes['Feed'] = ResolversParentTypes['Feed']> = {
   ID?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
-  AUTHOR?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
+  AUTHOR?: Resolver<Maybe<ResolversTypes['BitrixUser']>, ParentType, ContextType>,
   AUTHOR_ID?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   DETAIL_TEXT?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   DATE_PUBLISH?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
@@ -870,14 +887,14 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   GetFeed?: Resolver<ResolversTypes['FeedResponse'], ParentType, ContextType, RequireFields<QueryGetFeedArgs, 'start'>>,
   GetGroupById?: Resolver<Maybe<ResolversTypes['WorkGroup']>, ParentType, ContextType, RequireFields<QueryGetGroupByIdArgs, 'groupId'>>,
   GetGroupsTasks?: Resolver<Array<Maybe<ResolversTypes['Task']>>, ParentType, ContextType, RequireFields<QueryGetGroupsTasksArgs, 'groupId'>>,
-  GetGroupsUsers?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType, RequireFields<QueryGetGroupsUsersArgs, 'groupId'>>,
+  GetGroupsUsers?: Resolver<Array<Maybe<ResolversTypes['BitrixUser']>>, ParentType, ContextType, RequireFields<QueryGetGroupsUsersArgs, 'groupId'>>,
   GetProfile?: Resolver<ResolversTypes['Profile'], ParentType, ContextType>,
   GetTaskByID?: Resolver<Maybe<ResolversTypes['TaskDetail']>, ParentType, ContextType, RequireFields<QueryGetTaskByIdArgs, 'taskId'>>,
   GetTaskComments?: Resolver<Array<Maybe<ResolversTypes['TaskComment']>>, ParentType, ContextType, RequireFields<QueryGetTaskCommentsArgs, 'taskId'>>,
   GetTopvisorPositions?: Resolver<ResolversTypes['PositionResponse'], ParentType, ContextType, RequireFields<QueryGetTopvisorPositionsArgs, 'bitrixGroupId' | 'projectId' | 'regionIndexes' | 'date1' | 'date2'>>,
   GetTopvisorProject?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryGetTopvisorProjectArgs, 'bitrixGroupId'>>,
   GetTopvisorSummaryChart?: Resolver<Maybe<ResolversTypes['SummaryChartResponse']>, ParentType, ContextType, RequireFields<QueryGetTopvisorSummaryChartArgs, 'bitrixGroupId' | 'projectId' | 'regionIndex' | 'date1' | 'date2'>>,
-  GetUserByID?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByIdArgs, 'userId'>>,
+  GetUserByID?: Resolver<Maybe<ResolversTypes['BitrixUser']>, ParentType, ContextType, RequireFields<QueryGetUserByIdArgs, 'userId'>>,
   GetUserGroups?: Resolver<Maybe<ResolversTypes['WorkGroupResponse']>, ParentType, ContextType, RequireFields<QueryGetUserGroupsArgs, 'start'>>,
   GetYandexMetrics?: Resolver<ResolversTypes['YandexMetrikaApiResponse'], ParentType, ContextType, RequireFields<QueryGetYandexMetricsArgs, 'bitrixGroupId'>>,
   SearchGroupByName?: Resolver<Array<Maybe<ResolversTypes['WorkGroup']>>, ParentType, ContextType, RequireFields<QuerySearchGroupByNameArgs, 'name'>>,
@@ -980,7 +997,7 @@ export type TaskResolvers<ContextType = any, ParentType extends ResolversParentT
 
 export type TaskCommentResolvers<ContextType = any, ParentType extends ResolversParentTypes['TaskComment'] = ResolversParentTypes['TaskComment']> = {
   ATTACHED_OBJECTS?: Resolver<Maybe<Array<Maybe<ResolversTypes['ID']>>>, ParentType, ContextType>,
-  AUTHOR?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
+  AUTHOR?: Resolver<Maybe<ResolversTypes['BitrixUser']>, ParentType, ContextType>,
   AUTHOR_ID?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   FILES?: Resolver<Maybe<Array<Maybe<ResolversTypes['Attachment']>>>, ParentType, ContextType>,
   ID?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
@@ -1031,23 +1048,6 @@ export interface UploadFixScalarConfig extends GraphQLScalarTypeConfig<Resolvers
   name: 'UploadFix'
 }
 
-export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
-  ACTIVE?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
-  ID?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
-  LAST_NAME?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  NAME?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  PERSONAL_BIRTHDAY?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  PERSONAL_GENDER?: Resolver<Maybe<ResolversTypes['Gender']>, ParentType, ContextType>,
-  PERSONAL_ICQ?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  PERSONAL_MOBILE?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  PERSONAL_PHONE?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  PERSONAL_PHOTO?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  PERSONAL_PROFESSION?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  PERSONAL_WWW?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  SECOND_NAME?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  __isTypeOf?: isTypeOfResolverFn<ParentType>,
-};
-
 export type WorkGroupResolvers<ContextType = any, ParentType extends ResolversParentTypes['WorkGroup'] = ResolversParentTypes['WorkGroup']> = {
   ACTIVE?: Resolver<Maybe<ResolversTypes['BooleanEnum']>, ParentType, ContextType>,
   CLOSED?: Resolver<Maybe<ResolversTypes['BooleanEnum']>, ParentType, ContextType>,
@@ -1096,6 +1096,7 @@ export type YandexMetrikaApiResponseResolvers<ContextType = any, ParentType exte
 export type Resolvers<ContextType = any> = {
   Attachment?: AttachmentResolvers<ContextType>,
   AttachmentResponse?: AttachmentResponseResolvers<ContextType>,
+  BitrixUser?: BitrixUserResolvers<ContextType>,
   Counter?: CounterResolvers<ContextType>,
   DataType?: DataTypeResolvers<ContextType>,
   DeleteTaskMessageResponse?: DeleteTaskMessageResponseResolvers<ContextType>,
@@ -1127,7 +1128,6 @@ export type Resolvers<ContextType = any> = {
   Tops?: TopsResolvers<ContextType>,
   Upload?: GraphQLScalarType,
   UploadFix?: GraphQLScalarType,
-  User?: UserResolvers<ContextType>,
   WorkGroup?: WorkGroupResolvers<ContextType>,
   WorkGroupResponse?: WorkGroupResponseResolvers<ContextType>,
   WorkGroupShort?: WorkGroupShortResolvers<ContextType>,

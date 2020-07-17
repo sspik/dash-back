@@ -72,14 +72,14 @@ class BitrixAPI extends RESTDataSource {
     return response.result[0]
   }
 
-  async getUserById(userId: string): Promise<GraphQLTypes.User> {
+  async getUserById(userId: string): Promise<GraphQLTypes.BitrixUser> {
     const response = await this.get('user.get', {
       'ID': userId
     });
     return response.result[0];
   }
 
-  async getUserByIds(ids: Array<string>): Promise<Array<GraphQLTypes.User>> {
+  async getUserByIds(ids: Array<string>): Promise<Array<GraphQLTypes.BitrixUser>> {
     const response = await this.post('user.get', {
       FILTER: {
         LOGIC: 'OR',
@@ -92,8 +92,8 @@ class BitrixAPI extends RESTDataSource {
     return response.result
   }
 
-  async getGroupsUsers(groupId: string): Promise<Array<GraphQLTypes.User>> {
-    const usersId = await BitrixAPI.returnArray<GraphQLTypes.User>(
+  async getGroupsUsers(groupId: string): Promise<Array<GraphQLTypes.BitrixUser>> {
+    const usersId = await BitrixAPI.returnArray<GraphQLTypes.BitrixUser>(
       this.get('sonet_group.user.get',{
         'ID': groupId
       })

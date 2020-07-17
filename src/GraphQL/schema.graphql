@@ -2,7 +2,7 @@
 # import WorkGroup from "bitrix/workGroup.graphql"
 # import WorkGroupShort from "bitrix/workGroup.graphql"
 # import WorkGroupResponse from "bitrix/workGroup.graphql"
-# import User from "bitrix/user.graphql"
+# import BitrixUser from "bitrix/user.graphql"
 # import Task from "bitrix/task.graphql"
 # import TaskDetail from "bitrix/task.graphql"
 # import TaskComment from "bitrix/task.graphql"
@@ -24,10 +24,10 @@ type Query {
   GetUserGroups(start: Int = 0): WorkGroupResponse
   GetGroupById(groupId: ID!): WorkGroup
   SearchGroupByName(name: String!): [WorkGroup]!
-  GetGroupsUsers(groupId: ID!): [User]!
+  GetGroupsUsers(groupId: ID!): [BitrixUser]!
   GetGroupsTasks(groupId: ID!): [Task]!
   GetTaskByID(taskId: ID!): TaskDetail
-  GetUserByID(userId: ID!): User
+  GetUserByID(userId: ID!): BitrixUser
   GetTaskComments(taskId: ID!): [TaskComment]!
   GetFeed(start: Int = 0, filter: [String]): FeedResponse!
   GetAttachment(id: ID!): AttachmentResponse!

@@ -1,5 +1,5 @@
 #import BooleanEnum, RoleGroup from "enums.graphql"
-#import User from "user.graphql"
+#import BitrixUser from "user.graphql"
 #import Task from "task.graphql"
 #import Counter from "../yandexMetrika/counter.graphql"
 #import Project from "../topvisor/project.graphql"
@@ -30,8 +30,8 @@ type WorkGroupDetail {
   NAME: String
   DESCRIPTION: String
   DATE_CREATE: String
-  MEMBERS: [User]!
-  OWNER: User!
+  MEMBERS: [BitrixUser]!
+  OWNER: BitrixUser!
   TASKS: [Task]!
   COUNTER: Counter
   TOPVISOR_PROJECT: Project

@@ -1,9 +1,9 @@
-# import User from "./user.graphql"
+# import BitrixUser from "./user.graphql"
 # import Attachment from "./attachment.graphql"
 
 type Feed {
   ID: ID!
-  AUTHOR: User
+  AUTHOR: BitrixUser
   AUTHOR_ID: String!
   DETAIL_TEXT: String!
   DATE_PUBLISH: String!

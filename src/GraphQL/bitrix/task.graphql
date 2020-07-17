@@ -1,5 +1,5 @@
 #import BooleanEnum from "enums.graphql"
-#import User from "user.graphql"
+#import BitrixUser from "user.graphql"
 #improt Attachment from attachment.graphql
 
 enum Duration {
@@ -54,7 +54,7 @@ type TaskDetail {
 
 type TaskComment {
   ID: ID
-  AUTHOR: User
+  AUTHOR: BitrixUser
   AUTHOR_ID: ID!
   POST_DATE: String
   POST_MESSAGE: String
