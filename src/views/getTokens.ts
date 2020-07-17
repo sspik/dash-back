@@ -1,7 +1,8 @@
-import {Request, Response} from "express";
-import {IBitrixAuthParams} from "../interfaces";
+import { Request, Response } from "express";
+import { IBitrixAuthParams } from "../interfaces";
 import Axios from "axios";
-import {User} from "../models/user";
+import { User } from "../models/user";
+import { Bitrix } from "../dataSources";
 
 export default async (req: Request, res: Response): Promise<void> => {
   const { code, server_domain } = req.query;
@@ -22,20 +23,23 @@ export default async (req: Request, res: Response): Promise<void> => {
     res.statusCode = bitrixResponse ? bitrixResponse.status : 403;
     throw new Error(e)
   }
-
   const { data } = bitrixResponse;
+  const bitrixUser = await Bitrix.userIsAdmin(data.access_token);
+
   if (await User.exists({userId: data.user_id})){
     await User.findOneAndUpdate({userId: data.user_id}, {
       accessToken: data.access_token,
       refreshToken: data.refresh_token,
-      expires: Date.now() + 60*60*1000
+      expires: Date.now() + 60*60*1000,
+      isAdmin: bitrixUser
     })
   } else {
     await new User({
       accessToken: data.access_token,
       refreshToken: data.refresh_token,
       userId: data.user_id,
-      expires: Date.now() + 60*60*1000
+      expires: Date.now() + 60*60*1000,
+      isAdmin: bitrixUser
     }).save()
   }
   const user = await User.findById(data.user_id);

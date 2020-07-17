@@ -316,6 +316,13 @@ class BitrixAPI extends RESTDataSource {
     )
     return Array.isArray(response.data.result) && response.data.result[0];
   }
+  async userIsAdmin(token: string): Promise<boolean> {
+    const response = await Axois.get(
+      `${process.env.BITRIX24_API_ENDPOINT}/user.admin`,
+      { params: { auth: token } }
+    );
+    return response.data.result
+  }
 }
 
 export const Bitrix = new BitrixAPI()

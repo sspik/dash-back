@@ -31,6 +31,7 @@ export interface IUserJWTPayload {
   accessToken: string;
   refreshToken: string;
   expires: number;
+  isAdmin: number;
 }
 
 export interface IBitrixAuthParams {

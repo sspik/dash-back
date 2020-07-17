@@ -6,6 +6,7 @@ interface IUserBase {
   accessToken: string;
   refreshToken: string;
   expires: number;
+  isAdmin: boolean;
 }
 
 export interface IUserModel extends IUserBase {
@@ -21,6 +22,7 @@ const UserSchema: Schema = new Schema({
   accessToken: { type: String, required: true, unique: true },
   refreshToken: { type: String, required: true, unique: true },
   expires: { type: Number, required: true },
+  isAdmin: { type: Boolean, required: true },
 });
 
 UserSchema.statics.findById = async function findById(
@@ -48,6 +50,7 @@ UserSchema.methods.generateAuthToken = function generateAuthToken (): string {
     expires: this.expires,
     accessToken: this.accessToken,
     refreshToken: this.refreshToken,
+    isAdmin: this.isAdmin,
   })
 };
 export const User = mongoose.model<IUser>('User', UserSchema);
