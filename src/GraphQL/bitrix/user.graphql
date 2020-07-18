@@ -1,10 +1,11 @@
 # import Gender from "./enums.graphql"
 
 type BitrixUser {
-  ID: ID
-  ACTIVE: Boolean
-  NAME: String
-  LAST_NAME: String
+  ID: ID!
+  ACTIVE: Boolean!
+  NAME: String!
+  LAST_NAME: String!
+  DEPARTAMENT: String
   SECOND_NAME: String
   PERSONAL_GENDER: Gender
   PERSONAL_PROFESSION: String

@@ -73,10 +73,21 @@ class BitrixAPI extends RESTDataSource {
   }
 
   async getUserById(userId: string): Promise<GraphQLTypes.BitrixUser> {
-    const response = await this.get('user.get', {
-      'ID': userId
-    });
-    return response.result[0];
+    let batchResponse;
+    try {
+      batchResponse = await this.post('batch', {
+        cmd: {
+          getUser: `user.get?ID=${userId}`,
+          getDepartament: 'department.get?ID=$result[getUser][0][UF_DEPARTMENT][0]'
+        }
+      });
+    } catch (e) {
+      throw new Error(`Ошибка получения пользователя по ID ${e.message}`)
+    }
+    return {
+      ...batchResponse.result.result.getUser[0],
+      DEPARTAMENT: batchResponse.result.result.getDepartament[0].NAME
+    }
   }
 
   async getUserByIds(ids: Array<string>): Promise<Array<GraphQLTypes.BitrixUser>> {

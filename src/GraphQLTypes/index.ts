@@ -30,10 +30,11 @@ export type AttachmentResponse = {
 
 export type BitrixUser = {
    __typename?: 'BitrixUser';
-  ACTIVE?: Maybe<Scalars['Boolean']>;
-  ID?: Maybe<Scalars['ID']>;
-  LAST_NAME?: Maybe<Scalars['String']>;
-  NAME?: Maybe<Scalars['String']>;
+  ACTIVE: Scalars['Boolean'];
+  DEPARTAMENT?: Maybe<Scalars['String']>;
+  ID: Scalars['ID'];
+  LAST_NAME: Scalars['String'];
+  NAME: Scalars['String'];
   PERSONAL_BIRTHDAY?: Maybe<Scalars['String']>;
   PERSONAL_GENDER?: Maybe<Gender>;
   PERSONAL_ICQ?: Maybe<Scalars['String']>;
@@ -736,10 +737,11 @@ export type AttachmentResponseResolvers<ContextType = any, ParentType extends Re
 };
 
 export type BitrixUserResolvers<ContextType = any, ParentType extends ResolversParentTypes['BitrixUser'] = ResolversParentTypes['BitrixUser']> = {
-  ACTIVE?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
-  ID?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
-  LAST_NAME?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  NAME?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  ACTIVE?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  DEPARTAMENT?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  ID?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  LAST_NAME?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  NAME?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   PERSONAL_BIRTHDAY?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   PERSONAL_GENDER?: Resolver<Maybe<ResolversTypes['Gender']>, ParentType, ContextType>,
   PERSONAL_ICQ?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
