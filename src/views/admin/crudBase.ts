@@ -13,7 +13,9 @@ abstract class CrudApi<TModelData, TModel extends Document> implements ICrudApi<
 
   async create(data: TModelData): Promise<TModel> {
     try {
-      return await new this.Model(data);
+      const model = new this.Model(data);
+      await model.save();
+      return model;
     } catch (e) {
       throw e;
     }
@@ -49,7 +51,7 @@ abstract class CrudApi<TModelData, TModel extends Document> implements ICrudApi<
 
   async post(data: TModelData): Promise<TModel> {
     try {
-      const model = await new this.Model(data);
+      const model = new this.Model(data);
       await model.save();
       return model
     } catch (e) {
