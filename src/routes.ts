@@ -13,12 +13,10 @@ export default (app: Application) => {
   app.use(authMiddleware);
   app.get('/auth/client', views.getClientCode);
   app.get('/auth/login', views.getTokens);
-  app.get('/', authMiddleware, views.homePage);
+  app.get('/', views.homePage);
   app.get(
     '/attachment/:attachment',
-    authMiddleware,
     views.getAttachment
   );
-
   return app;
 };

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import {decodeToken, refreshToken} from "../utils";
+import { decodeToken, refreshToken } from "../utils";
 import { IUserJWTPayload } from "../interfaces";
 import { User } from '../models/user';
 
@@ -15,7 +15,7 @@ const localIps: string[] = [
 export const authMiddleware = async (
   req: Request,
   res: Response,
-  next: any
+  next: () => void,
 ) => {
   if (authPaths.includes(req.path)){
     next();
