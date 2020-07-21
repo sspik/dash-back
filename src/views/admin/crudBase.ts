@@ -1,60 +1,47 @@
 import mongoose, { Document } from "mongoose";
 
 export interface ICrudApi<ModelData, Model> {
-  create(data: ModelData): Promise<Model>;
-  get(data: keyof ModelData): Promise<Model>;
-  post(data: ModelData): Promise<Model>;
-  patch(id: mongoose.Types.ObjectId, data: ModelData): Promise<Model>;
-  delete(data: keyof ModelData): Promise<void>;
+  create(data: ModelData): Promise<void>;
+  get(id: string): Promise<Model>;
+  update(id: string, data: ModelData): Promise<void>;
+  delete(id: string): Promise<void>;
 }
 
 abstract class CrudApi<TModelData, TModel extends Document> implements ICrudApi<TModelData, TModel> {
-  private readonly Model: mongoose.Model<TModel>;
+  Model: mongoose.Model<TModel>;
+  abstract validateData(obj: any): void;
 
-  async create(data: TModelData): Promise<TModel> {
+  async create(data: TModelData): Promise<void> {
     try {
       const model = new this.Model(data);
       await model.save();
-      return model;
     } catch (e) {
       throw e;
     }
   }
 
-  async delete(data: keyof TModelData): Promise<void> {
+  async delete(id: string): Promise<void> {
     try {
-      await this.Model.remove(data)
+      await this.Model.remove({_id: id})
     } catch (e) {
       throw e
     }
   }
 
-  async get(data: keyof TModelData): Promise<TModel> {
+  async get(id: string): Promise<TModel> {
     try {
-      return await this.Model.findOne(data);
+      return await this.Model.findOne({_id: id});
     } catch (e) {
       throw e
     }
   }
 
-  async patch(id: mongoose.Types.ObjectId, data: TModelData): Promise<TModel> {
+  async update(id: string, data: TModelData): Promise<void> {
     try {
-      const model = await this.Model.findOne({_id: id});
-      await model.update(data);
+      const model = await this.Model.findByIdAndUpdate({_id: id}, data);
       await model.save();
-      return model
     }
     catch (e) {
-      throw e
-    }
-  }
-
-  async post(data: TModelData): Promise<TModel> {
-    try {
-      const model = new this.Model(data);
-      await model.save();
-      return model
-    } catch (e) {
       throw e
     }
   }

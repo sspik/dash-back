@@ -5,8 +5,9 @@ export const adminMiddleware = (
   resp: Response,
   next: () => void) => {
   if (req.user.isAdmin){
-    next()
+    next();
+    return;
   }
   resp.statusCode = 403;
-  next();
+  resp.send('Доступ запрещён')
 }
