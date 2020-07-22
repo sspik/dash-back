@@ -4,7 +4,12 @@ import { authMiddleware } from "./middleswares/auth";
 import { adminMiddleware } from "./middleswares/admin";
 import cookieParser from 'cookie-parser'
 import bodyParser from "body-parser";
-import * as UserApi from "./views/admin/UserApi"
+import { Router } from "./views/admin/Router";
+import { UserRouter } from "./views/admin/user";
+
+const router = new Router([
+  new UserRouter(),
+])
 
 export default (app: Application) => {
   app.use(cookieParser());
@@ -23,11 +28,6 @@ export default (app: Application) => {
   );
 
   app.use(adminMiddleware);
-  app.get('/admin/users', UserApi.getAll);
-  app.get('/admin/users/:id', UserApi.get);
-  app.post('/admin/users/', UserApi.post);
-  app.put('/admin/users/:id', UserApi.update);
-  app.delete('/admin/users/:id', UserApi.deleteUser);
-
+  router.routes.map(r => app.use(`/admin/${r.path}`, r.fnc))
   return app;
 };

@@ -30,6 +30,7 @@ export async function refreshToken(user: IUserModel) {
         params
       });
     const { data } = response;
+    // TODO update isAdmin
     await user.updateUser({
       userId: data.user_id,
       accessToken: data.access_token,
