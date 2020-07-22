@@ -1,6 +1,5 @@
 import CrudApi from "./crudBase";
 import {IUser, User} from "../../models/user";
-import mongoose from "mongoose";
 
 export interface IUserData {
   userId?: number;

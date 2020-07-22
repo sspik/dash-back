@@ -6,9 +6,11 @@ import cookieParser from 'cookie-parser'
 import bodyParser from "body-parser";
 import { Router } from "./views/admin/Router";
 import { UserRouter } from "./views/admin/user";
+import { TopvisorRouter } from "./views/admin/topvisor";
 
 const AdminRouter = new Router([
   new UserRouter(),
+  new TopvisorRouter(),
 ])
 
 export default async (app: Application) => {
