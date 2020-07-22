@@ -54,20 +54,21 @@ export class Router implements IRouterClass {
   }
 
   private get(cls: CrudApi<any, any>) {
-    return async (req: Request, resp: Response, next: () => void): Promise<void> => {
+    return async (req: Request, resp: Response): Promise<void> => {
       const id = req.params.id;
       try {
         const obj = await cls.get(id);
         resp.contentType('application/json');
         resp.send(obj);
       } catch (e) {
-        next();
+        resp.statusCode = 404
+        resp.send('Not Found');
       }
     }
   }
 
   private post(cls: CrudApi<any, any>) {
-    return async (req: Request, resp: Response): Promise<void> => {
+    return async (req: Request, resp: Response, next: (e: any) => void): Promise<void> => {
       const data = req.body;
       try {
         cls.validateData(data);
@@ -80,13 +81,13 @@ export class Router implements IRouterClass {
         resp.statusCode = 201;
         resp.send('Created');
       } catch (e) {
-        throw e;
+        next(e);
       }
     }
   }
 
   private update(cls: CrudApi<any, any>) {
-    return async (req: Request, resp: Response): Promise<void> => {
+    return async (req: Request, resp: Response, next: (e: any) => void): Promise<void> => {
       const id = req.params.id;
       const data = req.body;
       try {
@@ -100,20 +101,20 @@ export class Router implements IRouterClass {
         resp.statusCode = 204;
         resp.send('No Content');
       } catch (e) {
-        throw e;
+        next(e);
       }
     }
   }
 
   private deleteObject(cls: CrudApi<any, any>) {
-    return async (req: Request, resp: Response): Promise<void> => {
+    return async (req: Request, resp: Response, next: (e: any) => void): Promise<void> => {
       const id = req.params.id;
       try {
         await cls.delete(id);
         resp.statusCode = 204
         resp.send('No Content');
       } catch (e) {
-        throw e
+        next(e)
       }
     }
   }
