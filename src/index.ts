@@ -16,7 +16,6 @@ import {
 const typeDefs: DocumentNode = gql(importSchema(
   `${process.env.SCHEMA_PATH}schema.graphql`)
 );
-const app = routes(express());
 
 export const server = new ApolloServer({
   typeDefs,
@@ -31,11 +30,17 @@ export const server = new ApolloServer({
     return { user: req.user }
   }
 });
-server.applyMiddleware({ app });
 
-app.listen({ port: 4000 }, () =>
-  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
-);
+async function runServer(){
+  const app = await routes(express());
+  server.applyMiddleware({ app });
 
-const db = process.env.MONGO_URL;
-connect({ db });
+  app.listen({ port: 4000 }, () =>
+    console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+  );
+
+  const db = process.env.MONGO_URL;
+  connect({ db });
+}
+
+runServer();

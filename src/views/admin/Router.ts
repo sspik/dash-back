@@ -19,8 +19,8 @@ export class Router implements IRouterClass {
     this.apiCls = apiCls;
   }
   async createRoutes() {
-    return await Promise.all([() => this.apiCls.forEach((cls) => {
-      this.routes.concat([
+    return this.apiCls.forEach((cls) => {
+      this.routes = this.routes.concat([
         {
           path: cls.entryPoint,
           fnc: this.getAll(cls)
@@ -42,12 +42,12 @@ export class Router implements IRouterClass {
           fnc: this.deleteObject(cls)
         }
       ])
-    })])
+    })
   }
 
   private getAll(cls: CrudApi<any, any>) {
-    return (req: Request, resp: Response): void => {
-      const objArray = cls.getAll();
+    return async (req: Request, resp: Response): Promise<void> => {
+      const objArray = await cls.getAll();
       resp.contentType('application/json');
       resp.send(objArray)
     }

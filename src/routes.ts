@@ -11,7 +11,7 @@ const router = new Router([
   new UserRouter(),
 ])
 
-export default (app: Application) => {
+export default async (app: Application) => {
   app.use(cookieParser());
   app.use(express.json());
   app.use(bodyParser.urlencoded({
@@ -28,6 +28,7 @@ export default (app: Application) => {
   );
 
   app.use(adminMiddleware);
-  router.routes.map(r => app.use(`/admin/${r.path}`, r.fnc))
+  await router.createRoutes();
+  router.routes.map(r => app.use(`/${r.path}`, r.fnc))
   return app;
 };
