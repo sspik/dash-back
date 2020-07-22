@@ -12,6 +12,41 @@ export type Scalars = {
   Upload: any;
 };
 
+export type AdminResponse = {
+   __typename?: 'AdminResponse';
+  result: AdminResult;
+};
+
+export type AdminResult = {
+   __typename?: 'AdminResult';
+  user: Array<Maybe<AdminUser>>;
+  yandexMetrika: Array<Maybe<AdminYandexMetrika>>;
+  topvisor: Array<Maybe<AdminTopvisor>>;
+};
+
+export type AdminTopvisor = {
+   __typename?: 'AdminTopvisor';
+  _id: Scalars['ID'];
+  bitrixGroupId: Scalars['ID'];
+  projectId: Scalars['ID'];
+};
+
+export type AdminUser = {
+   __typename?: 'AdminUser';
+  _id: Scalars['ID'];
+  userId: Scalars['ID'];
+  expires: Scalars['Int'];
+  isAdmin: Scalars['Boolean'];
+};
+
+export type AdminYandexMetrika = {
+   __typename?: 'AdminYandexMetrika';
+  _id: Scalars['ID'];
+  userId: Scalars['ID'];
+  counter: Scalars['ID'];
+  bitrixGroupId: Scalars['ID'];
+};
+
 export type Attachment = {
    __typename?: 'Attachment';
   CREATED_BY: Scalars['ID'];
@@ -172,6 +207,7 @@ export type Monitoring = {
 export type Mutation = {
    __typename?: 'Mutation';
   DeleteTaskMessage: DeleteTaskMessageResponse;
+  DeleteUser?: Maybe<Scalars['String']>;
   SendFeedMessage: FeedMessageResponse;
   SendTaskMessage: SendTaskMessageResponse;
 };
@@ -180,6 +216,11 @@ export type Mutation = {
 export type MutationDeleteTaskMessageArgs = {
   taskId: Scalars['ID'];
   messageId: Scalars['ID'];
+};
+
+
+export type MutationDeleteUserArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -234,6 +275,7 @@ export type Project = {
 
 export type Query = {
    __typename?: 'Query';
+  GetAdminData: AdminResponse;
   GetAttachment: AttachmentResponse;
   GetCounter: Counter;
   GetFeed: FeedResponse;
@@ -613,11 +655,17 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>,
+  AdminResponse: ResolverTypeWrapper<AdminResponse>,
+  AdminResult: ResolverTypeWrapper<AdminResult>,
+  AdminUser: ResolverTypeWrapper<AdminUser>,
   ID: ResolverTypeWrapper<Scalars['ID']>,
+  Int: ResolverTypeWrapper<Scalars['Int']>,
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
+  AdminYandexMetrika: ResolverTypeWrapper<AdminYandexMetrika>,
+  AdminTopvisor: ResolverTypeWrapper<AdminTopvisor>,
   AttachmentResponse: ResolverTypeWrapper<AttachmentResponse>,
   Attachment: ResolverTypeWrapper<Attachment>,
   String: ResolverTypeWrapper<Scalars['String']>,
-  Int: ResolverTypeWrapper<Scalars['Int']>,
   Counter: ResolverTypeWrapper<Counter>,
   CodeStatus: CodeStatus,
   ErrorType: ResolverTypeWrapper<ErrorType>,
@@ -629,7 +677,6 @@ export type ResolversTypes = {
   FeedResponse: ResolverTypeWrapper<FeedResponse>,
   Feed: ResolverTypeWrapper<Feed>,
   BitrixUser: ResolverTypeWrapper<BitrixUser>,
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   Gender: Gender,
   WorkGroup: ResolverTypeWrapper<WorkGroup>,
   BooleanEnum: BooleanEnum,
@@ -668,11 +715,17 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Query: {},
+  AdminResponse: AdminResponse,
+  AdminResult: AdminResult,
+  AdminUser: AdminUser,
   ID: Scalars['ID'],
+  Int: Scalars['Int'],
+  Boolean: Scalars['Boolean'],
+  AdminYandexMetrika: AdminYandexMetrika,
+  AdminTopvisor: AdminTopvisor,
   AttachmentResponse: AttachmentResponse,
   Attachment: Attachment,
   String: Scalars['String'],
-  Int: Scalars['Int'],
   Counter: Counter,
   CodeStatus: CodeStatus,
   ErrorType: ErrorType,
@@ -684,7 +737,6 @@ export type ResolversParentTypes = {
   FeedResponse: FeedResponse,
   Feed: Feed,
   BitrixUser: BitrixUser,
-  Boolean: Scalars['Boolean'],
   Gender: Gender,
   WorkGroup: WorkGroup,
   BooleanEnum: BooleanEnum,
@@ -718,6 +770,41 @@ export type ResolversParentTypes = {
   Upload: Scalars['Upload'],
   WorkGroupShort: WorkGroupShort,
   RoleGroup: RoleGroup,
+};
+
+export type AdminResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['AdminResponse'] = ResolversParentTypes['AdminResponse']> = {
+  result?: Resolver<ResolversTypes['AdminResult'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type AdminResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['AdminResult'] = ResolversParentTypes['AdminResult']> = {
+  user?: Resolver<Array<Maybe<ResolversTypes['AdminUser']>>, ParentType, ContextType>,
+  yandexMetrika?: Resolver<Array<Maybe<ResolversTypes['AdminYandexMetrika']>>, ParentType, ContextType>,
+  topvisor?: Resolver<Array<Maybe<ResolversTypes['AdminTopvisor']>>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type AdminTopvisorResolvers<ContextType = any, ParentType extends ResolversParentTypes['AdminTopvisor'] = ResolversParentTypes['AdminTopvisor']> = {
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  bitrixGroupId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  projectId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type AdminUserResolvers<ContextType = any, ParentType extends ResolversParentTypes['AdminUser'] = ResolversParentTypes['AdminUser']> = {
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  expires?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  isAdmin?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type AdminYandexMetrikaResolvers<ContextType = any, ParentType extends ResolversParentTypes['AdminYandexMetrika'] = ResolversParentTypes['AdminYandexMetrika']> = {
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  counter?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  bitrixGroupId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type AttachmentResolvers<ContextType = any, ParentType extends ResolversParentTypes['Attachment'] = ResolversParentTypes['Attachment']> = {
@@ -849,6 +936,7 @@ export type MonitoringResolvers<ContextType = any, ParentType extends ResolversP
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   DeleteTaskMessage?: Resolver<ResolversTypes['DeleteTaskMessageResponse'], ParentType, ContextType, RequireFields<MutationDeleteTaskMessageArgs, 'taskId' | 'messageId'>>,
+  DeleteUser?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'id'>>,
   SendFeedMessage?: Resolver<ResolversTypes['FeedMessageResponse'], ParentType, ContextType, RequireFields<MutationSendFeedMessageArgs, 'message'>>,
   SendTaskMessage?: Resolver<ResolversTypes['SendTaskMessageResponse'], ParentType, ContextType, RequireFields<MutationSendTaskMessageArgs, 'taskId' | 'message'>>,
 };
@@ -884,6 +972,7 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  GetAdminData?: Resolver<ResolversTypes['AdminResponse'], ParentType, ContextType>,
   GetAttachment?: Resolver<ResolversTypes['AttachmentResponse'], ParentType, ContextType, RequireFields<QueryGetAttachmentArgs, 'id'>>,
   GetCounter?: Resolver<ResolversTypes['Counter'], ParentType, ContextType, RequireFields<QueryGetCounterArgs, 'bitrixGroupId'>>,
   GetFeed?: Resolver<ResolversTypes['FeedResponse'], ParentType, ContextType, RequireFields<QueryGetFeedArgs, 'start'>>,
@@ -1096,6 +1185,11 @@ export type YandexMetrikaApiResponseResolvers<ContextType = any, ParentType exte
 };
 
 export type Resolvers<ContextType = any> = {
+  AdminResponse?: AdminResponseResolvers<ContextType>,
+  AdminResult?: AdminResultResolvers<ContextType>,
+  AdminTopvisor?: AdminTopvisorResolvers<ContextType>,
+  AdminUser?: AdminUserResolvers<ContextType>,
+  AdminYandexMetrika?: AdminYandexMetrikaResolvers<ContextType>,
   Attachment?: AttachmentResolvers<ContextType>,
   AttachmentResponse?: AttachmentResponseResolvers<ContextType>,
   BitrixUser?: BitrixUserResolvers<ContextType>,

@@ -32,7 +32,6 @@ export async function refreshToken(user: IUserModel) {
       });
     const { data } = response;
     const bitrixUser = await Bitrix.userIsAdmin(data.access_token);
-    // TODO update isAdmin
     await user.updateUser({
       userId: data.user_id,
       accessToken: data.access_token,

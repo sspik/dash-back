@@ -74,7 +74,12 @@ export const resolvers: Resolvers = {
         regionIndex,
         date1,
         date2,
-      })
+      }),
+
+    // admin
+    GetAdminData: (_, __, { dataSources }) =>
+      dataSources.adminApi.getAdminData()
+
   },
   Mutation: {
     // Bitrix
@@ -92,5 +97,8 @@ export const resolvers: Resolvers = {
       dataSources.bitrixApi.sendFeedMessage(title, message, files, showFor),
     DeleteTaskMessage: (_, { taskId, messageId }, { dataSources }) =>
       dataSources.bitrixApi.deleteTaskMessage(taskId, messageId),
+
+    DeleteUser: (_, { id }, { dataSources }) =>
+      dataSources.adminApi.deleteUser(id)
   }
 };

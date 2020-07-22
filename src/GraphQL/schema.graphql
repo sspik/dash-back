@@ -16,6 +16,7 @@
 # import Project from "topvisor/project.graphql"
 # import PositionResponse from "topvisor/positions.graphql"
 # import SummaryChartResponse from "topvisor/summaryChart.graphql"
+# import AdminResponse from "admin/AdminTypes.graphql"
 
 scalar UploadFix
 
@@ -31,6 +32,7 @@ type Query {
   GetTaskComments(taskId: ID!): [TaskComment]!
   GetFeed(start: Int = 0, filter: [String]): FeedResponse!
   GetAttachment(id: ID!): AttachmentResponse!
+
   GetYandexMetrics(
     metrics: String
     dimensions: String
@@ -40,6 +42,7 @@ type Query {
     preset: String
   ): YandexMetrikaApiResponse!
   GetCounter(bitrixGroupId: ID!): Counter!
+
   GetTopvisorProject(bitrixGroupId: ID!): Project
   GetTopvisorPositions(
     bitrixGroupId: ID!
@@ -55,6 +58,8 @@ type Query {
     date1: String!
     date2: String!
   ): SummaryChartResponse
+
+  GetAdminData: AdminResponse!
 }
 
 type Mutation {
@@ -68,5 +73,11 @@ type Mutation {
     files: [UploadFix]
     showFor: [String]
   ): FeedMessageResponse!
-  DeleteTaskMessage(taskId: ID! messageId: ID!): DeleteTaskMessageResponse!
+  DeleteTaskMessage(
+    taskId: ID!
+    messageId: ID!
+  ): DeleteTaskMessageResponse!
+  DeleteUser(
+    id: ID!
+  ): String
 }

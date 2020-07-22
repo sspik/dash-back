@@ -24,7 +24,7 @@ abstract class CrudApi<TModelData, TModel extends Document> implements ICrudApi<
 
   async delete(id: string): Promise<void> {
     try {
-      await this.Model.remove({_id: id})
+      await this.Model.deleteOne({_id: id})
     } catch (e) {
       throw e
     }

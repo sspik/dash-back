@@ -33,7 +33,7 @@ export default async (app: Application) => {
 
   await AdminRouter.createRoutes();
   AdminRouter.routes.forEach(r =>
-    app.use(`^/admin/${r.path}$`, adminMiddleware, r.fnc)
+    app[r.method](`^/admin/${r.path}$`, adminMiddleware, r.fnc)
   )
   return app;
 };

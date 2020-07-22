@@ -23,18 +23,21 @@ export const authMiddleware = async (
   }
   try {
     const token = req.cookies.token;
-    if (!token) return res.status(401).send('Доступ запрещён');
+    if (!token){
+      res.statusCode = 301;
+      res.clearCookie('token')
+      return res.redirect('/')
+    }
     const userData = decodeToken(token) as IUserJWTPayload;
     const user = await User.findById(userData.userId);
     if (user.expires < Date.now()) {
       await refreshToken(user);
     }
-    req.user = user;   
+    req.user = user;
     next();
   } catch (e) {
-    res.status(400).json({
-      error: new Error('Неправильный токен')
-    });
-    next();
+    res.statusCode = 301;
+    res.clearCookie('token')
+    return res.redirect('/')
   }
 };

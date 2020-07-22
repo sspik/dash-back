@@ -10,7 +10,8 @@ import routes from "./routes";
 import {
   Bitrix,
   YandexMetrika,
-  Topvisor
+  Topvisor,
+  Admin
 } from "./dataSources";
 
 const typeDefs: DocumentNode = gql(importSchema(
@@ -25,6 +26,7 @@ export const server = new ApolloServer({
     bitrixApi: Bitrix,
     yandexMetrikaApi: YandexMetrika,
     topvisorApi: Topvisor,
+    adminApi: Admin,
   }),
   context: ({ req }) => {
     return { user: req.user }

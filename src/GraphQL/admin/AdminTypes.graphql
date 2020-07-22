@@ -1,0 +1,30 @@
+type AdminUser {
+  _id: ID!
+  userId: ID!
+  expires: Int!
+  isAdmin: Boolean!
+}
+
+type AdminYandexMetrika {
+  _id: ID!
+  userId: ID!
+  counter: ID!
+  bitrixGroupId: ID!
+}
+
+type AdminTopvisor {
+  _id: ID!
+  bitrixGroupId: ID!
+  projectId: ID!
+}
+
+type AdminResult {
+  user: [AdminUser]!
+  yandexMetrika: [AdminYandexMetrika]!
+  topvisor: [AdminTopvisor]!
+
+}
+
+type AdminResponse {
+  result: AdminResult!
+}

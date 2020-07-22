@@ -5,7 +5,8 @@ type TRouterFnc = (req: Request, resp: Response, next?: () => void) => void
 
 type TRouter = {
   path: string;
-  fnc: TRouterFnc
+  fnc: TRouterFnc;
+  method: 'get' | 'post' | 'delete' | 'patch'
 }
 
 interface IRouterClass {
@@ -23,23 +24,28 @@ export class Router implements IRouterClass {
       this.routes = this.routes.concat([
         {
           path: cls.entryPoint,
-          fnc: this.getAll(cls)
+          fnc: this.getAll(cls),
+          method: "get"
         },
         {
           path: `${cls.entryPoint}/:id`,
-          fnc: this.get(cls)
+          fnc: this.get(cls),
+          method: "get"
         },
         {
           path: `${cls.entryPoint}`,
-          fnc: this.post(cls)
+          fnc: this.post(cls),
+          method: "post"
         },
         {
           path: `${cls.entryPoint}/:id`,
-          fnc: this.update(cls)
+          fnc: this.update(cls),
+          method: "patch"
         },
         {
           path: `${cls.entryPoint}/:id`,
-          fnc: this.deleteObject(cls)
+          fnc: this.deleteObject(cls),
+          method: "delete"
         }
       ])
     })
