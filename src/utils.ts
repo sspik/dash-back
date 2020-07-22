@@ -3,6 +3,7 @@ import { IUserJWTPayload } from "./interfaces";
 import { IUserModel } from "./models/user";
 import axios from "axios";
 import { ReadStream } from "fs";
+import {Bitrix} from "./dataSources";
 
 export function decodeToken(token: string) {
   const secret = process.env.SECRET_KEY;
@@ -30,12 +31,14 @@ export async function refreshToken(user: IUserModel) {
         params
       });
     const { data } = response;
+    const bitrixUser = await Bitrix.userIsAdmin(data.access_token);
     // TODO update isAdmin
     await user.updateUser({
       userId: data.user_id,
       accessToken: data.access_token,
       refreshToken: data.refresh_token,
       expires: Date.now() + 60 * 60 * 1000,
+      isAdmin: bitrixUser,
     })
   } catch (e) {
     throw new Error(
