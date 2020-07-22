@@ -7,10 +7,12 @@ import bodyParser from "body-parser";
 import { Router } from "./views/admin/Router";
 import { UserRouter } from "./views/admin/user";
 import { TopvisorRouter } from "./views/admin/topvisor";
+import { YandexMetrikaRouter } from "./views/admin/yandexMetrika";
 
 const AdminRouter = new Router([
   new UserRouter(),
   new TopvisorRouter(),
+  new YandexMetrikaRouter(),
 ])
 
 export default async (app: Application) => {
