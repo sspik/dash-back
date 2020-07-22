@@ -7,7 +7,7 @@ import bodyParser from "body-parser";
 import { Router } from "./views/admin/Router";
 import { UserRouter } from "./views/admin/user";
 
-const router = new Router([
+const AdminRouter = new Router([
   new UserRouter(),
 ])
 
@@ -27,8 +27,9 @@ export default async (app: Application) => {
     views.getAttachment
   );
 
-  app.use(adminMiddleware);
-  await router.createRoutes();
-  router.routes.map(r => app.use(`/${r.path}`, r.fnc))
+  await AdminRouter.createRoutes();
+  AdminRouter.routes.forEach(r =>
+    app.use(`/admin/${r.path}`, adminMiddleware, r.fnc)
+  )
   return app;
 };
