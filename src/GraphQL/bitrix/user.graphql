@@ -5,6 +5,7 @@ type BitrixUser {
   ACTIVE: Boolean!
   NAME: String!
   LAST_NAME: String!
+  WORK_POSITION: String
   DEPARTAMENT: String
   SECOND_NAME: String
   PERSONAL_GENDER: Gender
