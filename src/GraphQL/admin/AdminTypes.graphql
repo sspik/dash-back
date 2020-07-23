@@ -1,13 +1,12 @@
 type AdminUser {
   _id: ID!
   userId: ID!
-  expires: Int!
+  expires: String!
   isAdmin: Boolean!
 }
 
 type AdminYandexMetrika {
   _id: ID!
-  userId: ID!
   counter: ID!
   bitrixGroupId: ID!
 }

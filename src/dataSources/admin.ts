@@ -27,12 +27,17 @@ class AdminApi extends RESTDataSource {
   }
 
   async willSendRequest(request: RequestOptions): Promise<void> {
+    this.clearCache();
     if (this.context.user){
       request.headers.set(
         'cookie',
         `token=${this.context.user.generateAuthToken()}` // Вроде не затратно
       )
     }
+  }
+
+  private clearCache(){
+    return this.memoizedResults.clear();
   }
 }
 export const Admin =  new AdminApi();
