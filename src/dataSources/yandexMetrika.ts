@@ -49,7 +49,7 @@ class YandexMetrikaApi extends RESTDataSource {
         totals: response.totals.map(ts => ts.map((t: any) => parseInt(t)))
       }
     } catch (e) {
-      throw new Error(e)
+      throw e
     }
   }
 
