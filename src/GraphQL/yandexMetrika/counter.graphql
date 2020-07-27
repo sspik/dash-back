@@ -36,6 +36,12 @@ type Monitoring {
   possible_phone_ids: [ID]!
 }
 
+
+type Goal {
+  id: ID!
+  name: String!
+}
+
 type Counter {
   id: ID
   status: Status
@@ -53,4 +59,5 @@ type Counter {
   site: String
   mirrors: [String]
   errors: ErrorType
+  goals: [Goal]
 }

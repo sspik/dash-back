@@ -35,14 +35,13 @@ export type AdminUser = {
    __typename?: 'AdminUser';
   _id: Scalars['ID'];
   userId: Scalars['ID'];
-  expires: Scalars['Int'];
+  expires: Scalars['String'];
   isAdmin: Scalars['Boolean'];
 };
 
 export type AdminYandexMetrika = {
    __typename?: 'AdminYandexMetrika';
   _id: Scalars['ID'];
-  userId: Scalars['ID'];
   counter: Scalars['ID'];
   bitrixGroupId: Scalars['ID'];
 };
@@ -79,6 +78,7 @@ export type BitrixUser = {
   PERSONAL_PROFESSION?: Maybe<Scalars['String']>;
   PERSONAL_WWW?: Maybe<Scalars['String']>;
   SECOND_NAME?: Maybe<Scalars['String']>;
+  WORK_POSITION?: Maybe<Scalars['String']>;
 };
 
 export enum BooleanEnum {
@@ -103,6 +103,7 @@ export type Counter = {
   errors?: Maybe<ErrorType>;
   favorite?: Maybe<Scalars['Int']>;
   filter_robots?: Maybe<Scalars['Int']>;
+  goals?: Maybe<Array<Maybe<Goal>>>;
   id?: Maybe<Scalars['ID']>;
   mirrors?: Maybe<Array<Maybe<Scalars['String']>>>;
   monitoring?: Maybe<Monitoring>;
@@ -184,6 +185,12 @@ export enum Gender {
   M = 'M',
   F = 'F'
 }
+
+export type Goal = {
+   __typename?: 'Goal';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+};
 
 export type Keyword = {
    __typename?: 'Keyword';
@@ -659,17 +666,18 @@ export type ResolversTypes = {
   AdminResult: ResolverTypeWrapper<AdminResult>,
   AdminUser: ResolverTypeWrapper<AdminUser>,
   ID: ResolverTypeWrapper<Scalars['ID']>,
-  Int: ResolverTypeWrapper<Scalars['Int']>,
+  String: ResolverTypeWrapper<Scalars['String']>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   AdminYandexMetrika: ResolverTypeWrapper<AdminYandexMetrika>,
   AdminTopvisor: ResolverTypeWrapper<AdminTopvisor>,
   AttachmentResponse: ResolverTypeWrapper<AttachmentResponse>,
   Attachment: ResolverTypeWrapper<Attachment>,
-  String: ResolverTypeWrapper<Scalars['String']>,
+  Int: ResolverTypeWrapper<Scalars['Int']>,
   Counter: ResolverTypeWrapper<Counter>,
   CodeStatus: CodeStatus,
   ErrorType: ResolverTypeWrapper<ErrorType>,
   Errors: ResolverTypeWrapper<Errors>,
+  Goal: ResolverTypeWrapper<Goal>,
   Monitoring: ResolverTypeWrapper<Monitoring>,
   Permission: Permission,
   Status: Status,
@@ -719,17 +727,18 @@ export type ResolversParentTypes = {
   AdminResult: AdminResult,
   AdminUser: AdminUser,
   ID: Scalars['ID'],
-  Int: Scalars['Int'],
+  String: Scalars['String'],
   Boolean: Scalars['Boolean'],
   AdminYandexMetrika: AdminYandexMetrika,
   AdminTopvisor: AdminTopvisor,
   AttachmentResponse: AttachmentResponse,
   Attachment: Attachment,
-  String: Scalars['String'],
+  Int: Scalars['Int'],
   Counter: Counter,
   CodeStatus: CodeStatus,
   ErrorType: ErrorType,
   Errors: Errors,
+  Goal: Goal,
   Monitoring: Monitoring,
   Permission: Permission,
   Status: Status,
@@ -794,14 +803,13 @@ export type AdminTopvisorResolvers<ContextType = any, ParentType extends Resolve
 export type AdminUserResolvers<ContextType = any, ParentType extends ResolversParentTypes['AdminUser'] = ResolversParentTypes['AdminUser']> = {
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
-  expires?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  expires?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   isAdmin?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type AdminYandexMetrikaResolvers<ContextType = any, ParentType extends ResolversParentTypes['AdminYandexMetrika'] = ResolversParentTypes['AdminYandexMetrika']> = {
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
-  userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   counter?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   bitrixGroupId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
@@ -838,6 +846,7 @@ export type BitrixUserResolvers<ContextType = any, ParentType extends ResolversP
   PERSONAL_PROFESSION?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   PERSONAL_WWW?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   SECOND_NAME?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  WORK_POSITION?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -848,6 +857,7 @@ export type CounterResolvers<ContextType = any, ParentType extends ResolversPare
   errors?: Resolver<Maybe<ResolversTypes['ErrorType']>, ParentType, ContextType>,
   favorite?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
   filter_robots?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  goals?: Resolver<Maybe<Array<Maybe<ResolversTypes['Goal']>>>, ParentType, ContextType>,
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
   mirrors?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>,
   monitoring?: Resolver<Maybe<ResolversTypes['Monitoring']>, ParentType, ContextType>,
@@ -912,6 +922,12 @@ export type FeedResponseResolvers<ContextType = any, ParentType extends Resolver
   next?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
   result?: Resolver<Array<Maybe<ResolversTypes['Feed']>>, ParentType, ContextType>,
   total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type GoalResolvers<ContextType = any, ParentType extends ResolversParentTypes['Goal'] = ResolversParentTypes['Goal']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -1202,6 +1218,7 @@ export type Resolvers<ContextType = any> = {
   Feed?: FeedResolvers<ContextType>,
   FeedMessageResponse?: FeedMessageResponseResolvers<ContextType>,
   FeedResponse?: FeedResponseResolvers<ContextType>,
+  Goal?: GoalResolvers<ContextType>,
   Keyword?: KeywordResolvers<ContextType>,
   Monitoring?: MonitoringResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,

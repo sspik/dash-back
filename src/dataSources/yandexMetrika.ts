@@ -63,7 +63,9 @@ class YandexMetrikaApi extends RESTDataSource {
   async getCounter(bitrixGroupId: GraphQLTypes.WorkGroup["ID"]): Promise<GraphQLTypes.Counter> {
     const counterId = await this.getCounterId(bitrixGroupId);
     type TResponse = { counter: GraphQLTypes.Counter }
-    const response = await this.get<TResponse>(`/management/v1/counter/${counterId}`);
+    const response = await this.get<TResponse>(`/management/v1/counter/${counterId}`, {
+      field: 'goals'
+    });
     if (!response.counter) throw new Error('Не удалось получилоть счётчик из API Метрики');
     return response.counter;
   }
@@ -72,7 +74,9 @@ class YandexMetrikaApi extends RESTDataSource {
     const domain = extractDomain(domainString);
     if (!domain) throw new Error('Имя группы не является доменным именем');
     type TResponse = { counters: GraphQLTypes.Counter[] }
-    const response = await this.get<TResponse>('management/v1/counters');
+    const response = await this.get<TResponse>('management/v1/counters', {
+      field: 'goals'
+    });
     const counters: GraphQLTypes.Counter[] = response.counters;
     if (!Array.isArray(counters)) throw new Error('Ошибка получения списка счётчиков');
     const counter = counters.filter(c => c.site === domain);
@@ -97,6 +101,7 @@ class YandexMetrikaApi extends RESTDataSource {
       const yandexMetrika = new YandexMetrkaModel({
         counter: counter.id,
         bitrixGroupId,
+        goals: counter.goals.map(goal => ({ id: goal.id, name: goal.name }))
       })
       try {
         await yandexMetrika.save();
