@@ -63,11 +63,14 @@ class YandexMetrikaApi extends RESTDataSource {
   async getCounter(bitrixGroupId: GraphQLTypes.WorkGroup["ID"]): Promise<GraphQLTypes.Counter> {
     const counterId = await this.getCounterId(bitrixGroupId);
     type TResponse = { counter: GraphQLTypes.Counter }
-    const response = await this.get<TResponse>(`/management/v1/counter/${counterId}`, {
-      field: 'goals'
-    });
+    const response = await this.get<TResponse>(`/management/v1/counter/${counterId}`);
     if (!response.counter) throw new Error('Не удалось получилоть счётчик из API Метрики');
     return response.counter;
+  }
+
+  async refreshCounter(bitrixGroupId: GraphQLTypes.WorkGroup["ID"]): Promise<GraphQLTypes.Counter> {
+    await this.getCounterId(bitrixGroupId, true);
+    return await this.getCounter(bitrixGroupId);
   }
 
   private async getCounterByDomain(domainString: string): Promise<GraphQLTypes.Counter> {
@@ -84,7 +87,12 @@ class YandexMetrikaApi extends RESTDataSource {
     return counter[0];
   }
 
-  private async getCounterId(bitrixGroupId: string): Promise<string> {
+  private async getCounterId(bitrixGroupId: string, rewrite: boolean = false): Promise<string> {
+    if (rewrite) {
+      await YandexMetrkaModel.deleteOne({
+        bitrixGroupId
+      });
+    }
     let counterId: string;
     try {
       const yandexMetrika = await YandexMetrkaModel.findOne({

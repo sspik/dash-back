@@ -80,4 +80,7 @@ type Mutation {
   DeleteUser(
     id: ID!
   ): String
+  RefreshMetrikaCounter(
+    bitrixGroupId: ID!
+  ): Counter
 }

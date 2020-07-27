@@ -215,6 +215,7 @@ export type Mutation = {
    __typename?: 'Mutation';
   DeleteTaskMessage: DeleteTaskMessageResponse;
   DeleteUser?: Maybe<Scalars['String']>;
+  RefreshMetrikaCounter?: Maybe<Counter>;
   SendFeedMessage: FeedMessageResponse;
   SendTaskMessage: SendTaskMessageResponse;
 };
@@ -228,6 +229,11 @@ export type MutationDeleteTaskMessageArgs = {
 
 export type MutationDeleteUserArgs = {
   id: Scalars['ID'];
+};
+
+
+export type MutationRefreshMetrikaCounterArgs = {
+  bitrixGroupId: Scalars['ID'];
 };
 
 
@@ -953,6 +959,7 @@ export type MonitoringResolvers<ContextType = any, ParentType extends ResolversP
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   DeleteTaskMessage?: Resolver<ResolversTypes['DeleteTaskMessageResponse'], ParentType, ContextType, RequireFields<MutationDeleteTaskMessageArgs, 'taskId' | 'messageId'>>,
   DeleteUser?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'id'>>,
+  RefreshMetrikaCounter?: Resolver<Maybe<ResolversTypes['Counter']>, ParentType, ContextType, RequireFields<MutationRefreshMetrikaCounterArgs, 'bitrixGroupId'>>,
   SendFeedMessage?: Resolver<ResolversTypes['FeedMessageResponse'], ParentType, ContextType, RequireFields<MutationSendFeedMessageArgs, 'message'>>,
   SendTaskMessage?: Resolver<ResolversTypes['SendTaskMessageResponse'], ParentType, ContextType, RequireFields<MutationSendTaskMessageArgs, 'taskId' | 'message'>>,
 };

@@ -99,6 +99,9 @@ export const resolvers: Resolvers = {
       dataSources.bitrixApi.deleteTaskMessage(taskId, messageId),
 
     DeleteUser: (_, { id }, { dataSources }) =>
-      dataSources.adminApi.deleteUser(id)
+      dataSources.adminApi.deleteUser(id),
+
+    RefreshMetrikaCounter: (_, { bitrixGroupId }, { dataSources }) =>
+      dataSources.yandexMetrikaApi.refreshCounter(bitrixGroupId),
   }
 };
