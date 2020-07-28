@@ -1,12 +1,10 @@
 require('dotenv').config();
 
-import express from 'express';
-import connect from "./connect";
 import { DocumentNode } from "graphql";
 import { ApolloServer, gql } from "apollo-server-express";
 import { importSchema } from "graphql-import";
 import { resolvers } from "./resolvers";
-import routes from "./routes";
+import { runServer } from "./createServer";
 import {
   Bitrix,
   YandexMetrika,
@@ -33,16 +31,4 @@ export const server = new ApolloServer({
   }
 });
 
-async function runServer(){
-  const app = await routes(express());
-  server.applyMiddleware({ app });
-
-  app.listen({ port: 4000 }, () =>
-    console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
-  );
-
-  const db = process.env.MONGO_URL;
-  connect({ db });
-}
-
-runServer();
+runServer( server );
