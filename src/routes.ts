@@ -21,11 +21,11 @@ export default async (app: Application) => {
   app.use(bodyParser.urlencoded({
     extended: true
   }));
+  app.get('/', views.homePage);
   app.get('/auth/client', views.getClientCode);
   app.get('/auth/login', views.getTokens);
 
   app.use(authMiddleware);
-  app.get('/', views.homePage);
   app.get(
     '/attachment/:attachment',
     views.getAttachment

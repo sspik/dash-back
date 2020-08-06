@@ -8,7 +8,7 @@ export default ({db}: TInput) => {
   const connect = () => {
     mongoose
       .connect(
-        db,
+        encodeURI(db),
         {
           useNewUrlParser: true,
           useUnifiedTopology: true,
