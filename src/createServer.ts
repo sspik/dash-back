@@ -4,12 +4,8 @@ import express from "express";
 import connect from "./connect";
 
 const {
-  MONGO_USERNAME,
-  MONGO_PASSWORD,
-  MONGO_PORT,
-  MONGO_DB,
-  MONGO_HOSTNAME,
   BACKEND_PORT,
+  MONGO_URL
 } = process.env
 
 
@@ -23,6 +19,5 @@ export async function runServer(server: ApolloServer){
     console.log(`🚀 Server ready`)
   );
 
-  const db = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`;
-  connect({ db });
+  connect({ db: MONGO_URL });
 }

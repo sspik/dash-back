@@ -217,7 +217,7 @@ class BitrixAPI extends RESTDataSource {
           cmd: queries
         });
         Object.values(response.result.result).forEach((r: any) => {
-          r.DOWNLOAD_URL = `${process.env.BACKEND_URL}/attachment/${r.ID}`
+          r.DOWNLOAD_URL = `/attachment/${r.ID}`
           files.push(r)
         })
       } catch (e) {
