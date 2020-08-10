@@ -23,6 +23,6 @@ export async function runServer(server: ApolloServer){
     console.log(`🚀 Server ready`)
   );
 
-  const db = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`;
+  const db = `mongodb://localhost:${MONGO_PORT}/${MONGO_DB}`;
   connect({ db });
 }

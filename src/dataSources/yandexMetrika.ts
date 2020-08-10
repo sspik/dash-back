@@ -109,7 +109,9 @@ class YandexMetrikaApi extends RESTDataSource {
       const yandexMetrika = new YandexMetrkaModel({
         counter: counter.id,
         bitrixGroupId,
-        goals: counter.goals.map(goal => ({ id: goal.id, name: goal.name }))
+        goals: Array.isArray(counter.goals)
+          ? counter.goals.map(goal => ({ id: goal.id, name: goal.name }))
+          : null
       })
       try {
         await yandexMetrika.save();
