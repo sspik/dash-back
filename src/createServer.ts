@@ -4,12 +4,10 @@ import express from "express";
 import connect from "./connect";
 
 const {
-  MONGO_USERNAME,
-  MONGO_PASSWORD,
-  MONGO_PORT,
-  MONGO_DB,
-  MONGO_HOSTNAME,
   BACKEND_PORT,
+  MONGO_URL,
+  MONGO_PORT,
+  MONGO_DB
 } = process.env
 
 
