@@ -1,9 +1,6 @@
 overwrite: true
 schema:
-  - "src/GraphQL/schema.graphql"
-  - |
-    scalar Upload
-documents: null
+  - "http://localhost:4000/graphql"
 generates:
   src/GraphQLTypes/index.ts:
     plugins:

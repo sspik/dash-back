@@ -39,6 +39,7 @@ type TaskDetail {
   priority: Int
   responsible: shortTaskUser
   timeEstimate: String
+  timeSpentInLogs: Int
   creator: shortTaskUser
   status: Int
   dateStart: String

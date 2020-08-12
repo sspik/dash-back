@@ -17,7 +17,7 @@ export const authMiddleware = async (
   res: Response,
   next: () => void,
 ) => {
-  if (authPaths.includes(req.path)){
+  if (authPaths.includes(req.path) || localIps.includes(req.ip)){
     next();
     return
   }
