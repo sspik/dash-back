@@ -507,6 +507,7 @@ export type Task = {
   CREATED_BY_LAST_NAME: Scalars['String'];
   CREATED_DATE: Scalars['String'];
   CLOSED_DATE: Scalars['String'];
+  TIME_SPENT_IN_LOGS?: Maybe<Scalars['Int']>;
 };
 
 export type TaskComment = {
@@ -1112,6 +1113,7 @@ export type TaskResolvers<ContextType = any, ParentType extends ResolversParentT
   CREATED_BY_LAST_NAME?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   CREATED_DATE?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   CLOSED_DATE?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  TIME_SPENT_IN_LOGS?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 

@@ -20,6 +20,7 @@ type Task {
   CREATED_BY_LAST_NAME: String!
   CREATED_DATE: String!
   CLOSED_DATE: String!
+  TIME_SPENT_IN_LOGS: Int
 }
 
 type shortTaskUser {
